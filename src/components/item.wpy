@@ -1,37 +1,50 @@
 <style lang="scss">
-    .item {
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 48rpx 32rpx;
+  padding-bottom: 36rpx;
+  &-left {
+    display: flex;
+    flex-direction: column;
+    & > view {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 48rpx 32rpx;
-      padding-bottom: 36rpx;
-      &-left {
-        display: flex;
-        flex-direction: column;
-      }
     }
+    &-title {
+    }
+    &-tag {
+      width: 64px;
+      height: 32px;
+      font-size:
+      border-radius: 24px 4px 24px 4px;
+      border: 1px solid rgba(3, 211, 193, 0.4);
+    }
+  }
+}
 </style>
 <template>
-    <view class="item">
-        <view class="item-left">
-          <view class="item-left-title">
-            <view class="item-left-tag">最新</view>
-            <text>高中二年级同步学习指导</text>
-          </view>
-          <view class="item-left-footer">
-            <view class="item-watch">23023</view>
-            <view class="item-start">2341213</view>
-          </view>
-        </view>
-        <view class="item-download">
-          <view class="item-download-btn"></view>
-          <text class="item-download-text">立即下载</text>
-        </view>
+  <view class="item">
+    <view class="item-left">
+      <view class="item-left-title">
+        <view class="item-left-tag">最新</view>
+        <text>高中二年级同步学习指导</text>
+      </view>
+      <view class="item-left-footer">
+        <view class="item-watch">23023</view>
+        <view class="item-start">2341213</view>
+      </view>
     </view>
+    <view class="item-download">
+      <view class="item-download-btn"></view>
+      <text class="item-download-text">立即下载</text>
+    </view>
+  </view>
 </template>
 <script>
-  import wepy from 'wepy'
-  export default class Item extends wepy.component {
+import wepy from 'wepy'
+export default class Item extends wepy.component {
 
-  }
+}
 </script>
