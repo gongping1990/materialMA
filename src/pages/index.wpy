@@ -1,0 +1,52 @@
+<style lang="scss">
+  .home {
+    &-title {
+      text-align: center;
+      font-size: 28px;
+      line-height: 40px;
+      &-num {
+        font-size: 34px;
+        font-weight: 500;
+      }
+    }
+  }
+</style>
+<template>
+  <view class="container home">
+    <view class="home-title">获课资料库已收录<text class="home-title-num">300,000,00</text>份资料</view>
+    <view class="home-scroll">
+
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import { connect } from 'wepy-redux'
+
+export default class Index extends wepy.page {
+  config = {
+    navigationBarTitleText: 'test',
+    usingComponents: {
+      "van-button": "../vant/button/index"
+    }
+  }
+
+  data = {
+
+  }
+
+
+  methods = {
+
+  }
+
+  events = {
+
+  }
+
+  onLoad () {
+
+  }
+}
+</script>

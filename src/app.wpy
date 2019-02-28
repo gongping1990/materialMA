@@ -1,0 +1,79 @@
+<style lang="scss">
+@import './assets/style/index.scss';
+@import "./vant/common/index.wxss";
+.container {
+  position: relative;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+::-webkit-scrollbar{
+    width: 0;
+    height: 0;
+    color: transparent;
+}
+</style>
+
+<script>
+import wepy from 'wepy'
+import 'wepy-async-function'
+
+import { setStore } from 'wepy-redux'
+import configStore from './store'
+
+const store = configStore()
+setStore(store)
+
+export default class extends wepy.app {
+  config = {
+    pages: [
+      'pages/index/index',
+      'pages/make/make',
+      'pages/ranking/ranking',
+      'pages/user/user'
+    ],
+    window: {
+      backgroundTextStyle: 'light',
+      navigationBarBackgroundColor: '#fff',
+      navigationBarTitleText: 'WeChat',
+      navigationBarTextStyle: 'black'
+    },
+    usingComponents: {
+      "van-icon": "./vant/icon/index",
+      "van-button": "./vant/button/index",
+      "van-tabbar": "./vant/tabbar/index",
+      "van-tabbar-item": "./vant/tabbar-item/index"
+    }
+  }
+
+  globalData = {
+    userInfo: null
+  }
+
+  constructor () {
+    super()
+    this.use('requestfix')
+    this.use('promisify');
+  }
+
+  onLaunch() {
+
+  }
+
+  getUserInfo(cb) {
+    const that = this
+    if (this.globalData.userInfo) {
+      return this.globalData.userInfo
+    }
+    console.log(11)
+    wx.getUs
+    wepy.getUserInfo({
+      success (res) {
+        console.log(res)
+        that.globalData.userInfo = res.userInfo
+        cb && cb(res.userInfo)
+      }
+    })
+  }
+}
+</script>

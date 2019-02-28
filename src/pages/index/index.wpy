@@ -1,0 +1,303 @@
+
+<template>
+  <view class="container home">
+    <view class="home-header">
+      <view class="home-select-class"
+            @tap="bindClick">
+        <text>高二年级</text>
+        <van-icon name="arrow-down" />
+      </view>
+      <view class="home-num">
+        <text class="home-num-title">{{num}}份</text>
+        <text class="home-num-text">已收录获课资料库</text>
+      </view>
+    </view>
+    <view class="home-banner">
+      <swiper autoplay
+              circular>
+        <block wx:for="{{bannerList}}"
+               wx:key="index">
+          <swiper-item>
+            <image mode="widthFix"
+                   class="home-banner-img"
+                   src="{{item.src}}" />
+          </swiper-item>
+        </block>
+      </swiper>
+    </view>
+    <view class="home-tab">
+      <van-tabs active="{{ active }}"
+                color="#FB9645"
+                border="{{false}}"
+                line-width="{{14}}">
+        <van-tab wx:for="{{tabList}}"
+                 wx:key="{{index}}"
+                 title="{{item.title}}"></van-tab>
+      </van-tabs>
+    </view>
+    <view class="home-classify van-hairline--bottom">
+      <scroll-view scroll-x
+                   scroll-with-animation>
+        <view class="home-classify-scroll ">
+          <view class="home-classify-item"
+                wx:for="{{classifyList}}"
+                wx:key="{{index}}">{{item.title}}</view>
+        </view>
+      </scroll-view>
+    </view>
+    <view class="home-sort">
+      <view class="home-sort-left">
+        <view class="home-sort-popular">
+          <text>热门排序</text>
+        </view>
+        <view class="home-sort-newest">
+          <text>最新排序</text>
+        </view>
+      </view>
+      <view class="home-sort-right">
+        <text>搜索</text>
+      </view>
+    </view>
+     <scroll-view
+      class="home-scroll"
+      scroll-y
+      scroll-with-animation
+      >
+      <item></item>
+    </scroll-view>
+    <van-tabbar active="{{ active }}"
+                bind:change="onChange">
+      <van-tabbar-item icon="home-o">标签</van-tabbar-item>
+      <van-tabbar-item icon="search"
+                       dot>标签</van-tabbar-item>
+      <van-tabbar-item icon="friends-o"
+                       info="5">标签</van-tabbar-item>
+      <van-tabbar-item icon="setting-o"
+                       info="20">标签</van-tabbar-item>
+    </van-tabbar>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import { connect } from 'wepy-redux'
+import Item from '../../components/item'
+
+import { NumberAnimate, toThousands } from '../../utils'
+
+export default class Index extends wepy.page {
+  config = {
+    navigationBarTitleText: 'test',
+    usingComponents: {
+      "van-tabs": "../../vant/tabs/index",
+      "van-tab": "../../vant/tab/index"
+    }
+  }
+
+  components = {
+    item: Item
+  }
+
+  data = {
+    num: 0,
+    active: 0,
+    classifyList: [
+      {
+        title: '试卷'
+      },
+      {
+        title: '试卷'
+      },
+      {
+        title: '试卷'
+      },
+      {
+        title: '试卷'
+      },
+      {
+        title: '试卷'
+      },
+      {
+        title: '试卷'
+      }
+    ],
+    tabList: [
+      {
+        title: '语文'
+      },
+      {
+        title: '数学'
+      }, {
+        title: '英语'
+      }, {
+        title: '生物'
+      },
+      {
+        title: '初中高考'
+      }, {
+        title: '英语'
+      }, {
+        title: '生物'
+      },
+      {
+        title: '初中高考'
+      }
+    ],
+    bannerList: [{
+      src: 'https://pub.file.k12.vip/2018/11/17/d1615b9fa20ee58a38b87a6ed02b96b.png'
+    }, {
+      src: 'https://pub.file.k12.vip/2019/02/13/1095571672162930689.jpg'
+    }]
+  }
+
+  computed = {
+
+  }
+
+  methods = {
+    bindClick () {
+      this.n++
+      console.log(1111)
+    }
+  }
+
+  events = {
+
+  }
+
+  onLoad () {
+
+  }
+
+  onShow () {
+    let num3 = 372020;
+    let n3 = new NumberAnimate({
+      from: num3,
+      speed: 2000,
+      refreshTime: 100,
+      decimals: 0,
+      onUpdate: () => {
+        this.num = toThousands(n3.tempValue)
+        this.$apply()
+      }
+    });
+  }
+}
+</script>
+<style lang="scss">
+@import '../../assets/style/mixin.scss';
+.home {
+  height: calc(100vh - 100rpx);
+  padding: 8rpx 0;
+  & > view {
+    width: 100%;
+  }
+  &-header {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32rpx;
+    margin-bottom: 32rpx;
+  }
+  &-select-class {
+    @include flex-center;
+    font-size: 40rpx;
+    font-weight: 500;
+    text {
+      margin-right: 18rpx;
+    }
+  }
+  &-num {
+    @include flex-column-center;
+    font-weight: 600;
+    &-title {
+      font-size: 36rpx;
+      color: #ff772d;
+    }
+    &-text {
+      font-size: 22rpx;
+      color: #2a2828;
+    }
+  }
+  &-banner {
+    box-sizing: border-box;
+    padding: 0 32rpx;
+    height: 214rpx;
+    overflow: hidden;
+    margin-bottom: 34rpx;
+    &-img {
+      width: 100%;
+      border-radius: 24rpx;
+    }
+  }
+  &-tab {
+    box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.03);
+  }
+  &-classify {
+    &-scroll {
+      width: calc(100vw + 32px);
+      display: flex;
+      flex-wrap: nowrap;
+      white-space: nowrap;
+      padding: 32rpx 0;
+    }
+    &-item {
+      display: flex;
+      align-items: center;
+      height: 56rpx;
+      margin-left: 32rpx;
+      padding: 0 24rpx;
+      font-size: 26rpx;
+      color: #fff;
+      border-radius: 16rpx;
+      background: linear-gradient(
+        225deg,
+        rgba(255, 119, 45, 1) 0%,
+        rgba(251, 150, 69, 1) 100%
+      );
+      &:last-child {
+        margin-right: 32rpx;
+      }
+    }
+  }
+  &-sort {
+    box-sizing: border-box;
+    padding: 18rpx 32rpx;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    &-left, &-right {
+      @include flex-center;
+      color: #858697;
+      font-size: 26rpx;
+    }
+    &-popular {
+      position: relative;
+      padding-right: 32rpx;
+      margin-right: 32rpx;
+      &::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 50%;
+        margin-top: -8rpx;
+        height: 16rpx;
+        width: 2rpx;
+        background: #C5C6D4;
+      }
+      &.active {
+        color: #2A2828
+      }
+    }
+    &-newest {
+      &.active {
+        color: #2A2828;
+      }
+    }
+  }
+  &-scroll {
+    height: calc(100vh - 708rpx);
+  }
+}
+</style>
