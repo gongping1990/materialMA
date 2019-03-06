@@ -23,21 +23,15 @@
         </view>
       </repeat>
       <view class="search-empty">
-        <image src="{{}}"
-               class="search-empty-img"
-               mode="scaleToFill"
-               lazy-load="false">
-        </image>
-        <text class="search-empty-text">抱歉，暂时没有找到你想要的内容~</text>
-        <text class="search-empty-text">换个关键词试试吧！~</text>
+        <noDataTemplate :info="noDataInfo"></noDataTemplate>
       </view>
     </view>
-
   </view>
 </template>
 <script>
 import wepy from 'wepy';
 import item from '../../components/item'
+import noDataTemplate from '../../components/noDataTemplate';
 
 export default class Search extends wepy.page {
   config = {
@@ -48,10 +42,15 @@ export default class Search extends wepy.page {
   };
 
   data = {
-    array: [1, 2, 3, 4, 5, 6]
+    noDataInfo: {
+      tip: '抱歉，暂时没有找到你想要的内容~换个关键词试试吧！~',
+      url: 'https://pub.file.k12.vip/empty/empty-search.png'
+    },
+    array: []
   };
   components = {
-    item
+    item,
+    noDataTemplate
   };
   methods = {};
   events = {};
@@ -90,10 +89,6 @@ export default class Search extends wepy.page {
     color: #afafaf;
   }
   &-empty {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
     position: absolute;
     left: 0;
     right: 0;

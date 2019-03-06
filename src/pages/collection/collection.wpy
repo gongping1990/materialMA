@@ -1,7 +1,7 @@
 <!--  -->
 <template>
   <view class='container collection'>
-    <view class="collection-scroll">
+    <view class="collection-scroll" wx:if="{{dataList.length}}">
       <view class="collection-item van-hairline--bottom">
         <view class="collection-item-left">
           <text class="collection-title">高中二年级同步学习指导</text>
@@ -13,16 +13,28 @@
         <view class="collection-item-btn"></view>
       </view>
     </view>
+    <view wx:else>
+      <noDataTemplate :info="noDataInfo"></noDataTemplate>
+    </view>
   </view>
 </template>
 <script>
 import wepy from 'wepy';
+import noDataTemplate from '../../components/noDataTemplate';
 export default class Example extends wepy.page {
   config = {
           navigationBarTitleText: "",
   };
-  data = {};
-  components = {};
+  data = {
+    noDataInfo: {
+      tip: '你还没有收藏过资料哦～',
+      url: 'https://pub.file.k12.vip/empty/empty-sc.png'
+    },
+    dataList: []
+  };
+  components = {
+    noDataTemplate
+  };
   methods = {};
   events = {};
   watch = {};

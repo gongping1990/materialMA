@@ -1,31 +1,43 @@
 <!--  -->
 <template>
   <view class='container convertible'>
-    <view class="convertible-scroll">
-      <view class="convertible-item van-hairline--bottom">
-        <view class="convertible-left">
-          <text class="convertible-title">小学二年级湖南期中试题</text>
-          <text class="convertible-time">2019-01-29 23:23:23</text>
-        </view>
-        <view class="convertible-right">
-          <text class="convertible-price">200</text>
-          <text class="convertible-price-text">下载币</text>
+    <view wx:if="{{dataList.length}}">
+      <view class="convertible-scroll">
+        <view class="convertible-item van-hairline--bottom">
+          <view class="convertible-left">
+            <text class="convertible-title">小学二年级湖南期中试题</text>
+            <text class="convertible-time">2019-01-29 23:23:23</text>
+          </view>
+          <view class="convertible-right">
+            <text class="convertible-price">200</text>
+            <text class="convertible-price-text">下载币</text>
+          </view>
         </view>
       </view>
+      <view class="convertible-footer">
+        <view class="convertible-btn">我要全部下载资料</view>
+      </view>
     </view>
-    <view class="convertible-footer">
-      <view class="convertible-btn">我要全部下载资料</view>
+    <view wx:else>
+      <noDataTemplate :info="noDataInfo"></noDataTemplate>
     </view>
   </view>
 </template>
 <script>
 import wepy from 'wepy';
+import noDataTemplate from '../../components/noDataTemplate';
 export default class Example extends wepy.page {
   config = {
     navigationBarTitleText: "",
   };
-  data = {};
-  components = {};
+  data = {
+    noDataInfo: {
+      tip: '你还没有兑换过资料哦～',
+      url: 'https://pub.file.k12.vip/empty/empty-dh.png'
+    },
+    dataList: []
+  };
+  components = { noDataTemplate };
   methods = {};
   events = {};
   watch = {};

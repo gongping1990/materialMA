@@ -1,7 +1,7 @@
 <!--  -->
 <template>
   <view class='container friend'>
-    <view class="friend-scroll">
+    <view class="friend-scroll" wx:if="{{dataList.length}}">
       <view class="friend-item ">
         <image
           class="friend-avatar"
@@ -14,16 +14,26 @@
         </view>
       </view>
     </view>
+    <view wx:else>
+      <noDataTemplate :info="noDataInfo"></noDataTemplate>
+    </view>
   </view>
 </template>
 <script>
 import wepy from 'wepy';
+import noDataTemplate from '../../components/noDataTemplate';
 export default class Friend extends wepy.page {
   config = {
           navigationBarTitleText: "",
   };
-  data = {};
-  components = {};
+  data = {
+    noDataInfo: {
+      tip: '你还没有邀请的好友哦～',
+      url: 'https://pub.file.k12.vip/empty/empty-yq.png'
+    },
+    dataList: []
+  };
+  components = { noDataTemplate };
   methods = {};
   events = {};
   watch = {};

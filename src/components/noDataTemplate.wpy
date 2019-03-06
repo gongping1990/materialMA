@@ -1,0 +1,49 @@
+<!--  -->
+<template>
+  <view class="zlk-no-date">
+    <image class="zlk-no-date-img" src="{{info.url}}"/>
+    <view class="zlk-no-date-text">{{info.tip}}</view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy';
+
+  export default class noDataTemplate extends wepy.component {
+    props = {
+      info: {
+        default: {}
+      }
+    };
+    data = {};
+    components = {};
+    methods = {};
+    events = {};
+    watch = {};
+    computed = {};
+
+    onLoad() {
+      console.log(this.info, 1);
+    };
+  }
+</script>
+<style lang='scss'>
+  @import '../assets/style/mixin.scss';
+  .zlk-no-date {
+    margin-top: rpx(144);
+    text-align: center;
+
+    &-img {
+      width: rpx(640);
+      height: rpx(460)
+    }
+
+    &-text {
+      width: rpx(420);
+      margin: 0 auto;
+      font-size: 26px;
+      font-weight: 400;
+      color: rgba(133, 134, 151, 1);
+    }
+
+  }
+</style>
