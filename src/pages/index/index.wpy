@@ -1,106 +1,183 @@
 
 <template>
   <view class="container home">
-    <view class="home-header">
+    <scroll-view class="home-scroll-wrap"
+                 scroll-y="{{!isScrollY}}"
+                 scroll-with-animation
+                 lower-threshold="5"
+                 @scrolltolower="bindScrolltolower">
+      <view class="home-header">
+        <view class="home-select-class"
+              @tap="bindClick">
+          <text>高二年级</text>
+          <van-icon name="arrow-down" />
+        </view>
+        <view class="home-num">
+          <text class="home-num-title">{{num}}份</text>
+          <text class="home-num-text">已收录获课资料库</text>
+        </view>
+      </view>
+      <view class="home-banner">
+        <swiper autoplay
+                circular>
+          <block wx:for="{{bannerList}}"
+                 wx:key="index">
+            <swiper-item>
+              <image mode="widthFix"
+                     class="home-banner-img"
+                     src="{{item.src}}" />
+            </swiper-item>
+          </block>
+        </swiper>
+      </view>
+      <view class="home-content-ref"
+            style="height:{{height}}px">
+        <view class="home-content-wrap ">
+          <view class="home-tab">
+            <van-tabs active="{{ active }}"
+                      color="#FB9645"
+                      border="{{false}}"
+                      line-width="{{14}}">
+              <van-tab wx:for="{{tabList}}"
+                       wx:key="{{index}}"
+                       title="{{item.title}}"></van-tab>
+            </van-tabs>
+          </view>
+          <view class="home-classify van-hairline--bottom">
+            <scroll-view scroll-x
+                         scroll-with-animation>
+              <view class="home-classify-scroll ">
+                <view class="home-classify-item"
+                      wx:for="{{classifyList}}"
+                      wx:key="{{index}}">{{item.title}}</view>
+              </view>
+            </scroll-view>
+          </view>
+          <view class="home-sort">
+            <view class="home-sort-left">
+              <view class="home-sort-popular">
+                <text>热门排序</text>
+                <image src="https://pub.file.k12.vip/zlk_weapp/zlk/index-icon-sort.png" />
+              </view>
+              <view class="home-sort-newest">
+                <text>最新排序</text>
+                <image src="https://pub.file.k12.vip/zlk_weapp/zlk/index-icon-sort.png" />
+              </view>
+            </view>
+            <view class="home-sort-right">
+              <image src="https://pub.file.k12.vip/zlk_weapp/zlk/index-icon-search.png" />
+              <text>搜索</text>
+            </view>
+          </view>
+          <scroll-view class="home-scroll"
+                       upper-threshold="5"
+                       @scrolltoupper="bindScrolltoupper"
+                       scroll-y="{{isScrollY}}"
+                       scroll-top="{{scrollTop}}"
+                       scroll-with-animation>
+            <view class="bus">
+              <repeat for="{{itemList}}"
+                      key="index"
+                      index="index"
+                      item="item">
+                <item class="home-item"
+                      @tap="bindClickItem" />
+                <view class="home-block"></view>
+              </repeat>
+            </view>
+          </scroll-view>
+        </view>
+      </view>
+    </scroll-view>
+    <van-tabbar active="{{0}}"
+                active-color="#FF772D"
+                bind:change="onChangeTabbar">
+      <van-tabbar-item>
+        <image slot="icon"
+               src="https://pub.file.k12.vip/zlk_weapp/tabar-icon-files-def.png"
+               mode="aspectFit" />
+        <image slot="icon-active"
+               src="https://pub.file.k12.vip/zlk_weapp/tabar-icon-files-sel.png"
+               mode="aspectFit" />
+        资料库
+      </van-tabbar-item>
+      <van-tabbar-item>
+        <image slot="icon"
+               src="https://pub.file.k12.vip/zlk_weapp/tabar-icon-coin-def.png"
+               mode="aspectFit" />
+        <image slot="icon-active"
+               src="https://pub.file.k12.vip/zlk_weapp/tabar-icon-coin-sel.png"
+               mode="aspectFit" />
+        赚下载币
+      </van-tabbar-item>
+      <van-tabbar-item>
+        <image slot="icon"
+               src="https://pub.file.k12.vip/zlk_weapp/tabar-icon-industrious-def.png"
+               mode="aspectFit" />
+        <image slot="icon-active"
+               src="https://pub.file.k12.vip/zlk_weapp/tabar-icon-industrious-sel.png"
+               mode="aspectFit" />
+        勤奋榜
+      </van-tabbar-item>
+      <van-tabbar-item>
+        <image slot="icon"
+               src="https://pub.file.k12.vip/zlk_weapp/tabar-icon-my-def.png"
+               mode="aspectFit" />
+        <image slot="icon-active"
+               src="https://pub.file.k12.vip/zlk_weapp/tabar-icon-my-sel.png"
+               mode="aspectFit" />
+        我的
+      </van-tabbar-item>
+    </van-tabbar>
+    <CollectGoldPopup :show.sync="showPopup"></CollectGoldPopup>
+    <view class="home-mask" wx:if="{{showMask}}" @tap="closeMask">
       <view class="home-select-class"
-            @tap="bindClick">
+            @tap.stop="bindClick">
         <text>高二年级</text>
         <van-icon name="arrow-down" />
       </view>
-      <view class="home-num">
-        <text class="home-num-title">{{num}}份</text>
-        <text class="home-num-text">已收录获课资料库</text>
-      </view>
+      <image src="https://pub.file.k12.vip/zlk_weapp/zlk/guide.png"
+             mode="widthFix" />
     </view>
-    <view class="home-banner">
-      <swiper autoplay
-              circular>
-        <block wx:for="{{bannerList}}"
-               wx:key="index">
-          <swiper-item>
-            <image mode="widthFix"
-                   class="home-banner-img"
-                   src="{{item.src}}" />
-          </swiper-item>
-        </block>
-      </swiper>
-    </view>
-    <view class="home-tab">
-      <van-tabs active="{{ active }}"
-                color="#FB9645"
-                border="{{false}}"
-                line-width="{{14}}">
-        <van-tab wx:for="{{tabList}}"
-                 wx:key="{{index}}"
-                 title="{{item.title}}"></van-tab>
-      </van-tabs>
-    </view>
-    <view class="home-classify van-hairline--bottom">
-      <scroll-view scroll-x
-                   scroll-with-animation>
-        <view class="home-classify-scroll ">
-          <view class="home-classify-item"
-                wx:for="{{classifyList}}"
-                wx:key="{{index}}">{{item.title}}</view>
-        </view>
-      </scroll-view>
-    </view>
-    <view class="home-sort">
-      <view class="home-sort-left">
-        <view class="home-sort-popular">
-          <text>热门排序</text>
-        </view>
-        <view class="home-sort-newest">
-          <text>最新排序</text>
-        </view>
-      </view>
-      <view class="home-sort-right">
-        <text>搜索</text>
-      </view>
-    </view>
-     <scroll-view
-      class="home-scroll"
-      scroll-y
-      scroll-with-animation
-      >
-      <item></item>
-    </scroll-view>
-    <van-tabbar active="{{ active }}"
-                bind:change="onChange">
-      <van-tabbar-item icon="home-o">标签</van-tabbar-item>
-      <van-tabbar-item icon="search"
-                       dot>标签</van-tabbar-item>
-      <van-tabbar-item icon="friends-o"
-                       info="5">标签</van-tabbar-item>
-      <van-tabbar-item icon="setting-o"
-                       info="20">标签</van-tabbar-item>
-    </van-tabbar>
   </view>
 </template>
 
 <script>
 import wepy from 'wepy'
 import { connect } from 'wepy-redux'
+import tabbarMixin from '../../mixins/tabbar.js'
 import Item from '../../components/item'
+import CollectGoldPopup from '../../components/collectGoldPopup'
 
 import { NumberAnimate, toThousands } from '../../utils'
+
+
 
 export default class Index extends wepy.page {
   config = {
     navigationBarTitleText: 'test',
     usingComponents: {
+      "van-popup": "../../vant/popup/index",
       "van-tabs": "../../vant/tabs/index",
       "van-tab": "../../vant/tab/index"
     }
   }
 
   components = {
-    item: Item
+    item: Item,
+    CollectGoldPopup
   }
 
+  mixins = [tabbarMixin]
+
   data = {
+    showMask: false,
+    showPopup: false,
+    scrollTop: 0,
+    height: 0,
     num: 0,
     active: 0,
+    itemList: [1, 2, 3, 4, 1, 2, 3, 4],
     classifyList: [
       {
         title: '试卷'
@@ -147,7 +224,15 @@ export default class Index extends wepy.page {
       src: 'https://pub.file.k12.vip/2018/11/17/d1615b9fa20ee58a38b87a6ed02b96b.png'
     }, {
       src: 'https://pub.file.k12.vip/2019/02/13/1095571672162930689.jpg'
-    }]
+    }],
+    isTop: false,
+    isScrollY: false,
+    time: null,
+    posterConfig: {
+      width: 500,
+      hight: 260,
+      backgroundColor: '#fff'
+    }
   }
 
   computed = {
@@ -155,15 +240,49 @@ export default class Index extends wepy.page {
   }
 
   methods = {
+    closeMask() {
+      this.showMask = false
+    },
+    onPosterSuccess (e) {
+      const { detail } = e;
+      console.log(e)
+      wx.previewImage({
+        current: detail,
+        urls: [detail]
+      })
+    },
+    onPosterFail (err) {
+      console.error(err);
+    },
     bindClick () {
       this.n++
       console.log(1111)
+    },
+    bindScrolltolower (n) {
+      console.log(n, this.time)
+      if (this.time) return
+      this.time = setTimeout(() => {
+        this.time = null
+      }, 500);
+      this.isScrollY = true
+    },
+    bindScrolltoupper (n) {
+      if (this.time) return
+      this.time = setTimeout(() => {
+        this.time = null
+      }, 500);
+      this.isScrollY = false
     }
   }
 
   events = {
-
+    'confim' () {
+      console.log(this.showPopup)
+      this.showPopup = false
+      this.$apply()
+    }
   }
+
 
   onLoad () {
 
@@ -187,6 +306,7 @@ export default class Index extends wepy.page {
 <style lang="scss">
 @import '../../assets/style/mixin.scss';
 .home {
+  overflow-y: auto;
   height: calc(100vh - 100rpx);
   padding: 8rpx 0;
   & > view {
@@ -234,40 +354,19 @@ export default class Index extends wepy.page {
   &-tab {
     box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.03);
   }
-  &-classify {
-    &-scroll {
-      width: calc(100vw + 32px);
-      display: flex;
-      flex-wrap: nowrap;
-      white-space: nowrap;
-      padding: 32rpx 0;
-    }
-    &-item {
-      display: flex;
-      align-items: center;
-      height: 56rpx;
-      margin-left: 32rpx;
-      padding: 0 24rpx;
-      font-size: 26rpx;
-      color: #fff;
-      border-radius: 16rpx;
-      background: linear-gradient(
-        225deg,
-        rgba(255, 119, 45, 1) 0%,
-        rgba(251, 150, 69, 1) 100%
-      );
-      &:last-child {
-        margin-right: 32rpx;
-      }
-    }
-  }
   &-sort {
     box-sizing: border-box;
     padding: 18rpx 32rpx;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    &-left, &-right {
+    image {
+      margin: 0 8rpx;
+      width: 18rpx;
+      height: 20rpx;
+    }
+    &-left,
+    &-right {
       @include flex-center;
       color: #858697;
       font-size: 26rpx;
@@ -284,20 +383,59 @@ export default class Index extends wepy.page {
         margin-top: -8rpx;
         height: 16rpx;
         width: 2rpx;
-        background: #C5C6D4;
+        background: #c5c6d4;
       }
       &.active {
-        color: #2A2828
+        color: #2a2828;
       }
     }
     &-newest {
       &.active {
-        color: #2A2828;
+        color: #2a2828;
       }
     }
   }
+  &-scroll-wrap,
+  &-content-wrap {
+    height: calc(100vh - 100rpx);
+    &.fixed {
+      position: fixed;
+      left: 0;
+      top: 0;
+      right: 0;
+      background-color: #fff;
+    }
+  }
   &-scroll {
-    height: calc(100vh - 708rpx);
+    height: calc(100vh - 392rpx);
+  }
+  &-block {
+    height: 60rpx;
+  }
+  &-mask {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba($color: #000000, $alpha: 0.6);
+    z-index: 10000;
+    .home-select-class {
+      position: absolute;
+      left: 16rpx;
+      top: 32rpx;
+      width: 296rpx;
+      height: 104rpx;
+      color: #FF772D;
+      background: rgba(255, 255, 255, 1);
+      border-radius: 32rpx;
+    }
+    image {
+      position: absolute;
+      left: 160rpx;
+      top: 142rpx;
+      width: 410rpx;
+    }
   }
 }
 </style>

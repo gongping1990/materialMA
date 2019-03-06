@@ -1,0 +1,80 @@
+<!--  -->
+<template>
+  <view class='ranking-item'>
+    <view class="ranking-item-left">
+      <view class="ranking-item-num">{{item.index}}</view>
+      <image
+        src="{{}}"
+        mode="scaleToFill"
+        class="ranking-item-avatar"
+        lazy-load="false"></image>
+      <view class="ranking-item-name">{{item.name}}</view>
+    </view>
+    <view class="ranking-item-right">
+      <viiew class="ranking-item-gold">{{item.num}}</viiew>
+    </view>
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+export default class Example extends wepy.component {
+  props = {
+    item: {
+      type: Object,
+      default: {
+        index: 1,
+        num: 2030,
+        name: '风中的雪花'
+      }
+    }
+  };
+  data = {};
+  components = {};
+  methods = {};
+  events = {};
+  watch = {};
+  computed = {};
+  onLoad() {
+    console.log(this.item)
+  };
+}
+</script>
+<style lang='scss'>
+@import '../assets/style/mixin.scss';
+
+.ranking-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32rpx;
+  border-bottom: 2rpx solid #D8D8D8;
+  &-left {
+    display: flex;
+    align-items: center;
+  }
+  &-num {
+    @include flex-center;
+    margin-right: 24rpx;
+    width: 56rpx;
+    height: 54rpx;
+    color: #4A4A4A;
+    font-size: 34rpx;
+    font-weight: bold;
+  }
+  &-avatar {
+    margin-right: 24rpx;
+    width: 96rpx;
+    height: 96rpx;
+    border-radius: 50%;
+  }
+  &-name {
+    font-size: 28rpx;
+    color: #2A2828;
+  }
+  &-gold {
+    color: #2A2828;
+    font-size: 34rpx;
+    font-weight: bold;
+  }
+}
+</style>

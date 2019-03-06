@@ -18,7 +18,7 @@
           wx:key="index"
           data-index="{{ index }}"
           class="van-ellipsis {{ utils.bem('tab', { active: index === active, disabled: item.disabled }) }}"
-          style="{{ color && index !== active && type === 'card' && !item.disabled ? 'color: ' + color : '' }} {{ color && index === active && type === 'card' ? ';background-color:' + color : '' }} {{ color ? ';border-color: ' + color : '' }} {{ scrollable ? ';flex-basis:' + (68 / swipeThreshold) + '%' : '' }}"
+          style="{{ color && index !== active && type === 'card' && !item.disabled ? 'color: ' + color : '' }} {{ color && index === active && type === 'card' ? ';background-color:' + color : '' }} {{ color ? ';border-color: ' + color : '' }} {{ scrollable ? ';flex-basis:' + (68 / swipeThreshold) + '%' : '' }} {{textColor && index == active ? 'color:' + textColor : 'color:#858697'}}"
           bind:tap="onTap"
         >
           <view class="van-ellipsis {{ utils.bem('tab__title', { dot: item.dot }) }}" style="{{ item.titleStyle }}">

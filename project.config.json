@@ -9,8 +9,35 @@
 		"autoAudits": false
 	},
 	"compileType": "miniprogram",
-	"appid": "wx648d576ab01b910f",
+	"appid": "wxf55391977aa1e37e",
 	"projectname": "zlk_huoke",
 	"miniprogramRoot": "dist/",
-	"condition": {}
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"list": []
+		},
+		"miniprogram": {
+			"current": 0,
+			"list": [
+				{
+					"id": 0,
+					"name": "authorize",
+					"pathName": "pages/details/details",
+					"query": ""
+				}
+			]
+		}
+	}
 }

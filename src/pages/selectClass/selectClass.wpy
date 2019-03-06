@@ -1,0 +1,84 @@
+<!--  -->
+<template>
+  <view class='container select-class'>
+    <view class="select-class-header">
+      <text class="select-class-title">选择年级</text>
+      <van-icon name="close"
+                size="52rpx"
+                @tap="bindClickBack"
+                color="#858697" />
+    </view>
+    <view class="select-class-list">
+      <view wx:for="{{array}}"
+            wx:key="{{index}}"
+            class="select-class-item {{index == 2 ? 'active' : ''}}">{{item}}</view>
+    </view>
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+export default class SelectClass extends wepy.page {
+  config = {
+    navigationBarTitleText: "",
+  };
+  data = {
+    array: ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级',]
+  };
+  components = {};
+  methods = {
+    bindClickBack() {
+      wx.navigateBack({
+        delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+      });
+    }
+  };
+  events = {};
+  watch = {};
+  computed = {};
+  onLoad () { };
+  onShow () { };
+}
+</script>
+<style lang='scss'>
+.select-class {
+  padding: 48rpx 0;
+  &-header {
+    padding: 0 48rpx;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  &-title {
+    color: #2a2828;
+    font-size: 40rpx;
+    font-weight: bold;
+  }
+  &-list {
+    padding: 56rpx 24rpx;
+  }
+  &-item {
+    box-sizing: border-box;
+    margin: 24rpx;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 184rpx;
+    height: 80rpx;
+    font-size: 28rpx;
+    font-weight: 500;
+    color: #2a2828;
+    border-radius: 32rpx;
+    border: 1rpx solid #d8d8d8;
+    &.active {
+      color: #fff;
+      background: linear-gradient(
+        225deg,
+        rgba(255, 119, 45, 1) 0%,
+        rgba(251, 150, 69, 1) 100%
+      );
+      border-color: transparent;
+      box-shadow: 0px 4px 20px 0px rgba(255, 119, 45, 0.5);
+    }
+  }
+}
+</style>

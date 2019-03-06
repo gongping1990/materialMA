@@ -18,6 +18,7 @@ VantComponent({
     }
   },
   props: {
+    textColor: String,
     color: String,
     sticky: Boolean,
     animated: Boolean,

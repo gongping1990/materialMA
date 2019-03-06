@@ -1,0 +1,68 @@
+<!--  -->
+<template>
+  <view class='container collection'>
+    <view class="collection-scroll">
+      <view class="collection-item van-hairline--bottom">
+        <view class="collection-item-left">
+          <text class="collection-title">高中二年级同步学习指导</text>
+          <view class="collection-info">
+            <text class="collection-watch">23,023</text>
+            <text class="collection-start">2,434,970</text>
+          </view>
+        </view>
+        <view class="collection-item-btn"></view>
+      </view>
+    </view>
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+export default class Example extends wepy.page {
+  config = {
+          navigationBarTitleText: "",
+  };
+  data = {};
+  components = {};
+  methods = {};
+  events = {};
+  watch = {};
+  computed = {};
+  onLoad() {};
+  onShow() {};
+}
+</script>
+<style lang='scss'>
+@import '../../assets/style/mixin.scss';
+
+.collection {
+  background-color: #FAFAFA;
+  &-scroll {
+    background-color: #fff;
+  }
+  &-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24rpx 32rpx;
+    &-left {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  &-title {
+    @include text-overflow(540rpx);
+    margin-bottom: 18rpx;
+    font-size: 30rpx;
+    color: #4A4A4A;
+  }
+  &-info {
+    display: flex;
+    align-items: center;
+    font-size: 22rpx;
+    color: #858697;
+  }
+  &-watch {
+    margin-right: 44rpx;
+  }
+}
+</style>

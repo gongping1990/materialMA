@@ -1,0 +1,80 @@
+<style lang="scss">
+@import '../../assets/style/mixin.scss';
+
+.authorize {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  &-title {
+    margin-top: 40rpx;
+    font-size: 44rpx;
+    color: #2a2828;
+    &-origin {
+      margin-right: 10rpx;
+      color: #ff772d;
+    }
+  }
+  &-subtitle {
+    font-size: 26rpx;
+    color: #858697;
+  }
+  &-img {
+    margin-top: 32rpx;
+    margin-bottom: 40rpx;
+    width: 640rpx;
+    height: 810rpx;
+  }
+  &-action {
+    @include flex-center;
+    flex-direction: column;
+    font-size: 24rpx;
+    color: #858697;
+    line-height: 34rpx;
+  }
+  &-btn {
+    @include flex-center;
+    margin-bottom: 24rpx;
+    width: 560rpx;
+    height: 96rpx;
+    font-size: 34rpx;
+    color: #fff;
+    background: linear-gradient(
+      225deg,
+      rgba(255, 119, 45, 1) 0%,
+      rgba(251, 150, 69, 1) 100%
+    );
+    box-shadow: 0px 4rpx 20rpx 0px rgba(255, 119, 45, 0.5);
+    border-radius: 32rpx;
+  }
+}
+</style>
+<template>
+  <view class="authorize">
+    <view class="authorize-title">
+      <text class="authorize-title-origin">获课资料库</text>
+      <text>为师生和家长</text>
+    </view>
+    <text class="authorize-subtitle">免费提供优质和全面的小学学习资料</text>
+    <image src="https://pub.file.k12.vip/zlk_weapp/sq@3x.png"
+           class="authorize-img"
+           mode="widthFix"
+           lazy-load="false" />
+    <view class="authorize-action">
+      <view class="authorize-btn">确认授权</view>
+      <text class="authorize-text">获课资料库需要你的授权才能给你发放资料哦</text>
+      <text class="authorize-text">请点击确认授权</text>
+    </view>
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+export default class Authorize extends wepy.page {
+  config = {
+
+  }
+
+  data = {
+    active: 0
+  }
+}
+</script>

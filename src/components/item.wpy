@@ -1,10 +1,10 @@
 <style lang="scss">
+@import '../assets/style/mixin.scss';
 .item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 48rpx 32rpx;
-  padding-bottom: 36rpx;
+  padding: 32rpx;
   &-left {
     display: flex;
     flex-direction: column;
@@ -13,31 +13,81 @@
       align-items: center;
     }
     &-title {
+      font-size: 34rpx;
+      color: #2A2828;
+      text {
+        @include text-overflow(476rpx);
+        line-height: 48rpx;
+        font-weight: 600;
+      }
+    }
+    &-footer {
+      margin-top: 26rpx;
+      color: #858697;
+      font-size: 22rpx;
+      & > view {
+        margin-right: 52rpx;
+        @include flex-center;
+      }
     }
     &-tag {
-      width: 64px;
-      height: 32px;
-      font-size:
-      border-radius: 24px 4px 24px 4px;
+      margin-right: 16rpx;
+      @include flex-center;
+      width: 64rpx;
+      height: 32rpx;
+      font-size: 18rpx;
+      color: #03D3C1;
+      border-radius: 24rpx 4rpx 24rpx 4rpx;
       border: 1px solid rgba(3, 211, 193, 0.4);
+    }
+  }
+  &-download {
+    @include flex-center;
+    flex-direction: column;
+    font-size: 24rpx;
+    color: #2A2828;
+    line-height: 34rpx;
+    &-btn {
+      height: 100rpx;
+      overflow: hidden;
+      image {
+        width: 112rpx;
+      }
+    }
+  }
+  &-watch {
+    image {
+      width: 40rpx;
+      margin-right: 8rpx;
+    }
+  }
+  &-start {
+    image {
+      width: 26rpx;
+      margin-right: 8rpx;
     }
   }
 }
 </style>
 <template>
-  <view class="item">
+  <view class="item van-hairline--bottom">
     <view class="item-left">
       <view class="item-left-title">
         <view class="item-left-tag">最新</view>
         <text>高中二年级同步学习指导</text>
       </view>
       <view class="item-left-footer">
-        <view class="item-watch">23023</view>
-        <view class="item-start">2341213</view>
+        <view class="item-watch"><image mode="widthFix" src="https://pub.file.k12.vip/zlk_weapp/zlk/icon-scan.png" />23023</view>
+        <view class="item-start"><image mode="widthFix" src="https://pub.file.k12.vip/zlk_weapp/zlk/icon-like.png" />2341213</view>
       </view>
     </view>
-    <view class="item-download">
-      <view class="item-download-btn"></view>
+    <view class="item-download" @tap="bindClick">
+      <view class="item-download-btn">
+        <image
+          src="https://pub.file.k12.vip/zlk_weapp/zlk/button-download.png"
+          mode="widthFix">
+        </image>
+      </view>
       <text class="item-download-text">立即下载</text>
     </view>
   </view>
@@ -45,6 +95,15 @@
 <script>
 import wepy from 'wepy'
 export default class Item extends wepy.component {
+  onLoad() {
+    console.log(22222222)
+  }
 
+  methods = {
+    bindClick() {
+      console.log(111)
+      this.$emit('click-item')
+    }
+  }
 }
 </script>

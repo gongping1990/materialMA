@@ -1,0 +1,87 @@
+<!--  -->
+<template>
+  <view class='container task'>
+    <view class="task-content">
+      <view class="task-list">
+        <view class="task-item van-hairline--bottom">
+          <view class="task-item-left">
+            <text class="task-item-title">每日签到</text>
+            <text class="task-item-text">每周连续签到7天可额外获得100奖励</text>
+            <view class="task-item-gold">150</view>
+          </view>
+          <view class="task-item-btn disabled">已签到</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+export default class Example extends wepy.page {
+  config = {
+    navigationBarTitleText: "",
+  };
+  data = {};
+  components = {};
+  methods = {};
+  events = {};
+  watch = {};
+  computed = {};
+  onLoad () { };
+  onShow () { };
+}
+</script>
+<style lang='scss'>
+.task {
+  &-content {
+    margin: 0 auto;
+    margin-top: 524rpx;
+    padding-top: 20rpx;
+    width: 686rpx;
+    border-radius: 0px 0px 16rpx 16rpx;
+  }
+  &-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30rpx 0;
+    margin: 0 48rpx;
+    &-left {
+      display: flex;
+      flex-direction: column;
+    }
+    &-title {
+      font-size: 32rpx;
+      color: #2a2828;
+      font-weight: 500;
+      line-height: 44rpx;
+    }
+    &-text {
+      font-size: 24rpx;
+      color: #858697;
+      line-height: 34rpx;
+    }
+    &-gold {
+      margin-top: 18rpx;
+      font-size: 24rpx;
+      color: #2a2828;
+    }
+    &-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 128rpx;
+      height: 56rpx;
+      font-size: 26rpx;
+      color: #ff772d;
+      border-radius: 16rpx;
+      border: 1px solid rgba(255, 119, 45, 1);
+      &.disabled {
+        background-color: #d8d8d8;
+        border-color: transparent;
+        color: #858697;
+      }
+    }
+  }
+}
+</style>

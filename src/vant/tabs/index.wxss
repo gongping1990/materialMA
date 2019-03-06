@@ -11,7 +11,7 @@
   left: 0;
   display: -webkit-flex;
   display: flex;
-  background-color: #fff
+  background-color: transparent;
 }
 
 .van-tabs__wrap--page-top {

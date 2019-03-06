@@ -1,0 +1,122 @@
+<!--  -->
+<template>
+  <view class='container search'>
+    <view class="search-header">
+      <van-search value="{{ value }}"
+                  background="#fff"
+                  placeholder="请输入搜索关键词"
+                  use-action-slot
+                  field-class="field-class"
+                  bind:search="onSearch">
+        <view slot="action"
+              class="search-btn"
+              bind:tap="onSearch">搜索</view>
+      </van-search>
+    </view>
+    <view class="search-list van-hairline--top">
+      <repeat for="{{array}}"
+              key="index"
+              index="index"
+              item="item">
+        <view class="search-item">
+          <item></item>
+        </view>
+      </repeat>
+      <view class="search-empty">
+        <image src="{{}}"
+               class="search-empty-img"
+               mode="scaleToFill"
+               lazy-load="false">
+        </image>
+        <text class="search-empty-text">抱歉，暂时没有找到你想要的内容~</text>
+        <text class="search-empty-text">换个关键词试试吧！~</text>
+      </view>
+    </view>
+
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+import item from '../../components/item'
+
+export default class Search extends wepy.page {
+  config = {
+    navigationBarTitleText: "",
+    usingComponents: {
+      "van-search": "../../vant/search/index"
+    }
+  };
+
+  data = {
+    array: [1, 2, 3, 4, 5, 6]
+  };
+  components = {
+    item
+  };
+  methods = {};
+  events = {};
+  watch = {};
+  computed = {};
+  onLoad () { };
+  onShow () { };
+}
+</script>
+<style lang='scss'>
+.search {
+  &-header {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    padding-bottom: 10rpx;
+  }
+  &-list {
+    position: relative;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 102rpx;
+    bottom: 0;
+    overflow-y: auto;
+    background: rgba(250, 250, 250, 1);
+  }
+  &-item {
+    border-bottom: 2rpx solid #d8d8d8;
+  }
+  &-text {
+    margin-top: 32rpx;
+    margin-left: 32rpx;
+    font-size: 24rpx;
+    color: #afafaf;
+  }
+  &-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1000;
+    background-color: #FAFAFA;
+    &-img {
+      width: 640rpx;
+      height: 460rpx;
+    }
+    &-text {
+      font-size: 26rpx;
+      color: #858697;
+      line-height: 36rpx;
+    }
+  }
+}
+.field-class {
+  border-radius: 16px !important;
+  border: 1px solid rgba(216, 216, 216, 1);
+}
+.search-btn {
+  color: #ff772d;
+}
+</style>

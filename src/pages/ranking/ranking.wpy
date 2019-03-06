@@ -1,36 +1,133 @@
 <style lang="scss">
-  .home {
-    &-title {
-      text-align: center;
-      font-size: 28px;
-      line-height: 40px;
-      &-num {
-        font-size: 34px;
-        font-weight: 500;
+@import '../../assets/style/mixin.scss';
+
+.ranking {
+  bottom: 100rpx;
+  overflow-y: auto;
+  &-title {
+    height: 60rpx;
+    text-align: center;
+    font-size: 24rpx;
+    line-height: 60rpx;
+    color: #FF4961;
+    background-color: #FEF6F7;
+  }
+  &-gold-coin {
+    font-size: 34rpx;
+    font-weight: bold;
+    color: #2A2828;
+  }
+  &-banner {
+    @include flex-column-center;
+    height: 372rpx;
+    color: #fff;
+    background:linear-gradient(225deg,rgba(255,171,147,1) 0%,rgba(255,166,94,1) 100%);
+    &-avatar {
+      position: relative;
+      margin-bottom: 16rpx;
+      width: 144rpx;
+      height: 144rpx;
+      border-radius: 50%;
+      border:4rpx solid rgba(255,235,180,1);
+      & > image {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
       }
     }
+    &-username {
+      margin-bottom: 6rpx;
+      font-size: 30rpx;
+    }
+    .ranking-gold-coin {
+      font-size: 48rpx;
+      color: #fff;
+    }
   }
+}
 </style>
 <template>
-  <view class="container home">
-    <view class="home-title">获课资料库已收录<text class="home-title-num">300,000,00</text>份资料</view>
+  <view class="container ranking">
+    <view class="ranking-title">榜单根据一周内累计获得下载币数量排名，每10分钟更新1次</view>
+    <view class="ranking-banner">
+      <view class="ranking-banner-avatar">
+        <image src="{{}}"
+               mode="widthFix"
+               lazy-load="false">
+        </image>
+      </view>
+      <text class="ranking-banner-username">风中的雪花</text>
+      <view class="ranking-gold-coin">220030</view>
+    </view>
+    <view class="ranking-list">
+      <repeat
+          for="{{array}}"
+          key="index"
+          index="index"
+          item="item">
+          <rankingItem :item="item"></rankingItem>
+      </repeat>
+    </view>
+    <van-tabbar active="{{ active }}"
+                bind:change="onChange">
+      <van-tabbar-item icon="home-o">标签</van-tabbar-item>
+      <van-tabbar-item icon="search"
+                       dot>标签</van-tabbar-item>
+      <van-tabbar-item icon="friends-o"
+                       info="5">标签</van-tabbar-item>
+      <van-tabbar-item icon="setting-o"
+                       info="20">标签</van-tabbar-item>
+    </van-tabbar>
   </view>
 </template>
 
 <script>
 import wepy from 'wepy'
 import { connect } from 'wepy-redux'
+import rankingItem from '../../components/rankingItem'
+
 
 export default class Index extends wepy.page {
   config = {
     navigationBarTitleText: 'test',
-    usingComponents: {
-      "van-button": "../vant/button/index"
-    }
+  }
+
+  components = {
+    rankingItem
   }
 
   data = {
-
+    array: [
+      {
+        index: 1,
+        num: 2030,
+        name: '风中的雪花'
+      },{
+        index: 2,
+        num: 2030,
+        name: '风中的雪花'
+      },{
+        index: 3,
+        num: 2030,
+        name: '风中的雪花'
+      },{
+        index: 4,
+        num: 2030,
+        name: '风中的雪花'
+      },{
+        index: 5,
+        num: 2030,
+        name: '风中的雪花'
+      },{
+        index: 6,
+        num: 2030,
+        name: '风中的雪花'
+      },{
+        index: 7,
+        num: 2030,
+        name: '风中的雪花'
+      }
+    ]
   }
 
 

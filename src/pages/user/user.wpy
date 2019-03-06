@@ -1,19 +1,163 @@
 <style lang="scss">
-  .home {
-    &-title {
-      text-align: center;
-      font-size: 28px;
-      line-height: 40px;
-      &-num {
-        font-size: 34px;
-        font-weight: 500;
-      }
+@import '../../assets/style/mixin.scss';
+
+.user {
+  &-header {
+    display: flex;
+    align-items: center;
+    padding: 48rpx 32rpx;
+  }
+  &-avatar {
+    margin-right: 24rpx;
+    width: 96rpx;
+    height: 96rpx;
+  }
+  &-name {
+    font-size: 32rpx;
+    color: #2a2828;
+  }
+  &-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 32rpx;
+    padding: 32rpx 0;
+    padding-right: 42rpx;
+    font-size: 30rpx;
+    color: #2a2828;
+    &-right {
+      display: flex;
+      align-items: center;
+    }
+    &-num {
+      margin-right: 18rpx;
+      font-size: 28rpx;
+      color: #fff;
+      padding: 0 16rpx;
+      height: 40rpx;
+      background-color: #ff4961;
+      border-radius: 20rpx;
+    }
+    &-arrow {
+      transform: translateY(4rpx);
     }
   }
+  &-message {
+    box-sizing: border-box;
+    margin: 34rpx auto;
+    padding: 32rpx;
+    width: 686rpx;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 1px 1px 10px 0px rgba(0, 0, 0, 0.05);
+    border-radius: 16rpx;
+    &-title {
+      @include flex-center;
+      margin-bottom: 10rpx;
+      justify-content: space-between;
+      font-size: 34tpx;
+      color: #2a2828;
+      & > text {
+        @include text-overflow(500rpx);
+      }
+    }
+    &-tag {
+      @include flex-center;
+      width: 112rpx;
+      height: 36rpx;
+      font-size: 20rpx;
+      color: #03d3c1;
+      background: rgba(3, 211, 193, 0.1);
+      border-radius: 8rpx;
+      border: 1px solid rgba(3, 211, 193, 0.4);
+    }
+    &-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    &-num {
+      font-size: 24rpx;
+      color: #ffd45c;
+    }
+    &-time {
+      font-size: 22rpx;
+      color: #858697;
+    }
+  }
+}
 </style>
 <template>
-  <view class="container home">
-    <view class="home-title">获课资料库已收录<text class="home-title-num">300,000,00</text>份资料</view>
+  <view class="container user">
+    <view class="user-header van-hairline--bottom">
+      <image src="{{}}"
+             class="user-avatar"
+             mode="scaleToFill"
+             lazy-load="false">
+      </image>
+      <text class="user-name">风中的雪花</text>
+    </view>
+    <navigator url="/pages/convertible/convertible" class="user-item van-hairline--bottom">
+      <text class="user-item-text">已兑换资料</text>
+      <view class="user-item-right">
+        <text class="user-item-num">10</text>
+        <view class="user-item-arrow">
+          <van-icon name="arrow"
+                    color="#858697" />
+        </view>
+      </view>
+    </navigator>
+    <view class="user-message">
+      <view class="user-message-title">
+        <text>小学二年级湖南期中试题</text>
+        <view class="user-message-tag">最近兑换</view>
+      </view>
+      <view class="user-message-info">
+        <text class="user-message-num">200</text>
+        <text class="user-message-time">2019-01-29 23:23:23</text>
+      </view>
+    </view>
+    <view class="user-list van-hairline--top">
+      <view class="user-item van-hairline--bottom">
+        <text class="user-item-text">已收藏资料</text>
+        <view class="user-item-right">
+          <text class="user-item-num">10</text>
+          <view class="user-item-arrow">
+            <van-icon name="arrow"
+                      color="#858697" />
+          </view>
+        </view>
+      </view>
+      <view class="user-item van-hairline--bottom">
+        <text class="user-item-text">我邀请的好友</text>
+        <view class="user-item-right">
+          <text class="user-item-num">10</text>
+          <view class="user-item-arrow">
+            <van-icon name="arrow"
+                      color="#858697" />
+          </view>
+        </view>
+      </view>
+      <view class="user-item van-hairline--bottom">
+        <text class="user-item-text">我的订单</text>
+        <view class="user-item-right">
+          <text class="user-item-num">10</text>
+          <view class="user-item-arrow">
+            <van-icon name="arrow"
+                      color="#858697" />
+          </view>
+        </view>
+      </view>
+    </view>
+    <van-tabbar active="{{ active }}"
+                bind:change="onChange">
+      <van-tabbar-item icon="home-o">资料库</van-tabbar-item>
+      <van-tabbar-item icon="search"
+                       dot>赚下载币</van-tabbar-item>
+      <van-tabbar-item icon="friends-o"
+                       info="5">勤奋榜</van-tabbar-item>
+      <van-tabbar-item icon="setting-o"
+                       info="20">我的</van-tabbar-item>
+    </van-tabbar>
   </view>
 </template>
 
@@ -25,7 +169,9 @@ export default class Index extends wepy.page {
   config = {
     navigationBarTitleText: 'test',
     usingComponents: {
-      "van-button": "../vant/button/index"
+      "van-popup": "../../vant/popup/index",
+      "van-tabs": "../../vant/tabs/index",
+      "van-tab": "../../vant/tab/index"
     }
   }
 

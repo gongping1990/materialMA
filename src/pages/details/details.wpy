@@ -1,0 +1,1074 @@
+<!--  -->
+<template>
+  <view class='container details'>
+    <scroll-view class="details-scroll"
+                 scroll-y
+                 @scroll="bindScroll"
+                 scroll-with-animation>
+      <view class="float-nav" wx:if="{{showNav}}">
+        <view class="details-tag float-nav-tag">最新</view>
+        <text class="float-nav-title">2019年小学二年级湖南期中试卷…2019年小学二年级湖南期中试卷…</text>
+        <view class="float-nav-share"></view>
+      </view>
+      <view class="details-title">
+        <view class="details-tag">最新</view>
+        <text>2019年小学二年级湖南期中试题(模拟卷)</text>
+      </view>
+      <view class="details-action">
+        <view class="details-action-dz">
+          <text>2434</text>
+        </view>
+        <view class="details-action-sc">
+          <text>已收藏</text>
+        </view>
+        <view class="details-action-fx">
+          <text>分享得50币</text>
+        </view>
+      </view>
+      <view class="details-method">
+        <text class="details-method-title">兑换方法</text>
+        <view class="details-method-content def">
+          <text class="details-method-content-title">使用下载币免费兑换，</text>
+          <text class="details-method-content-subtitle">下载币可通过邀请好友等方式获得。</text>
+          <view class="details-method-content-btn">获取下载币</view>
+          <text class="details-method-content-text">资料兑换后，可永久免费下载。</text>
+        </view>
+        <view class="details-method-content sel">
+          <text class="details-method-content-title">微信支付购买正在开发中，</text>
+          <text class="details-method-content-subtitle">将陆续开放。</text>
+          <view class="details-method-content-btn disabled">敬请期待…</view>
+        </view>
+      </view>
+      <view class="details-method">
+        <text class="details-method-title">下载说明</text>
+      </view>
+      <view class="details-method">
+        <text class="details-method-title">资料预览</text>
+        <view class="explain">
+          <image class="explain-img"
+                 src="https://pub.file.k12.vip/zlk_weapp/details/mobile.png"
+                 mode="widthFix" />
+          <text class="explain-text">手机在线查看</text>
+          <text class="explain-title">兑换后，点击页面底部直接打开</text>
+          <image class="explain-img"
+                 src="https://pub.file.k12.vip/zlk_weapp/details/pc.png"
+                 mode="widthFix" />
+          <text class="explain-text">电脑下载/打印</text>
+          <text class="explain-title">兑换后，点击页面底部下载打印，</text>
+          <text class="explain-title">可下载/打印当前资料。</text>
+          <text class="explain-subtitle">如需下载已兑换的所有资料，在电脑上打开网站 </text>
+          <text class="explain-subtitle orange">“ www.baidu.com ” </text>
+        </view>
+      </view>
+    </scroll-view>
+    <view class="details-nav">
+      <view class="details-nav-left">
+        <image src="https://pub.file.k12.vip/zlk_weapp/details/tabar-icon-files-sel.png"
+               class="details-nav-img"
+               mode="widthFix">
+        </image>
+        <text>资料库</text>
+      </view>
+      <view class="details-nav-right">
+        <view class="details-nav-pay"
+              @tap="bindClickPay"
+              wx:if="{{true}}">
+          <text class="details-nav-pay-title">直接购买</text>
+          <text class="details-nav-pay-subtitle">¥ 5元</text>
+        </view>
+        <view class="details-nav-free"
+              wx:if="{{true}}">
+          <text class="details-nav-free-title"
+                @tap="bindChangeShow">免费兑换</text>
+          <text class="details-nav-free-subtitle">消耗200币</text>
+        </view>
+        <view class="details-nav-pay"
+              wx:if="{{false}}"
+              @tap="bindChangeDownloadShow">
+          <text class="details-nav-pay-title">下载打印</text>
+        </view>
+        <view class="details-nav-free"
+              wx:if="{{false}}">
+          <text class="details-nav-free-title"
+                @tap="bindClickOpen">直接打开</text>
+        </view>
+      </view>
+    </view>
+    <van-popup show="{{ show }}">
+      <view class="details-popup">
+        <view class="details-popup-content">
+          <text class="details-popup-title">你正在兑换</text>
+          <text class="details-popup-text">小学一年级数学周练</text>
+        </view>
+        <view class="details-popup-action">
+          <view class="details-popup-btn cancel"
+                @tap="bindChangeShow">取消</view>
+          <view class="details-popup-btn confim"
+                @tap="bindConfim">确认兑换</view>
+        </view>
+      </view>
+    </van-popup>
+    <van-popup show="{{sucShow}}">
+      <view class="details-success-popup">
+        <van-icon name="checked"
+                  color="#03D3C1"
+                  size="96rpx" />
+        <text class="details-success-popup-title">你已成功兑换资料</text>
+        <text class="details-success-popup-text">好资料当然要和大家一起分享，</text>
+        <text class="details-success-popup-text">邀请好友浏览资料，各得50下载币</text>
+        <view class="details-success-popup-btn">分享到家长群</view>
+        <van-icon name="close"
+                  @tap="closePopup"
+                  class="close-btn"
+                  color="#fff"
+                  size="52rpx" />
+      </view>
+    </van-popup>
+    <van-popup show="{{errShow}}">
+      <view class="details-success-popup">
+        <van-icon name="checked"
+                  color="#03D3C1"
+                  size="96rpx" />
+        <text class="details-success-popup-title">下载币不足，无法兑换 </text>
+        <text class="details-success-popup-text">每邀请一位好友,即赚200下载币</text>
+        <text class="details-success-popup-text">可以下好多资料呢,快去分享吧！</text>
+        <view class="details-success-popup-btn">分享到家长群</view>
+        <van-icon name="close"
+                  @tap="closePopup"
+                  class="close-btn"
+                  color="#fff"
+                  size="52rpx" />
+      </view>
+    </van-popup>
+    <van-popup show="{{expectShow}}">
+      <view class="details-success-popup">
+        <van-icon name="checked"
+                  color="#03D3C1"
+                  size="96rpx" />
+        <text class="details-success-popup-title">敬请期待 </text>
+        <text class="details-success-popup-text">购买功能正在努力开发中,</text>
+        <text class="details-success-popup-text">很快就好~ 你现在可以使用下载币</text>
+        <text class="details-success-popup-text">免费兑换资料哦！</text>
+        <view class="details-success-popup-btn">分享到家长群</view>
+        <van-icon name="close"
+                  @tap="closePopup"
+                  class="close-btn"
+                  color="#fff"
+                  size="52rpx" />
+      </view>
+    </van-popup>
+    <van-popup show="{{copyShow}}">
+      <view class="details-success-popup">
+        <van-icon name="checked"
+                  color="#03D3C1"
+                  size="96rpx" />
+        <text class="details-success-popup-title">文档链接复制成功 </text>
+        <text class="details-success-popup-text">现在去微信聊天页面，</text>
+        <text class="details-success-popup-text"><text>粘贴文档链接</text>发送给打印店老板即可</text>
+        <view class="details-success-popup-btn"
+              @tap="closePopup">我知道了</view>
+        <van-icon name="close"
+                  @tap="closePopup"
+                  class="close-btn"
+                  color="#fff"
+                  size="52rpx" />
+      </view>
+    </van-popup>
+    <van-popup show="{{downPopShow}}">
+      <view class="details-success-popup">
+        <van-icon name="checked"
+                  color="#03D3C1"
+                  size="96rpx" />
+        <text class="details-success-popup-title">文档链接复制成功 </text>
+        <view class="details-down-step-num">
+          <view class="line left"></view>
+          <text>第1步</text>
+          <view class="line right"></view>
+        </view>
+        <text class="details-success-popup-text">点击复制文档链接，在微信 </text>
+        <text class="details-success-popup-text">聊天页面，粘贴文档链接</text>
+        <text class="details-success-popup-text"><text>发送给任意好友。</text></text>
+        <view class="details-down-step-num">
+          <view class="line left"></view>
+          <text>第2步</text>
+          <view class="line right"></view>
+        </view>
+        <text class="details-success-popup-text">登录微信电脑版，在聊天记录中</text>
+        <text class="details-success-popup-text"><text>复制文档链接</text>，然后打开电脑</text>
+        <text class="details-success-popup-text">浏览器，<text>粘贴文档链接</text>即可下载。</text>
+        <view class="details-success-popup-btn"
+              @tap="closePopup">我知道了</view>
+        <van-icon name="close"
+                  @tap="closePopup"
+                  class="close-btn"
+                  color="#fff"
+                  size="52rpx" />
+      </view>
+    </van-popup>
+    <van-popup show="{{downShow}}"
+               @close="bindChangeDownloadShow"
+               position="bottom">
+      <view class="details-down-popup">
+        <van-tabs active="{{ active }}"
+                  textColor="#2A2828"
+                  line-width="{{0}}">
+          <van-tab title="打印">
+            <view class="details-down-popup-tab phone">
+              <view class="details-down-step">
+                <view class="details-down-step-num">
+                  <view class="line left"></view>
+                  <text>第1步</text>
+                  <view class="line right"></view>
+                </view>
+                <view class="details-down-step-text"><text>复制</text>文档链接</view>
+              </view>
+              <view class="details-down-step">
+                <view class="details-down-step-num">
+                  <view class="line left"></view>
+                  <text>第1步</text>
+                  <view class="line right"></view>
+                </view>
+                <view class="details-down-step-text">在微信聊天页面，</view>
+                <view class="details-down-step-text">粘贴文档<text>链接发送给打印店老板</text>即可</view>
+              </view>
+              <text class="details-down-popup-text">emm^还是没搞懂？点击下面视频教程学习一下吧～</text>
+              <view class="details-down-popup-btn"
+                    @tap="bindCopyLink({{1}})">复制文档链接</view>
+            </view>
+          </van-tab>
+          <van-tab title="下载">
+            <view class="details-down-popup-tab phone">
+              <view class="details-down-step">
+                <view class="details-down-step-num">
+                  <view class="line left"></view>
+                  <text>第1步</text>
+                  <view class="line right"></view>
+                </view>
+                <view class="details-down-step-text">点击复制文档链接，在微信聊天页面，</view>
+                <view class="details-down-step-text">粘贴文档链接<text>发送给任意好友。</text></view>
+              </view>
+              <view class="details-down-step">
+                <view class="details-down-step-num">
+                  <view class="line left"></view>
+                  <text>第2步</text>
+                  <view class="line right"></view>
+                </view>
+                <view class="details-down-step-text">登录微信电脑版，在聊天记录中 </view>
+                <view class="details-down-step-text"><text>复制文档链接</text>，然后打开电脑浏览器， </view>
+                <view class="details-down-step-text"><text>粘贴文档链接</text>即可下载。 </view>
+              </view>
+              <text class="details-down-popup-text">emm^还是没搞懂？点击下面视频教程学习一下吧～</text>
+              <view class="details-down-popup-btn"
+                    @tap="bindCopyLink({{0}})">复制文档链接</view>
+            </view>
+          </van-tab>
+        </van-tabs>
+      </view>
+    </van-popup>
+    <van-toast id="van-toast" />
+
+    <view class="invite-friend"
+          @tap="bindClickInvite">
+      <text>邀请好友</text>
+      <text>赚150币</text>
+    </view>
+    <van-popup show="{{inviteShow}}">
+      <view class="invite-popup">
+        <view class="invite-popup-wrap">
+          <view class="invite-popup-btn">分享到家长群</view>
+          <view class="invite-popup-btn-wrap">
+            <poster id="poster"
+                    config="{{dConfig}}"
+                    bind:success="onPosterSuccess"
+                    bind:fail="onPosterFail">
+              <view class="invite-popup-btn share">生成邀请卡</view>
+            </poster>
+          </view>
+        </view>
+        <van-icon name="close"
+                  @tap="closePopup"
+                  class="close-btn"
+                  color="#fff"
+                  size="52rpx" />
+      </view>
+    </van-popup>
+    <van-popup show="{{shareShow}}">
+      <view class="share-popup">
+        <image src="{{shareUrl}}"
+               mode="widthFix" />
+        <text class="share-popup-text">保存你的专属海报，分享到朋友圈</text>
+        <view class="share-popup-btn">保存海报</view>
+        <van-icon name="close"
+                  @tap="closePopup"
+                  class="close-btn"
+                  color="#fff"
+                  size="52rpx" />
+      </view>
+    </van-popup>
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+import Toast from '../../vant/toast/toast'
+
+export default class Details extends wepy.page {
+  config = {
+    usingComponents: {
+      "poster": "../../miniprogram_dist/poster/index",
+      "van-popup": "../../vant/popup/index",
+      "van-tab": "../../vant/tab/index",
+      "van-tabs": "../../vant/tabs/index",
+      "van-toast": "../../vant/toast/index"
+    }
+  }
+
+  data = {
+    active: 0,
+    show: false,
+    errShow: false,
+    expectShow: false,
+    sucShow: false,
+    downShow: false,
+    copyShow: false,
+    inviteShow: false,
+    shareShow: false,
+    downPopShow: false,
+    downloadProgress: 0,
+    downloadSuccess: false,
+    showNav: false,
+    downloadStatus: 0,
+    shareUrl: '',
+    dConfig: {
+      width: 750,
+      height: 1334,
+      backgroundColor: '#fff',
+      debug: false,
+      blocks: [
+        {
+          width: 690,
+          height: 808,
+          x: 30,
+          y: 183,
+          borderWidth: 2,
+          borderColor: '#f0c2a0',
+          borderRadius: 20,
+        },
+        {
+          width: 634,
+          height: 74,
+          x: 59,
+          y: 770,
+          backgroundColor: '#fff',
+          opacity: 0.5,
+          zIndex: 100,
+        },
+      ],
+      texts: [
+        {
+          x: 113,
+          y: 61,
+          baseLine: 'middle',
+          text: '伟仔',
+          fontSize: 32,
+          color: '#8d8d8d',
+        },
+        {
+          x: 30,
+          y: 113,
+          baseLine: 'top',
+          text: '发现一个好物，推荐给你呀',
+          fontSize: 38,
+          color: '#080808',
+        },
+        {
+          x: 92,
+          y: 810,
+          fontSize: 38,
+          baseLine: 'middle',
+          text: '标题标题标题标题标题标题标题标题标题',
+          width: 570,
+          lineNum: 1,
+          color: '#8d8d8d',
+          zIndex: 200,
+        },
+        {
+          x: 59,
+          y: 895,
+          baseLine: 'middle',
+          text: [
+            {
+              text: '2人拼',
+              fontSize: 28,
+              color: '#ec1731',
+            },
+            {
+              text: '¥99',
+              fontSize: 36,
+              color: '#ec1731',
+              marginLeft: 30,
+            }
+          ]
+        },
+        {
+          x: 522,
+          y: 895,
+          baseLine: 'middle',
+          text: '已拼2件',
+          fontSize: 28,
+          color: '#929292',
+        },
+        {
+          x: 59,
+          y: 945,
+          baseLine: 'middle',
+          text: [
+            {
+              text: '商家发货&售后',
+              fontSize: 28,
+              color: '#929292',
+            },
+            {
+              text: '七天退货',
+              fontSize: 28,
+              color: '#929292',
+              marginLeft: 50,
+            },
+            {
+              text: '运费险',
+              fontSize: 28,
+              color: '#929292',
+              marginLeft: 50,
+            },
+          ]
+        },
+        {
+          x: 360,
+          y: 1065,
+          baseLine: 'top',
+          text: '长按识别小程序码',
+          fontSize: 38,
+          color: '#080808',
+        },
+        {
+          x: 360,
+          y: 1123,
+          baseLine: 'top',
+          text: '超值好货一起拼',
+          fontSize: 28,
+          color: '#929292',
+        },
+      ],
+      images: [
+        {
+          width: 62,
+          height: 62,
+          x: 30,
+          y: 30,
+          borderRadius: 62,
+          url: 'https://lc-I0j7ktVK.cn-n1.lcfile.com/02bb99132352b5b5dcea.jpg',
+        },
+        {
+          width: 634,
+          height: 634,
+          x: 59,
+          y: 210,
+          url: 'https://lc-I0j7ktVK.cn-n1.lcfile.com/193256f45999757701f2.jpeg',
+        },
+        {
+          width: 220,
+          height: 220,
+          x: 92,
+          y: 1020,
+          url: 'https://lc-I0j7ktVK.cn-n1.lcfile.com/d719fdb289c955627735.jpg',
+        },
+        {
+          width: 750,
+          height: 90,
+          x: 0,
+          y: 1244,
+          url: 'https://lc-I0j7ktVK.cn-n1.lcfile.com/67b0a8ad316b44841c69.png',
+        }
+      ]
+
+    },
+  };
+  methods = {
+    closePopup () {
+      this.errShow = false
+      this.sucShow = false
+      this.downShow = false
+      this.expectShow = false
+      this.downPopShow = false
+      this.copyShow = false
+      this.inviteShow = false
+    },
+    bindChangeShow () {
+      console.log(this.show, !this.show)
+      this.show = !this.show
+    },
+    bindCancel () {
+      this.show = false
+    },
+    bindConfim () {
+      this.show = false
+      this.sucShow = true
+    },
+    bindClickPay () {
+      this.expectShow = true
+    },
+    bindCloseSuccessShow () {
+      this.sucShow = false
+    },
+    bindChangeDownloadShow () {
+      this.downShow = !this.downShow
+    },
+    bindScroll(e) {
+      console.log(e)
+      if(e.detail.scrollTop > 50) {
+        this.showNav = true
+      } else {
+        this.showNav = false
+      }
+    },
+    bindCopyLink (n) {
+      console.log(n)
+      wx.setClipboardData({
+        data: 'dsadsadsaassa', //需要设置的内容,
+        success: res => {
+          wx.hideToast()
+          if (n) {
+            this.copyShow = true
+          } else {
+            this.downPopShow = true
+          }
+          this.downShow = false
+          this.$apply()
+        }
+      });
+    },
+    bindClickOpen () {
+      const toast = Toast.loading({
+        duration: 0,       // 持续展示 toast
+        forbidClick: true, // 禁用背景点击
+        message: '加载中 0%'
+      });
+
+      const downloadTask = wx.downloadFile({
+        url: 'https://pub.file.k12.vip/ccc.pptx', // 仅为示例，并非真实的资源
+        success (res) {
+          const filePath = res.tempFilePath
+          wx.openDocument({
+            filePath,
+            type: 'pptx',
+            success (res) {
+              wx.hideLoading()
+            }
+          })
+        }
+      })
+
+      downloadTask.onProgressUpdate((res) => {
+        if (res.progress < 100) {
+          toast.setData({
+            message: `加载中 ${res.progress}%`
+          })
+        } else {
+          Toast.clear()
+        }
+      })
+    },
+    bindClickInvite () {
+      this.inviteShow = true
+    },
+    onPosterSuccess (e) {
+      const { detail } = e;
+      console.log(e)
+      wx.saveImageToPhotosAlbum({
+        filePath: detail,
+        success (res) {
+          console.log(res)
+        }
+      })
+      this.inviteShow = false
+      this.shareUrl = detail
+      this.shareShow = true
+
+    }
+  };
+  events = {};
+  watch = {};
+  computed = {};
+  onLoad () {
+  }
+  onShow () { };
+}
+</script>
+<style lang='scss'>
+@import '../../assets/style/mixin.scss';
+
+.details {
+  height: 100vh;
+  .float-nav {
+    @include flex-center;
+    justify-content: space-between;
+    padding: 0 32rpx;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 92rpx;
+    background-color: #fff;
+    box-shadow:0px 6rpx 8rpx 0px rgba(0,0,0,0.08);
+    &-title {
+      @include text-overflow(496rpx);
+      font-size: 32rpx;
+      color: #2a2828;
+    }
+    &-share {
+      width: 72rpx;
+      height: 72rpx;
+      border-radius: 50%;
+      background: rgba(255, 119, 45, 1);
+    }
+  }
+  &-scroll {
+    box-sizing: border-box;
+    height: calc(100vh - 128rpx);
+    padding: 34rpx 48rpx;
+  }
+  &-title {
+    font-size: 44rpx;
+    color: #2a2828;
+    line-height: 60rpx;
+    text {
+      @include line-clamp;
+    }
+  }
+  &-tag {
+    @include flex-center;
+    margin-bottom: 10rpx;
+    width: 64rpx;
+    height: 32rpx;
+    font-size: 18rpx;
+    color: #03d3c1;
+    border-radius: 24rpx 4rpx 24rpx 4rpx;
+    border: 1px solid rgba(3, 211, 193, 0.4);
+  }
+  &-action {
+    @include flex-center;
+    margin-top: 48rpx;
+    width: 100%;
+    height: 132rpx;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0px 4rpx 24rpx 0px rgba(255, 119, 45, 0.14);
+    border-radius: 78rpx;
+    & > view {
+      flex: 1;
+      @include flex-center;
+      font-size: 24rpx;
+      color: #2a2828;
+      font-weight: 500;
+    }
+  }
+  &-method {
+    margin-top: 80rpx;
+    &-title {
+      font-size: 34rpx;
+      color: #2a2828;
+      font-weight: 500;
+      margin-bottom: 32rpx;
+    }
+    &-content {
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      margin-top: 32rpx;
+      width: 654rpx;
+      padding: 48rpx;
+      border-radius: 16rpx;
+      color: #fff;
+      background: url('https://pub.file.k12.vip/zlk_weapp/details/bg-downlaod.png')
+        no-repeat;
+      background-size: 100%;
+      &.sel {
+        background-image: url('https://pub.file.k12.vip/zlk_weapp/details/bg-pay.png');
+      }
+      &-title {
+        font-size: 34rpx;
+        line-height: 42rpx;
+      }
+      &-subtitle {
+        font-size: 24rpx;
+        line-height: 42rpx;
+      }
+      &-btn {
+        @include flex-center;
+        margin-top: 32rpx;
+        margin-bottom: 8rpx;
+        width: 220rpx;
+        height: 76rpx;
+        font-size: 28rpx;
+        color: #ff772d;
+        background: rgba(255, 255, 255, 1);
+        border-radius: 38rpx;
+        &.disabled {
+          background: #ddddea;
+          color: #858697;
+        }
+      }
+      &-text {
+        font-size: 20rpx;
+      }
+    }
+  }
+  &-float-nav {
+    position: fixed;
+    right: 16rpx;
+    top: 300rpx;
+  }
+  &-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0 32rpx;
+    height: 128rpx;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    &-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 20rpx;
+      color: #858697;
+    }
+    &-img {
+      width: 62rpx;
+      margin-bottom: 6rpx;
+    }
+    &-right {
+      font-size: 28rpx;
+      line-height: 40rpx;
+      font-weight: 500;
+      color: #2a2828;
+      @include flex-center;
+      & > view {
+        @include flex-column-center;
+      }
+    }
+    &-pay {
+      margin-right: 16rpx;
+      width: 196rpx;
+      height: 96rpx;
+      border-radius: 32rpx;
+      border: 1px solid rgba(216, 216, 216, 1);
+      &-subtitle {
+        font-size: 20rpx;
+        font-weight: normal;
+      }
+    }
+    &-free,
+    &-purchased {
+      width: 288rpx;
+      height: 96rpx;
+      color: #fff;
+      background: linear-gradient(
+        225deg,
+        rgba(255, 119, 45, 1) 0%,
+        rgba(251, 150, 69, 1) 100%
+      );
+      border-radius: 32rpx;
+      &-subtitle {
+        font-size: 20rpx;
+        font-weight: normal;
+      }
+    }
+    &-purchased {
+      width: 500rpx;
+    }
+  }
+  &-popup {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 48rpx;
+    width: 500rpx;
+    height: 352rpx;
+    font-weight: 400;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 16rpx;
+    &-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      font-size: 34rpx;
+      line-height: 48rpx;
+      color: #2a2828;
+    }
+    &-action {
+      @include flex-center;
+      justify-content: space-between;
+      width: 100%;
+      font-size: 28rpx;
+    }
+    &-btn {
+      @include flex-center;
+      width: 184rpx;
+      height: 80rpx;
+      border-radius: 32rpx;
+      border: 1px solid rgba(216, 216, 216, 1);
+      &.confim {
+        color: #fff;
+        border-color: transparent;
+        background: linear-gradient(
+          225deg,
+          rgba(255, 119, 45, 1) 0%,
+          rgba(251, 150, 69, 1) 100%
+        );
+        box-shadow: 0px 4rpx 20rpx 0px rgba(255, 119, 45, 0.5);
+      }
+    }
+    &-text {
+      color: #ff772d;
+    }
+  }
+  &-success-popup {
+    @include flex-column-center;
+    box-sizing: border-box;
+    padding: 48rpx 38rpx;
+    min-width: 500rpx;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 16rpx;
+    &-title {
+      margin-bottom: 6rpx;
+      font-size: 34rpx;
+      font-weight: 500;
+      line-height: 48rpx;
+    }
+    &-text {
+      font-size: 26rpx;
+      line-height: 48rpx;
+      text {
+        color: #ff772d;
+      }
+    }
+    &-btn {
+      @include flex-center;
+      margin-top: 48rpx;
+      width: 100%;
+      height: 80rpx;
+      font-size: 28rpx;
+      color: #fff;
+      background: linear-gradient(
+        225deg,
+        rgba(255, 119, 45, 1) 0%,
+        rgba(251, 150, 69, 1) 100%
+      );
+      box-shadow: 0px 4rpx 20rpx 0px rgba(255, 119, 45, 0.5);
+      border-radius: 32rpx;
+    }
+  }
+  .close-btn {
+    position: fixed;
+    z-index: 1000;
+    right: -68rpx;
+    top: -68rpx;
+  }
+  &-down-popup {
+    border-radius: 16rpx 16rpx 0px 0px;
+    overflow: hidden;
+    &-tab {
+      height: auto;
+      background-color: #fff;
+      &.phone,
+      &.computed {
+        @include flex-column-center;
+      }
+      &.computed {
+        .details-down-popup-info {
+          color: #ff772d;
+          font-size: 36rpx;
+        }
+      }
+    }
+    &-title {
+      margin-bottom: 8rpx;
+      font-size: 32rpx;
+      font-weight: 500;
+      color: #2a2828;
+      line-height: 44rpx;
+    }
+    &-info {
+      font-size: 24rpx;
+      color: #858697;
+    }
+    &-btn {
+      @include flex-center;
+      margin-top: 32rpx;
+      margin-bottom: 64rpx;
+      width: 500rpx;
+      height: 96rpx;
+      color: #fff;
+      font-size: 28rpx;
+      background: linear-gradient(
+        225deg,
+        rgba(255, 119, 45, 1) 0%,
+        rgba(251, 150, 69, 1) 100%
+      );
+      border-radius: 32rpx;
+      &.disabled {
+        background: rgba(197, 198, 212, 1);
+        color: #858697;
+      }
+    }
+    &-text {
+      margin-top: 50rpx;
+      width: 606rpx;
+      text-align: center;
+      font-size: 22rpx;
+      color: #c5c6d4;
+      line-height: 32rpx;
+    }
+  }
+  &-down {
+    &-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 46rpx;
+      font-size: 32rpx;
+      color: #2a2828;
+      &-num {
+        margin-top: 24rpx;
+        position: relative;
+        font-size: 24rpx;
+        color: #858697;
+        margin-bottom: 8rpx;
+      }
+      &-text {
+        & > text {
+          color: #ff772d;
+        }
+      }
+    }
+  }
+  .line {
+    position: absolute;
+    top: 50%;
+    width: 158rpx;
+    height: 2rpx;
+    transform: translateY(-50%);
+    background-color: #e2e3ed;
+    &.left {
+      left: -182rpx;
+    }
+    &.right {
+      right: -182rpx;
+    }
+  }
+  .explain {
+    @include flex-column-center;
+    padding-bottom: 80rpx;
+    &-img {
+      margin-top: 70rpx;
+      width: 192rpx;
+    }
+    &-text {
+      margin-top: 32rpx;
+      margin-bottom: 16rpx;
+      font-size: 28rpx;
+      color: #2a2828;
+    }
+    &-title {
+      font-size: 36rpx;
+      font-weight: 500;
+      line-height: 52rpx;
+    }
+    &-subtitle {
+      font-size: 28rpx;
+      color: #858697;
+      line-height: 52rpx;
+      &.orange {
+        color: #ff772d;
+      }
+    }
+  }
+  .invite-friend {
+    @include flex-column-center;
+    position: fixed;
+    right: 16rpx;
+    bottom: 400rpx;
+    width: 112rpx;
+    height: 112rpx;
+    font-size: 20rpx;
+    line-height: 28rpx;
+    color: #fff;
+    border-radius: 50%;
+    background: rgba(255, 73, 97, 1);
+    box-shadow: 0px 8rpx 24rpx 0px rgba(0, 0, 0, 0.05);
+  }
+  .invite-popup {
+    position: relative;
+    display: block;
+    padding: 0;
+    width: 640rpx;
+    height: 846rpx;
+    background: url('https://pub.file.k12.vip/zlk_weapp/popup/yq-friends.png')
+      no-repeat;
+    background-size: 100%;
+    .close-btn {
+      right: -28rpx;
+    }
+    &-btn {
+      position: absolute;
+      @include flex-center;
+      left: 96rpx;
+      bottom: 184rpx;
+      width: 404rpx;
+      height: 80rpx;
+      font-size: 28rpx;
+      color: #ff772d;
+      background: rgba(255, 255, 255, 1);
+      border-radius: 32rpx;
+      &.share {
+        bottom: 72rpx;
+        color: #fff;
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 1);
+      }
+    }
+  }
+  .share-popup {
+    @include flex-column-center;
+    image {
+      width: 500rpx;
+      border-radius: 16rpx;
+      margin-bottom: 48rpx;
+    }
+    &-text {
+      font-size: 24rpx;
+      color: rgba($color: #fff, $alpha: 0.6);
+    }
+    &-btn {
+      @include flex-center;
+      margin-top: 24rpx;
+      width: 500rpx;
+      height: 80rpx;
+      font-size: 28rpx;
+      color: #fff;
+      border-radius: 32rpx;
+      border: 1px solid rgba(255, 255, 255, 1);
+      &-wrap {
+        position: relative;
+        width: 500rpx;
+        height: 80rpx;
+        overflow: hidden;
+      }
+    }
+  }
+}
+</style>

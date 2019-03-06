@@ -1,0 +1,66 @@
+<!--  -->
+<template>
+  <view>
+    <van-popup show="{{ show }}">
+      <view class="new-popup">
+        <text class="new-popup-title">{{title}}</text>
+        <text class="new-popup-subtitle">{{subtitle}}</text>
+        <view class="new-popup-img">
+          <image src="https://pub.file.k12.vip/zlk_weapp/zlk/coin.png"
+                 class="new-popup-icon"
+                 mode="widthFix" />
+          <image src="https://pub.file.k12.vip/zlk_weapp/zlk/light.png"
+                 class="new-popup-bg"
+                 mode="widthFix" />
+        </view>
+        <text class="new-popup-num">+ {{num}}</text>
+        <view class="new-popup-text">
+          <slot name="message">使用下载币可以免费兑换资料</slot>
+        </view>
+        <view class="new-popup-btn"
+              @tap="onClose">{{buttonText}}</view>
+      </view>
+    </van-popup>
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+export default class Example extends wepy.component {
+  props = {
+    show: {
+      type: Boolean,
+      default: false
+    },
+    title: {
+      type: String,
+      default: '新用户礼包'
+    },
+    subtitle: {
+      type: String,
+      default: '恭喜获得下载币'
+    },
+    num: {
+      type: String,
+      default: 200
+    },
+    buttonText: {
+      type: String,
+      default: '立即领取'
+    }
+  };
+  data = {};
+  components = {};
+  methods = {
+    onClose () {
+      console.log(111)
+      this.$emit('confim')
+    }
+  };
+  events = {};
+  watch = {};
+  computed = {};
+  onLoad () { };
+}
+</script>
+<style lang='scss'>
+</style>
