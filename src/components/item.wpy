@@ -31,6 +31,7 @@
       }
     }
     &-tag {
+<<<<<<< HEAD
       margin-right: 16rpx;
       @include flex-center;
       width: 64rpx;
@@ -38,6 +39,12 @@
       font-size: 18rpx;
       color: #03D3C1;
       border-radius: 24rpx 4rpx 24rpx 4rpx;
+=======
+      width: 64px;
+      height: 32px;
+      font-size: 20px;
+      border-radius: 24px 4px 24px 4px;
+>>>>>>> 3ff2d32116b4aecb27faf38d2eb289ae787a89be
       border: 1px solid rgba(3, 211, 193, 0.4);
     }
   }

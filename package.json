@@ -20,7 +20,7 @@
     "redux": "^3.7.2",
     "redux-actions": "^2.2.1",
     "redux-promise": "^0.5.3",
-    "wepy": "^1.6.0",
+    "wepy": "^1.7.2",
     "wepy-async-function": "^1.4.4",
     "wepy-com-toast": "^1.0.2",
     "wepy-redux": "^1.5.3",
@@ -37,7 +37,13 @@
     "less": "^3.8.1",
     "node-sass": "^4.11.0",
     "wepy-compiler-babel": "^1.5.1",
+<<<<<<< HEAD
     "wepy-compiler-less": "^1.3.14",
     "wepy-compiler-sass": "^1.3.12"
+=======
+    "wepy-compiler-less": "^1.3.10",
+    "wepy-compiler-sass": "^1.3.12",
+    "wepy-plugin-px2units": "^1.1.0"
+>>>>>>> 3ff2d32116b4aecb27faf38d2eb289ae787a89be
   }
 }
