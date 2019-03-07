@@ -127,7 +127,8 @@ export default class extends wepy.app {
       'pages/task/task',
       'pages/convertible/convertible',
       'pages/collection/collection',
-      'pages/friend/friend'
+      'pages/friend/friend',
+      'pages/publicPopup/publicPopup',
     ],
     window: {
       backgroundTextStyle: 'light',
