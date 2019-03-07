@@ -1,0 +1,44 @@
+<!--  -->
+<template>
+  <view class= "zlk-subions">
+    <van-popup show="{{ show }}" bind:close="onClose">
+      <view class="new-popup">
+        11111
+      </view>
+    </van-popup>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy';
+
+  export default class subionsPopup extends wepy.component {
+    config = {
+      usingComponents: {
+        "van-popup": "../../vant/popup/index",
+      }
+    };
+    props = {};
+    data = {
+      show: true
+    };
+    components = {};
+    methods = {
+      onClose() {
+        this.show = false
+      }
+    };
+    events = {};
+    watch = {};
+    computed = {};
+
+    onLoad() {
+    };
+  }
+</script>
+<style lang='scss'>
+  @import '../assets/style/mixin.scss';
+
+  .zlk-subions {
+
+  }
+</style>

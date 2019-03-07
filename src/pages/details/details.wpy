@@ -32,7 +32,7 @@
         </view>
       </view>
       <view class="details-method">
-        <text class="details-method-title">兑换方法</text>
+        <text class="details-method-title" @tap="bindShowPopup({{'unconcernedShow'}})">兑换方法</text>
         <view class="details-method-content def">
           <text class="details-method-content-title">使用下载币免费兑换，</text>
           <text class="details-method-content-subtitle">下载币可通过邀请好友等方式获得。</text>
@@ -316,6 +316,23 @@
         </van-tabs>
       </view>
     </van-popup>
+    <!--未关注公众号弹窗-->
+    <van-popup show="{{unconcernedShow}}">
+      <view class="details-success-popup details-unconcerned-popup">
+        <text class="details-unconcerned-popup-title">激活永久免费下载权限 </text>
+        <text class="details-unconcerned-popup-text">1.进入客服，点击右下角小卡片,</text>
+        <text class="details-unconcerned-popup-text"> 2.按照客服的提示操作，即可激 活永久免费下载“语文”资料的权限</text>
+        <image class="details-unconcerned-popup-img"
+               src="https://pub.file.k12.vip/zlk_weapp/popup/tq-icon-wait.png"
+               mode="widthFix" />
+        <view class="details-success-popup-btn">去学习</view>
+        <van-icon name="close"
+                  @tap="closePopup"
+                  class="close-btn"
+                  color="#fff"
+                  size="52rpx" />
+      </view>
+    </van-popup>
     <van-toast id="van-toast" />
     <Share></Share>
   </view>
@@ -351,6 +368,7 @@ export default class Details extends wepy.page {
     downloadProgress: 0,
     downloadSuccess: false,
     showNav: false,
+    unconcernedShow: false,
     downloadStatus: 0
   };
   methods = {
@@ -363,6 +381,7 @@ export default class Details extends wepy.page {
       this.copyShow = false
       this.shareShow = false
       this.openErrShow = false
+      this.unconcernedShow = false
     },
     bindShowPopup (popup) {
       this[popup] = true
@@ -746,6 +765,32 @@ export default class Details extends wepy.page {
       border-radius: 32rpx;
     }
   }
+  &-unconcerned-popup{
+    &-title {
+      text-align: center;
+      width: rpx(392);
+      font-weight:500;
+      font-size: rpx(34);
+      color: #2A2828FF;
+      margin-bottom: rpx(20);
+    }
+
+    &-text {
+      width: rpx(392);
+      color: #FF772DFF;
+      font-size: rpx(26);
+      /*line-height: rpx(48);*/
+    }
+
+    &-img{
+      margin-top: rpx(32);
+      width: rpx(404);
+      height: rpx(528);
+      background:rgba(250,250,250,1);
+      border-radius: rpx(8);
+    }
+  }
+
   .close-btn {
     position: fixed;
     z-index: 1000;
