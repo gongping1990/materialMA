@@ -16,6 +16,10 @@
   white-space: normal;
 }
 
+@function rpx($value) {
+  @return $value * 1rpx;
+}
+
 // 垂直水平居中
 @mixin flex-center {
   display: flex;

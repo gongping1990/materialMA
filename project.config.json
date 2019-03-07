@@ -29,13 +29,26 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 0,
+			"current": 2,
 			"list": [
 				{
 					"id": 0,
 					"name": "authorize",
 					"pathName": "pages/collection/collection",
 					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "wushuju",
+					"pathName": "pages/convertible/convertible",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "sousuo",
+					"pathName": "pages/search/search",
+					"scene": null
 				}
 			]
 		}

@@ -117,7 +117,7 @@
       </view>
     </view>
     <view class="user-list van-hairline--top">
-      <view class="user-item van-hairline--bottom">
+      <view class="user-item van-hairline--bottom" @tap="toJump(1)">
         <text class="user-item-text">已收藏资料</text>
         <view class="user-item-right">
           <text class="user-item-num">10</text>
@@ -127,7 +127,7 @@
           </view>
         </view>
       </view>
-      <view class="user-item van-hairline--bottom">
+      <view class="user-item van-hairline--bottom" @tap="toJump(2)">
         <text class="user-item-text">我邀请的好友</text>
         <view class="user-item-right">
           <text class="user-item-num">10</text>
@@ -137,16 +137,16 @@
           </view>
         </view>
       </view>
-      <view class="user-item van-hairline--bottom">
-        <text class="user-item-text">我的订单</text>
-        <view class="user-item-right">
-          <text class="user-item-num">10</text>
-          <view class="user-item-arrow">
-            <van-icon name="arrow"
-                      color="#858697" />
-          </view>
-        </view>
-      </view>
+      <!--<view class="user-item van-hairline&#45;&#45;bottom">-->
+        <!--<text class="user-item-text">我的订单</text>-->
+        <!--<view class="user-item-right">-->
+          <!--<text class="user-item-num">10</text>-->
+          <!--<view class="user-item-arrow">-->
+            <!--<van-icon name="arrow"-->
+                      <!--color="#858697" />-->
+          <!--</view>-->
+        <!--</view>-->
+      <!--</view>-->
     </view>
     <van-tabbar active="{{3}}"
                 active-color="#FF772D"
@@ -214,7 +214,11 @@ export default class User extends wepy.page {
 
 
   methods = {
-
+    toJump (data) {
+      wx.navigateTo({
+        url: data == '1' ? '/pages/collection/collection' : '/pages/friend/friend'
+      })
+    }
   }
 
   events = {
