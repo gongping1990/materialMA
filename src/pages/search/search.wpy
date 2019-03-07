@@ -41,7 +41,7 @@ import item from '../../components/item'
 
 export default class Search extends wepy.page {
   config = {
-    navigationBarTitleText: "",
+    navigationBarTitleText: "搜索",
     usingComponents: {
       "van-search": "../../vant/search/index"
     }

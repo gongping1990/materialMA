@@ -62,3 +62,8 @@
   flex-direction: column;
   justify-content: center;
 }
+
+@mixin bg($path) {
+  background: url('https://pub.file.k12.vip' + $path) no-repeat;
+  background-size: 100%;
+}

@@ -57,10 +57,10 @@ export default {
         method: method,
         credentials: 'include',
         header: {
-          'content-type': contentType,
-          cookie: wx.getStorageSync('sessionid')
+          'content-type': contentType
         },
         success(res) {
+          console.log(res)
           if(res.data.code == 200) {
             resolve(res)
           } else {
@@ -76,7 +76,6 @@ export default {
           })
         }
       }
-      option.header = {...option.header, 'cookie': store.state.sessionid}
       wepy.request(option)
     })
   },

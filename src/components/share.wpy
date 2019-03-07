@@ -1,0 +1,254 @@
+<!--  -->
+<template>
+  <view class='share'>
+    <view class="invite-friend"
+          style="{{top ? 'bottom:auto;top:' + top + 'rpx' : ''}}"
+          @tap="bindClickInvite">
+      <text>邀请好友</text>
+      <text>{{bottom}}</text>
+    </view>
+    <van-popup show="{{inviteShow}}">
+      <view class="invite-popup">
+        <view class="invite-popup-wrap">
+          <view class="invite-popup-btn">分享到家长群</view>
+          <view class="invite-popup-btn-wrap">
+            <poster id="poster"
+                    config="{{dConfig}}"
+                    bind:success="onPosterSuccess"
+                    bind:fail="onPosterFail">
+              <view class="invite-popup-btn share">生成邀请卡</view>
+            </poster>
+          </view>
+        </view>
+        <van-icon name="close"
+                  @tap="closePopup"
+                  class="close-btn"
+                  color="#fff"
+                  size="52rpx" />
+      </view>
+    </van-popup>
+    <van-popup show="{{shareShow}}">
+      <view class="share-popup">
+        <image src="{{shareUrl}}"
+               mode="widthFix" />
+        <text class="share-popup-text">保存你的专属海报，分享到朋友圈</text>
+        <view class="share-popup-btn"
+              @tap="bindSaveImage">保存海报</view>
+        <van-icon name="close"
+                  @tap="closePopup"
+                  class="close-btn"
+                  color="#fff"
+                  size="52rpx" />
+      </view>
+    </van-popup>
+  </view>
+</template>
+<script>
+import wepy from 'wepy';
+export default class Example extends wepy.component {
+  props = {
+    top: {
+      type: Number,
+      default: 0
+    }
+  };
+  data = {
+    shareShow: false,
+    inviteShow: false,
+    shareUrl: '',
+    dConfig: {
+      width: 500,
+      height: 692,
+      backgroundColor: '#fff',
+      debug: false,
+      blocks: [
+        {
+          width: 500,
+          height: 260,
+          x: 0,
+          y: 0,
+          backgroundColor: '#FB9645',
+          zIndex: 1
+        },
+      ],
+      texts: [
+        {
+          x: 148,
+          y: 84,
+          text: '获课资料库',
+          fontSize: 44,
+          color: '#fff',
+          fontWeight: 600,
+          zIndex: 2
+        },
+        {
+          x: 128,
+          y: 130,
+          text: '精品小学学习资料免费领',
+          fontSize: 24,
+          color: '#fff',
+          zIndex: 2
+        },
+        {
+          x: 196,
+          y: 336,
+          text: '最美的期待',
+          fontSize: 26,
+          color: '#2A2828',
+          fontWeight: 600,
+          zIndex: 2
+        },
+        {
+          x: 120,
+          y: 370,
+          text: '我已经免费领取到学习资料啦，',
+          fontSize: 20,
+          color: '#2A2828',
+          zIndex: 2
+        },
+        {
+          x: 190,
+          y: 400,
+          text: '你也来看看吧~',
+          fontSize: 20,
+          color: '#2A2828',
+          zIndex: 2
+        },
+        {
+          x: 124,
+          y: 458,
+          text: '扫码免费领取资料',
+          fontSize: 34,
+          color: '#FF772D',
+          fontWeight: 600,
+          zIndex: 2
+        },
+      ],
+      images: [
+
+      ]
+
+    },
+  };
+  components = {};
+  methods = {
+    closePopup() {
+      this.inviteShow = false
+      this.shareShow = false
+    },
+    bindClickInvite () {
+      this.inviteShow = true
+    },
+    onPosterSuccess (e) {
+      const { detail } = e;
+      console.log(e)
+      this.inviteShow = false
+      this.shareUrl = detail
+      this.shareShow = true
+
+    },
+    bindSaveImage() {
+      wx.saveImageToPhotosAlbum({
+        filePath: this.shareUrl,
+        success (res) {
+          wx.showToast({
+            title: '已保存到相册！', //提示的内容,
+            icon: 'success', //图标,
+            duration: 2000, //延迟时间,
+            mask: true, //显示透明蒙层，防止触摸穿透,
+          });
+        }
+      })
+    }
+  };
+  events = {};
+  watch = {};
+  computed = {};
+  onLoad () { };
+}
+</script>
+<style lang='scss'>
+@import '../assets/style/mixin.scss';
+
+.invite-friend {
+  @include flex-column-center;
+  position: fixed;
+  right: 16rpx;
+  bottom: 400rpx;
+  width: 112rpx;
+  height: 112rpx;
+  font-size: 20rpx;
+  line-height: 28rpx;
+  color: #fff;
+  border-radius: 50%;
+  background: rgba(255, 73, 97, 1);
+  box-shadow: 0px 8rpx 24rpx 0px rgba(0, 0, 0, 0.05);
+}
+.invite-popup {
+  position: relative;
+  display: block;
+  padding: 0;
+  width: 640rpx;
+  height: 846rpx;
+  background: url('https://pub.file.k12.vip/zlk_weapp/popup/yq-friends.png')
+    no-repeat;
+  background-size: 100%;
+  .close-btn {
+    position: absolute;
+    top: -50rpx !important;
+    right: -18rpx !important;
+  }
+  &-btn {
+    position: absolute;
+    @include flex-center;
+    left: 96rpx;
+    bottom: 184rpx;
+    width: 404rpx;
+    height: 80rpx;
+    font-size: 28rpx;
+    color: #ff772d;
+    background: rgba(255, 255, 255, 1);
+    border-radius: 32rpx;
+    &.share {
+      bottom: 72rpx;
+      color: #fff;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 1);
+    }
+  }
+}
+.share-popup {
+  @include flex-column-center;
+  image {
+    width: 500rpx;
+    border-radius: 16rpx;
+    margin-bottom: 48rpx;
+  }
+  .close-btn {
+    position: absolute;
+    top: -90rpx !important;
+    right: -50rpx !important;
+  }
+  &-text {
+    font-size: 24rpx;
+    color: rgba($color: #fff, $alpha: 0.6);
+  }
+  &-btn {
+    @include flex-center;
+    margin-top: 24rpx;
+    width: 500rpx;
+    height: 80rpx;
+    font-size: 28rpx;
+    color: #fff;
+    border-radius: 32rpx;
+    border: 1px solid rgba(255, 255, 255, 1);
+    &-wrap {
+      position: relative;
+      width: 500rpx;
+      height: 80rpx;
+      overflow: hidden;
+    }
+  }
+}
+
+</style>

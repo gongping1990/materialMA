@@ -20,9 +20,9 @@
 </template>
 <script>
 import wepy from 'wepy';
-export default class Example extends wepy.page {
+export default class Convertible extends wepy.page {
   config = {
-    navigationBarTitleText: "",
+    navigationBarTitleText: "已兑换资料",
   };
   data = {};
   components = {};

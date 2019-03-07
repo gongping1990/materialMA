@@ -9,26 +9,39 @@
     text-align: center;
     font-size: 24rpx;
     line-height: 60rpx;
-    color: #FF4961;
-    background-color: #FEF6F7;
+    color: #ff4961;
+    background-color: #fef6f7;
   }
   &-gold-coin {
     font-size: 34rpx;
     font-weight: bold;
-    color: #2A2828;
+    color: #2a2828;
   }
   &-banner {
     @include flex-column-center;
     height: 372rpx;
     color: #fff;
-    background:linear-gradient(225deg,rgba(255,171,147,1) 0%,rgba(255,166,94,1) 100%);
+    background: linear-gradient(
+      225deg,
+      rgba(255, 171, 147, 1) 0%,
+      rgba(255, 166, 94, 1) 100%
+    );
+
     &-avatar {
       position: relative;
       margin-bottom: 16rpx;
       width: 144rpx;
       height: 144rpx;
       border-radius: 50%;
-      border:4rpx solid rgba(255,235,180,1);
+      border: 4rpx solid rgba(255, 235, 180, 1);
+      &-icon {
+        position: absolute;
+        top: -28rpx;
+        right: -26rpx;
+        width: 84rpx;
+        height: 84rpx;
+        @include bg('/zlk_weapp/qfb/crown.png');
+      }
       & > image {
         width: 100%;
         height: 100%;
@@ -40,8 +53,14 @@
       font-size: 30rpx;
     }
     .ranking-gold-coin {
+      @include flex-center;
       font-size: 48rpx;
       color: #fff;
+      image {
+        margin-right: 16rpx;
+        width: 56rpx;
+        height: 56rpx;
+      }
     }
   }
 }
@@ -51,81 +70,128 @@
     <view class="ranking-title">榜单根据一周内累计获得下载币数量排名，每10分钟更新1次</view>
     <view class="ranking-banner">
       <view class="ranking-banner-avatar">
-        <image src="{{}}"
-               mode="widthFix"
-               lazy-load="false">
-        </image>
+        <view class="ranking-banner-avatar-icon"></view>
+        <image src=""
+               mode="widthFix" />
       </view>
       <text class="ranking-banner-username">风中的雪花</text>
-      <view class="ranking-gold-coin">220030</view>
+      <view class="ranking-gold-coin">
+        <image
+          src="https://pub.file.k12.vip/zlk_weapp/qfb/coin.png"
+          mode="widthFix" />
+        220030
+      </view>
     </view>
     <view class="ranking-list">
-      <repeat
-          for="{{array}}"
-          key="index"
-          index="index"
-          item="item">
-          <rankingItem :item="item"></rankingItem>
+      <repeat for="{{array}}"
+              key="index"
+              index="index"
+              item="item">
+        <rankingItem :item="item" :index="index"></rankingItem>
       </repeat>
     </view>
-    <van-tabbar active="{{ active }}"
-                bind:change="onChange">
-      <van-tabbar-item icon="home-o">标签</van-tabbar-item>
-      <van-tabbar-item icon="search"
-                       dot>标签</van-tabbar-item>
-      <van-tabbar-item icon="friends-o"
-                       info="5">标签</van-tabbar-item>
-      <van-tabbar-item icon="setting-o"
-                       info="20">标签</van-tabbar-item>
+    <van-tabbar active="{{2}}"
+                active-color="#FF772D"
+                bind:change="onChangeTabbar">
+      <van-tabbar-item>
+        <image slot="icon"
+               src="https://pub.file.k12.vip/zlk_weapp/tabar-icon-files-def.png"
+               mode="aspectFit" />
+        <image slot="icon-active"
+               src="https://pub.file.k12.vip/zlk_weapp/tabar-icon-files-sel.png"
+               mode="aspectFit" />
+        资料库
+      </van-tabbar-item>
+      <van-tabbar-item>
+        <image slot="icon"
+               src="https://pub.file.k12.vip/zlk_weapp/tabar-icon-coin-def.png"
+               mode="aspectFit" />
+        <image slot="icon-active"
+               src="https://pub.file.k12.vip/zlk_weapp/tabar-icon-coin-sel.png"
+               mode="aspectFit" />
+        赚下载币
+      </van-tabbar-item>
+      <van-tabbar-item>
+        <image slot="icon"
+               src="https://pub.file.k12.vip/zlk_weapp/tabar-icon-industrious-def.png"
+               mode="aspectFit" />
+        <image slot="icon-active"
+               src="https://pub.file.k12.vip/zlk_weapp/tabar-icon-industrious-sel.png"
+               mode="aspectFit" />
+        勤奋榜
+      </van-tabbar-item>
+      <van-tabbar-item>
+        <image slot="icon"
+               src="https://pub.file.k12.vip/zlk_weapp/tabar-icon-my-def.png"
+               mode="aspectFit" />
+        <image slot="icon-active"
+               src="https://pub.file.k12.vip/zlk_weapp/tabar-icon-my-sel.png"
+               mode="aspectFit" />
+        我的
+      </van-tabbar-item>
     </van-tabbar>
+    <Share :top="top" />
   </view>
 </template>
 
 <script>
 import wepy from 'wepy'
 import { connect } from 'wepy-redux'
+import tabbarMixin from '../../mixins/tabbar.js'
+import Share from '../../components/share'
 import rankingItem from '../../components/rankingItem'
 
 
-export default class Index extends wepy.page {
+export default class Ranking extends wepy.page {
   config = {
-    navigationBarTitleText: 'test',
+    navigationBarTitleText: '排行榜'
   }
 
   components = {
-    rankingItem
+    rankingItem,
+    Share
   }
 
+  mixins = [tabbarMixin]
+
   data = {
+    top: 348,
     array: [
       {
         index: 1,
         num: 2030,
-        name: '风中的雪花'
-      },{
+        name: '风中的雪花',
+        mc: 22
+      }, {
         index: 2,
         num: 2030,
-        name: '风中的雪花'
-      },{
+        name: '风中的雪花',
+        mc: 1
+      }, {
         index: 3,
         num: 2030,
-        name: '风中的雪花'
-      },{
+        name: '风中的雪花',
+        mc: 2
+      }, {
         index: 4,
         num: 2030,
-        name: '风中的雪花'
-      },{
+        name: '风中的雪花',
+        mc: 3
+      }, {
         index: 5,
         num: 2030,
-        name: '风中的雪花'
-      },{
+        name: '风中的雪花',
+        mc: 4
+      }, {
         index: 6,
         num: 2030,
-        name: '风中的雪花'
-      },{
+        name: '风中的雪花',
+        mc: 5
+      }, {
         index: 7,
         num: 2030,
-        name: '风中的雪花'
+        name: '风中的雪花',
+        mc:6
       }
     ]
   }

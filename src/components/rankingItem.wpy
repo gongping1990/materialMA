@@ -2,21 +2,31 @@
 <template>
   <view class='ranking-item'>
     <view class="ranking-item-left">
-      <view class="ranking-item-num">{{item.index}}</view>
+      <view class="ranking-item-num {{!index ? 'isMe' : ''}}">
+        <image
+          wx:if="{{item.mc <= 3}}"
+          src="{{'https://pub.file.k12.vip/zlk_weapp/qfb/' + item.mc + '.png'}}"
+          mode="widthFix"/>
+        </image>
+        <text class="ranking-item-num-text" wx:if="{{item.mc > 3}}">{{item.mc}}</text>
+      </view>
       <image
-        src="{{}}"
+        src=""
         mode="scaleToFill"
-        class="ranking-item-avatar"
-        lazy-load="false"></image>
+        class="ranking-item-avatar"/>
       <view class="ranking-item-name">{{item.name}}</view>
     </view>
     <view class="ranking-item-right">
-      <viiew class="ranking-item-gold">{{item.num}}</viiew>
+      <image
+        class="ranking-item-coin"
+        src="https://pub.file.k12.vip/zlk_weapp/qfb/coin.png"/>
+      <view class="ranking-item-gold">{{item.num}}</view>
     </view>
   </view>
 </template>
 <script>
 import wepy from 'wepy';
+
 export default class Example extends wepy.component {
   props = {
     item: {
@@ -26,10 +36,13 @@ export default class Example extends wepy.component {
         num: 2030,
         name: '风中的雪花'
       }
+    },
+    index: {
+      type: Number,
+      default: 0
     }
   };
-  data = {};
-  components = {};
+
   methods = {};
   events = {};
   watch = {};
@@ -48,7 +61,7 @@ export default class Example extends wepy.component {
   align-items: center;
   padding: 32rpx;
   border-bottom: 2rpx solid #D8D8D8;
-  &-left {
+  &-left, &-right {
     display: flex;
     align-items: center;
   }
@@ -60,6 +73,10 @@ export default class Example extends wepy.component {
     color: #4A4A4A;
     font-size: 34rpx;
     font-weight: bold;
+    &.isMe {
+      font-style: italic;
+      color: #FF772D;
+    }
   }
   &-avatar {
     margin-right: 24rpx;
@@ -72,9 +89,14 @@ export default class Example extends wepy.component {
     color: #2A2828;
   }
   &-gold {
-    color: #2A2828;
+    color: #FF772D;
     font-size: 34rpx;
     font-weight: bold;
+  }
+  &-coin {
+    margin-right: 16rpx;
+    width: 40rpx;
+    height: 40rpx;
   }
 }
 </style>

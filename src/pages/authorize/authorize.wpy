@@ -70,7 +70,7 @@
 import wepy from 'wepy';
 export default class Authorize extends wepy.page {
   config = {
-
+    navigationBarTitleText: '获课资料库'
   }
 
   data = {

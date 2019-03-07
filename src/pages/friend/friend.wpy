@@ -20,7 +20,7 @@
 import wepy from 'wepy';
 export default class Friend extends wepy.page {
   config = {
-          navigationBarTitleText: "",
+    navigationBarTitleText: "我邀请的好友",
   };
   data = {};
   components = {};

@@ -130,7 +130,9 @@
       </van-tabbar-item>
     </van-tabbar>
     <CollectGoldPopup :show.sync="showPopup"></CollectGoldPopup>
-    <view class="home-mask" wx:if="{{showMask}}" @tap="closeMask">
+    <view class="home-mask"
+          wx:if="{{showMask}}"
+          @tap="closeMask">
       <view class="home-select-class"
             @tap.stop="bindClick">
         <text>高二年级</text>
@@ -139,6 +141,7 @@
       <image src="https://pub.file.k12.vip/zlk_weapp/zlk/guide.png"
              mode="widthFix" />
     </view>
+    <Share></Share>
   </view>
 </template>
 
@@ -148,24 +151,24 @@ import { connect } from 'wepy-redux'
 import tabbarMixin from '../../mixins/tabbar.js'
 import Item from '../../components/item'
 import CollectGoldPopup from '../../components/collectGoldPopup'
-
+import Share from '../../components/share'
 import { NumberAnimate, toThousands } from '../../utils'
 
 
 
 export default class Index extends wepy.page {
   config = {
-    navigationBarTitleText: 'test',
+    navigationBarTitleText: '获课资料库',
     usingComponents: {
-      "van-popup": "../../vant/popup/index",
-      "van-tabs": "../../vant/tabs/index",
-      "van-tab": "../../vant/tab/index"
+      "van-tab": "../../vant/tab/index",
+      "van-tabs": "../../vant/tabs/index"
     }
   }
 
   components = {
     item: Item,
-    CollectGoldPopup
+    CollectGoldPopup,
+    Share
   }
 
   mixins = [tabbarMixin]
@@ -240,7 +243,7 @@ export default class Index extends wepy.page {
   }
 
   methods = {
-    closeMask() {
+    closeMask () {
       this.showMask = false
     },
     onPosterSuccess (e) {
@@ -255,8 +258,7 @@ export default class Index extends wepy.page {
       console.error(err);
     },
     bindClick () {
-      this.n++
-      console.log(1111)
+      wx.navigateTo({ url: '/pages/selectClass/selectClass' });
     },
     bindScrolltolower (n) {
       console.log(n, this.time)
@@ -426,7 +428,7 @@ export default class Index extends wepy.page {
       top: 32rpx;
       width: 296rpx;
       height: 104rpx;
-      color: #FF772D;
+      color: #ff772d;
       background: rgba(255, 255, 255, 1);
       border-radius: 32rpx;
     }

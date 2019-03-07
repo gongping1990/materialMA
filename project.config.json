@@ -34,7 +34,7 @@
 				{
 					"id": 0,
 					"name": "authorize",
-					"pathName": "pages/details/details",
+					"pathName": "pages/collection/collection",
 					"query": ""
 				}
 			]

@@ -5,10 +5,12 @@
                  scroll-y
                  @scroll="bindScroll"
                  scroll-with-animation>
-      <view class="float-nav" wx:if="{{showNav}}">
+      <view class="float-nav"
+            wx:if="{{showNav}}">
         <view class="details-tag float-nav-tag">最新</view>
         <text class="float-nav-title">2019年小学二年级湖南期中试卷…2019年小学二年级湖南期中试卷…</text>
-        <view class="float-nav-share"></view>
+        <view class="float-nav-share"
+              @tap="bindShowPopup({{'shareShow'}})"></view>
       </view>
       <view class="details-title">
         <view class="details-tag">最新</view>
@@ -16,12 +18,16 @@
       </view>
       <view class="details-action">
         <view class="details-action-dz">
+          <view class="details-action-icon dz"></view>
           <text>2434</text>
         </view>
         <view class="details-action-sc">
+          <view class="details-action-icon sc"></view>
           <text>已收藏</text>
         </view>
-        <view class="details-action-fx">
+        <view class="details-action-fx"
+              @tap="bindShowPopup({{'shareShow'}})">
+          <view class="details-action-icon fx"></view>
           <text>分享得50币</text>
         </view>
       </view>
@@ -61,6 +67,7 @@
         </view>
       </view>
     </scroll-view>
+    <!-- 底部按钮导航  -->
     <view class="details-nav">
       <view class="details-nav-left">
         <image src="https://pub.file.k12.vip/zlk_weapp/details/tabar-icon-files-sel.png"
@@ -71,7 +78,7 @@
       </view>
       <view class="details-nav-right">
         <view class="details-nav-pay"
-              @tap="bindClickPay"
+              @tap="bindShowPopup({{'expectShow'}})"
               wx:if="{{true}}">
           <text class="details-nav-pay-title">直接购买</text>
           <text class="details-nav-pay-subtitle">¥ 5元</text>
@@ -79,12 +86,12 @@
         <view class="details-nav-free"
               wx:if="{{true}}">
           <text class="details-nav-free-title"
-                @tap="bindChangeShow">免费兑换</text>
+                @tap="bindShowPopup({{'show'}})">免费兑换</text>
           <text class="details-nav-free-subtitle">消耗200币</text>
         </view>
         <view class="details-nav-pay"
               wx:if="{{false}}"
-              @tap="bindChangeDownloadShow">
+              @tap="bindShowPopup({{'downShow'}})">
           <text class="details-nav-pay-title">下载打印</text>
         </view>
         <view class="details-nav-free"
@@ -94,6 +101,24 @@
         </view>
       </view>
     </view>
+    <!-- 点击分享时的弹窗  shareShow-->
+    <van-popup show="{{shareShow}}">
+      <view class="details-success-popup">
+        <image class="details-success-popup-img"
+               src="https://pub.file.k12.vip/zlk_weapp/popup/tq-icon-files.png"
+               mode="widthFix" />
+        <text class="details-success-popup-title">邀请好友浏览资料</text>
+        <text class="details-success-popup-title">各得<text>50</text>下载币 </text>
+        <text class="details-success-popup-text">好资料当然要和大家一起分享～</text>
+        <view class="details-success-popup-btn">分享到家长群</view>
+        <van-icon name="close"
+                  @tap="closePopup"
+                  class="close-btn"
+                  color="#fff"
+                  size="52rpx" />
+      </view>
+    </van-popup>
+    <!-- 点击免费兑换时的弹出 show  -->
     <van-popup show="{{ show }}">
       <view class="details-popup">
         <view class="details-popup-content">
@@ -108,13 +133,31 @@
         </view>
       </view>
     </van-popup>
+    <!-- 直接打开文档时格式错误出现的弹窗 openErrShow  -->
+    <van-popup show="{{openErrShow}}">
+      <view class="details-success-popup">
+        <image class="details-success-popup-img"
+               src="https://pub.file.k12.vip/zlk_weapp/popup/tq-icon-fial.png"
+               style="width:96rpx"
+               mode="widthFix" />
+        <text class="details-success-popup-title">文档格式不支持直接打开 </text>
+        <text class="details-success-popup-text">请在电脑上下载后使用</text>
+        <view class="details-success-popup-btn">分享到家长群</view>
+        <van-icon name="close"
+                  @tap="closePopup"
+                  class="close-btn"
+                  color="#fff"
+                  size="52rpx" />
+      </view>
+    </van-popup>
+    <!-- 成功兑换时的弹窗 sucShow  -->
     <van-popup show="{{sucShow}}">
       <view class="details-success-popup">
-        <van-icon name="checked"
-                  color="#03D3C1"
-                  size="96rpx" />
+        <image class="details-success-popup-img"
+               src="https://pub.file.k12.vip/zlk_weapp/popup/tq-icon-success.png"
+               style="width:96rpx"
+               mode="widthFix" />
         <text class="details-success-popup-title">你已成功兑换资料</text>
-        <text class="details-success-popup-text">好资料当然要和大家一起分享，</text>
         <text class="details-success-popup-text">邀请好友浏览资料，各得50下载币</text>
         <view class="details-success-popup-btn">分享到家长群</view>
         <van-icon name="close"
@@ -124,14 +167,15 @@
                   size="52rpx" />
       </view>
     </van-popup>
+    <!-- 金币不足时的弹窗  errShow-->
     <van-popup show="{{errShow}}">
       <view class="details-success-popup">
-        <van-icon name="checked"
-                  color="#03D3C1"
-                  size="96rpx" />
+        <image class="details-success-popup-img"
+               src="https://pub.file.k12.vip/zlk_weapp/popup/tq-icon-short.png"
+               style="width:96rpx"
+               mode="widthFix" />
         <text class="details-success-popup-title">下载币不足，无法兑换 </text>
-        <text class="details-success-popup-text">每邀请一位好友,即赚200下载币</text>
-        <text class="details-success-popup-text">可以下好多资料呢,快去分享吧！</text>
+        <text class="details-success-popup-text">每邀请一位好友,可赚200下载币</text>
         <view class="details-success-popup-btn">分享到家长群</view>
         <van-icon name="close"
                   @tap="closePopup"
@@ -140,11 +184,13 @@
                   size="52rpx" />
       </view>
     </van-popup>
+    <!-- 功能待开发时的弹窗 expectShow -->
     <van-popup show="{{expectShow}}">
       <view class="details-success-popup">
-        <van-icon name="checked"
-                  color="#03D3C1"
-                  size="96rpx" />
+        <image class="details-success-popup-img"
+               src="https://pub.file.k12.vip/zlk_weapp/popup/tq-icon-wait.png"
+               style="width:96rpx"
+               mode="widthFix" />
         <text class="details-success-popup-title">敬请期待 </text>
         <text class="details-success-popup-text">购买功能正在努力开发中,</text>
         <text class="details-success-popup-text">很快就好~ 你现在可以使用下载币</text>
@@ -157,11 +203,13 @@
                   size="52rpx" />
       </view>
     </van-popup>
+    <!-- 打印 文档链接复制成功时的弹窗  -->
     <van-popup show="{{copyShow}}">
       <view class="details-success-popup">
-        <van-icon name="checked"
-                  color="#03D3C1"
-                  size="96rpx" />
+        <image class="details-success-popup-img"
+               src="https://pub.file.k12.vip/zlk_weapp/popup/tq-icon-success.png"
+               style="width:96rpx"
+               mode="widthFix" />
         <text class="details-success-popup-title">文档链接复制成功 </text>
         <text class="details-success-popup-text">现在去微信聊天页面，</text>
         <text class="details-success-popup-text"><text>粘贴文档链接</text>发送给打印店老板即可</text>
@@ -174,11 +222,13 @@
                   size="52rpx" />
       </view>
     </van-popup>
+    <!-- 下载 文档链接复制成功时的弹窗  -->
     <van-popup show="{{downPopShow}}">
       <view class="details-success-popup">
-        <van-icon name="checked"
-                  color="#03D3C1"
-                  size="96rpx" />
+        <image class="details-success-popup-img"
+               src="https://pub.file.k12.vip/zlk_weapp/popup/tq-icon-success.png"
+               style="width:96rpx"
+               mode="widthFix" />
         <text class="details-success-popup-title">文档链接复制成功 </text>
         <view class="details-down-step-num">
           <view class="line left"></view>
@@ -205,6 +255,7 @@
                   size="52rpx" />
       </view>
     </van-popup>
+    <!-- 点击打印下载按钮时底部Tabs弹窗  -->
     <van-popup show="{{downShow}}"
                @close="bindChangeDownloadShow"
                position="bottom">
@@ -266,60 +317,24 @@
       </view>
     </van-popup>
     <van-toast id="van-toast" />
-
-    <view class="invite-friend"
-          @tap="bindClickInvite">
-      <text>邀请好友</text>
-      <text>赚150币</text>
-    </view>
-    <van-popup show="{{inviteShow}}">
-      <view class="invite-popup">
-        <view class="invite-popup-wrap">
-          <view class="invite-popup-btn">分享到家长群</view>
-          <view class="invite-popup-btn-wrap">
-            <poster id="poster"
-                    config="{{dConfig}}"
-                    bind:success="onPosterSuccess"
-                    bind:fail="onPosterFail">
-              <view class="invite-popup-btn share">生成邀请卡</view>
-            </poster>
-          </view>
-        </view>
-        <van-icon name="close"
-                  @tap="closePopup"
-                  class="close-btn"
-                  color="#fff"
-                  size="52rpx" />
-      </view>
-    </van-popup>
-    <van-popup show="{{shareShow}}">
-      <view class="share-popup">
-        <image src="{{shareUrl}}"
-               mode="widthFix" />
-        <text class="share-popup-text">保存你的专属海报，分享到朋友圈</text>
-        <view class="share-popup-btn">保存海报</view>
-        <van-icon name="close"
-                  @tap="closePopup"
-                  class="close-btn"
-                  color="#fff"
-                  size="52rpx" />
-      </view>
-    </van-popup>
+    <Share></Share>
   </view>
 </template>
 <script>
 import wepy from 'wepy';
 import Toast from '../../vant/toast/toast'
+import Share from '../../components/share'
 
 export default class Details extends wepy.page {
   config = {
+    navigationBarTitleText: '资料详情',
     usingComponents: {
-      "poster": "../../miniprogram_dist/poster/index",
-      "van-popup": "../../vant/popup/index",
-      "van-tab": "../../vant/tab/index",
-      "van-tabs": "../../vant/tabs/index",
       "van-toast": "../../vant/toast/index"
     }
+  }
+
+  components = {
+    Share
   }
 
   data = {
@@ -327,170 +342,16 @@ export default class Details extends wepy.page {
     show: false,
     errShow: false,
     expectShow: false,
+    openErrShow: false,
     sucShow: false,
     downShow: false,
     copyShow: false,
-    inviteShow: false,
-    shareShow: false,
     downPopShow: false,
+    shareShow: false,
     downloadProgress: 0,
     downloadSuccess: false,
     showNav: false,
-    downloadStatus: 0,
-    shareUrl: '',
-    dConfig: {
-      width: 750,
-      height: 1334,
-      backgroundColor: '#fff',
-      debug: false,
-      blocks: [
-        {
-          width: 690,
-          height: 808,
-          x: 30,
-          y: 183,
-          borderWidth: 2,
-          borderColor: '#f0c2a0',
-          borderRadius: 20,
-        },
-        {
-          width: 634,
-          height: 74,
-          x: 59,
-          y: 770,
-          backgroundColor: '#fff',
-          opacity: 0.5,
-          zIndex: 100,
-        },
-      ],
-      texts: [
-        {
-          x: 113,
-          y: 61,
-          baseLine: 'middle',
-          text: '伟仔',
-          fontSize: 32,
-          color: '#8d8d8d',
-        },
-        {
-          x: 30,
-          y: 113,
-          baseLine: 'top',
-          text: '发现一个好物，推荐给你呀',
-          fontSize: 38,
-          color: '#080808',
-        },
-        {
-          x: 92,
-          y: 810,
-          fontSize: 38,
-          baseLine: 'middle',
-          text: '标题标题标题标题标题标题标题标题标题',
-          width: 570,
-          lineNum: 1,
-          color: '#8d8d8d',
-          zIndex: 200,
-        },
-        {
-          x: 59,
-          y: 895,
-          baseLine: 'middle',
-          text: [
-            {
-              text: '2人拼',
-              fontSize: 28,
-              color: '#ec1731',
-            },
-            {
-              text: '¥99',
-              fontSize: 36,
-              color: '#ec1731',
-              marginLeft: 30,
-            }
-          ]
-        },
-        {
-          x: 522,
-          y: 895,
-          baseLine: 'middle',
-          text: '已拼2件',
-          fontSize: 28,
-          color: '#929292',
-        },
-        {
-          x: 59,
-          y: 945,
-          baseLine: 'middle',
-          text: [
-            {
-              text: '商家发货&售后',
-              fontSize: 28,
-              color: '#929292',
-            },
-            {
-              text: '七天退货',
-              fontSize: 28,
-              color: '#929292',
-              marginLeft: 50,
-            },
-            {
-              text: '运费险',
-              fontSize: 28,
-              color: '#929292',
-              marginLeft: 50,
-            },
-          ]
-        },
-        {
-          x: 360,
-          y: 1065,
-          baseLine: 'top',
-          text: '长按识别小程序码',
-          fontSize: 38,
-          color: '#080808',
-        },
-        {
-          x: 360,
-          y: 1123,
-          baseLine: 'top',
-          text: '超值好货一起拼',
-          fontSize: 28,
-          color: '#929292',
-        },
-      ],
-      images: [
-        {
-          width: 62,
-          height: 62,
-          x: 30,
-          y: 30,
-          borderRadius: 62,
-          url: 'https://lc-I0j7ktVK.cn-n1.lcfile.com/02bb99132352b5b5dcea.jpg',
-        },
-        {
-          width: 634,
-          height: 634,
-          x: 59,
-          y: 210,
-          url: 'https://lc-I0j7ktVK.cn-n1.lcfile.com/193256f45999757701f2.jpeg',
-        },
-        {
-          width: 220,
-          height: 220,
-          x: 92,
-          y: 1020,
-          url: 'https://lc-I0j7ktVK.cn-n1.lcfile.com/d719fdb289c955627735.jpg',
-        },
-        {
-          width: 750,
-          height: 90,
-          x: 0,
-          y: 1244,
-          url: 'https://lc-I0j7ktVK.cn-n1.lcfile.com/67b0a8ad316b44841c69.png',
-        }
-      ]
-
-    },
+    downloadStatus: 0
   };
   methods = {
     closePopup () {
@@ -500,7 +361,11 @@ export default class Details extends wepy.page {
       this.expectShow = false
       this.downPopShow = false
       this.copyShow = false
-      this.inviteShow = false
+      this.shareShow = false
+      this.openErrShow = false
+    },
+    bindShowPopup (popup) {
+      this[popup] = true
     },
     bindChangeShow () {
       console.log(this.show, !this.show)
@@ -522,9 +387,8 @@ export default class Details extends wepy.page {
     bindChangeDownloadShow () {
       this.downShow = !this.downShow
     },
-    bindScroll(e) {
-      console.log(e)
-      if(e.detail.scrollTop > 50) {
+    bindScroll (e) {
+      if (e.detail.scrollTop > 50) {
         this.showNav = true
       } else {
         this.showNav = false
@@ -577,23 +441,6 @@ export default class Details extends wepy.page {
         }
       })
     },
-    bindClickInvite () {
-      this.inviteShow = true
-    },
-    onPosterSuccess (e) {
-      const { detail } = e;
-      console.log(e)
-      wx.saveImageToPhotosAlbum({
-        filePath: detail,
-        success (res) {
-          console.log(res)
-        }
-      })
-      this.inviteShow = false
-      this.shareUrl = detail
-      this.shareShow = true
-
-    }
   };
   events = {};
   watch = {};
@@ -618,7 +465,7 @@ export default class Details extends wepy.page {
     top: 0;
     height: 92rpx;
     background-color: #fff;
-    box-shadow:0px 6rpx 8rpx 0px rgba(0,0,0,0.08);
+    box-shadow: 0px 6rpx 8rpx 0px rgba(0, 0, 0, 0.08);
     &-title {
       @include text-overflow(496rpx);
       font-size: 32rpx;
@@ -664,10 +511,30 @@ export default class Details extends wepy.page {
     border-radius: 78rpx;
     & > view {
       flex: 1;
-      @include flex-center;
+      @include flex-column-center;
       font-size: 24rpx;
       color: #2a2828;
       font-weight: 500;
+    }
+    &-icon {
+      width: 36rpx;
+      height: 36rpx;
+      margin-bottom: 4rpx;
+      &.dz {
+        @include bg('/zlk_weapp/details/xq-icon-collect1.png');
+        &.sel {
+          @include bg('/zlk_weapp/details/xq-icon-collect.png');
+        }
+      }
+      &.sc {
+        @include bg('/zlk_weapp/details/xq-icon-like1.png');
+        &.sel {
+          @include bg('/zlk_weapp/details/xq-icon-like.png');
+        }
+      }
+      &.fx {
+        @include bg('/zlk_weapp/details/xq-icon-share.png');
+      }
     }
   }
   &-method {
@@ -843,11 +710,18 @@ export default class Details extends wepy.page {
     min-width: 500rpx;
     background: rgba(255, 255, 255, 1);
     border-radius: 16rpx;
+    &-img {
+      width: 118rpx;
+      margin-bottom: 48rpx;
+    }
     &-title {
       margin-bottom: 6rpx;
       font-size: 34rpx;
       font-weight: 500;
       line-height: 48rpx;
+      text {
+        color: #ff772d;
+      }
     }
     &-text {
       font-size: 26rpx;
@@ -994,79 +868,6 @@ export default class Details extends wepy.page {
       line-height: 52rpx;
       &.orange {
         color: #ff772d;
-      }
-    }
-  }
-  .invite-friend {
-    @include flex-column-center;
-    position: fixed;
-    right: 16rpx;
-    bottom: 400rpx;
-    width: 112rpx;
-    height: 112rpx;
-    font-size: 20rpx;
-    line-height: 28rpx;
-    color: #fff;
-    border-radius: 50%;
-    background: rgba(255, 73, 97, 1);
-    box-shadow: 0px 8rpx 24rpx 0px rgba(0, 0, 0, 0.05);
-  }
-  .invite-popup {
-    position: relative;
-    display: block;
-    padding: 0;
-    width: 640rpx;
-    height: 846rpx;
-    background: url('https://pub.file.k12.vip/zlk_weapp/popup/yq-friends.png')
-      no-repeat;
-    background-size: 100%;
-    .close-btn {
-      right: -28rpx;
-    }
-    &-btn {
-      position: absolute;
-      @include flex-center;
-      left: 96rpx;
-      bottom: 184rpx;
-      width: 404rpx;
-      height: 80rpx;
-      font-size: 28rpx;
-      color: #ff772d;
-      background: rgba(255, 255, 255, 1);
-      border-radius: 32rpx;
-      &.share {
-        bottom: 72rpx;
-        color: #fff;
-        background: transparent;
-        border: 1px solid rgba(255, 255, 255, 1);
-      }
-    }
-  }
-  .share-popup {
-    @include flex-column-center;
-    image {
-      width: 500rpx;
-      border-radius: 16rpx;
-      margin-bottom: 48rpx;
-    }
-    &-text {
-      font-size: 24rpx;
-      color: rgba($color: #fff, $alpha: 0.6);
-    }
-    &-btn {
-      @include flex-center;
-      margin-top: 24rpx;
-      width: 500rpx;
-      height: 80rpx;
-      font-size: 28rpx;
-      color: #fff;
-      border-radius: 32rpx;
-      border: 1px solid rgba(255, 255, 255, 1);
-      &-wrap {
-        position: relative;
-        width: 500rpx;
-        height: 80rpx;
-        overflow: hidden;
       }
     }
   }

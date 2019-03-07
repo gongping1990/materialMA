@@ -19,7 +19,7 @@
 import wepy from 'wepy';
 export default class SelectClass extends wepy.page {
   config = {
-    navigationBarTitleText: "",
+    navigationBarTitleText: "选择年级",
   };
   data = {
     array: ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级',]

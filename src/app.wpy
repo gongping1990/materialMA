@@ -106,7 +106,7 @@
 <script>
 import wepy from 'wepy'
 import 'wepy-async-function'
-
+import api from './request/api'
 import { setStore } from 'wepy-redux'
 import configStore from './store'
 
@@ -136,6 +136,8 @@ export default class extends wepy.app {
       navigationBarTextStyle: 'black',
     },
     usingComponents: {
+      "poster": "../miniprogram_dist/poster/index",
+      "van-popup": "../vant/popup/index",
       "van-icon": "./vant/icon/index",
       "van-button": "./vant/button/index",
       "van-tabbar": "./vant/tabbar/index",
@@ -163,10 +165,13 @@ export default class extends wepy.app {
       this.globalData.share = false
     };
 
-    wx.getSystemInfo({
-      success: (res) => {
-        this.globalData.height = res.statusBarHeight
-      }
+    wepy.login().then(res => {
+      console.log(res)
+      api.user.wxUserLogin({
+        code: res.code
+      }).then(res => {
+        console.log(res)
+      })
     })
   }
 
