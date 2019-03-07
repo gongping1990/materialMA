@@ -60,7 +60,14 @@
            mode="widthFix"
            lazy-load="false" />
     <view class="authorize-action">
-      <view class="authorize-btn">确认授权</view>
+      <button
+        class="authorize-btn"
+        open-type="getUserInfo"
+        @getuserinfo="getUserInfo"
+        lang="zh_CN"
+        >
+        确认授权
+      </button>
       <text class="authorize-text">获课资料库需要你的授权才能给你发放资料哦</text>
       <text class="authorize-text">请点击确认授权</text>
     </view>
@@ -68,6 +75,7 @@
 </template>
 <script>
 import wepy from 'wepy';
+import api from '../../request/api'
 export default class Authorize extends wepy.page {
   config = {
     navigationBarTitleText: '获课资料库'
@@ -75,6 +83,23 @@ export default class Authorize extends wepy.page {
 
   data = {
     active: 0
+  }
+
+  methods = {
+    getUserInfo(res) {
+      console.log(res)
+      let {iv, encryptedData, rawData, signature} = res.detail
+      if(iv) {
+        api.user.updateUserWxMa({
+          iv,
+          encryptedData,
+          rawData,
+          signature
+        }).then(({data}) => {
+
+        })
+      }
+    }
   }
 }
 </script>

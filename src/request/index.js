@@ -76,7 +76,7 @@ export default {
           })
         }
       }
-      wepy.request(option)
+      wx.request(option)
     })
   },
   get(url, data = '') {
