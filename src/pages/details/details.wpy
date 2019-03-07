@@ -84,9 +84,9 @@
           <text class="details-nav-pay-subtitle">¥ 5元</text>
         </view>
         <view class="details-nav-free"
+              @tap="bindShowPopup({{'show'}})"
               wx:if="{{true}}">
-          <text class="details-nav-free-title"
-                @tap="bindShowPopup({{'show'}})">免费兑换</text>
+          <text class="details-nav-free-title">免费兑换</text>
           <text class="details-nav-free-subtitle">消耗200币</text>
         </view>
         <view class="details-nav-pay"
@@ -95,9 +95,9 @@
           <text class="details-nav-pay-title">下载打印</text>
         </view>
         <view class="details-nav-free"
+              @tap="bindClickOpen"
               wx:if="{{false}}">
-          <text class="details-nav-free-title"
-                @tap="bindClickOpen">直接打开</text>
+          <text class="details-nav-free-title">直接打开</text>
         </view>
       </view>
     </view>
