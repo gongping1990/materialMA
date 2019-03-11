@@ -10,6 +10,12 @@ const user = {
   },
   updateGrade(params) {
     return request.post("/user/updateGrade", params)
+  },
+  addZan(params) {
+    return request.get("/user/zan", params)
+  },
+  addCollect(params) {
+    return request.get("/user/collect", params)
   }
 };
 

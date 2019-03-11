@@ -7,23 +7,29 @@
                  scroll-with-animation>
       <view class="float-nav"
             wx:if="{{showNav}}">
-        <view class="details-tag float-nav-tag">最新</view>
-        <text class="float-nav-title">2019年小学二年级湖南期中试卷…2019年小学二年级湖南期中试卷…</text>
+        <view wx:if="{{detailData.newly || detailData.hot}}"
+              class="details-tag float-nav-tag {{detailDat.hot ? 'hot' : ''}}">{{detailData.newly ? '最新' : detailData.hot ? '最热' : ''}}</view>
+        <text class="float-nav-title">{{detailData.name}}</text>
         <view class="float-nav-share"
-              @tap="bindShowPopup({{'shareShow'}})"></view>
+              @tap="bindShowPopup({{'shareShow'}})">
+          <view class="float-nav-share-icon"></view>
+        </view>
       </view>
       <view class="details-title">
-        <view class="details-tag">最新</view>
-        <text>2019年小学二年级湖南期中试题(模拟卷)</text>
+        <view wx:if="{{detailData.newly || detailData.hot}}"
+              class="details-tag {{detailDat.hot ? 'hot' : ''}}">{{detailData.newly ? '最新' : detailData.hot ? '最热' : ''}}</view>
+        <text>{{detailData.name}}</text>
       </view>
       <view class="details-action">
-        <view class="details-action-dz">
-          <view class="details-action-icon dz"></view>
-          <text>2434</text>
+        <view class="details-action-dz"
+              @tap="binClickActionBtn({{'ownZan'}})">
+          <view class="details-action-icon dz {{detailData.ownZan ? 'sel' : ''}}"></view>
+          <text>{{detailData.zan}}</text>
         </view>
-        <view class="details-action-sc">
-          <view class="details-action-icon sc"></view>
-          <text>已收藏</text>
+        <view class="details-action-sc"
+              @tap="binClickActionBtn({{'ownCollect'}})">
+          <view class="details-action-icon sc {{detailData.ownCollect ? 'sel' : ''}}"></view>
+          <text>{{detailData.ownCollect ? '已收藏' : '未收藏'}}</text>
         </view>
         <view class="details-action-fx"
               @tap="bindShowPopup({{'shareShow'}})">
@@ -32,8 +38,9 @@
         </view>
       </view>
       <view class="details-method">
-        <text class="details-method-title" @tap="bindShowPopup({{'unconcernedShow'}})">兑换方法</text>
-        <view class="details-method-content def">
+        <text class="details-method-title"
+              @tap="bindShowPopup({{'unconcernedShow'}})">兑换方法</text>
+        <view class="details-method-content def" @tap="navigateToTask">
           <text class="details-method-content-title">使用下载币免费兑换，</text>
           <text class="details-method-content-subtitle">下载币可通过邀请好友等方式获得。</text>
           <view class="details-method-content-btn">获取下载币</view>
@@ -46,10 +53,17 @@
         </view>
       </view>
       <view class="details-method">
-        <text class="details-method-title">下载说明</text>
+        <text class="details-method-title">资料预览</text>
+        <swiper indicator-dots circular style="height: 906rpx">
+            <block wx:for="{{detailData.previewImgUrl}}" wx:key="{{index}}">
+                <swiper-item>
+                    <image mode="widthFix" src="{{item}}"/>
+                </swiper-item>
+            </block>
+        </swiper>
       </view>
       <view class="details-method">
-        <text class="details-method-title">资料预览</text>
+        <text class="details-method-title">资料使用说明</text>
         <view class="explain">
           <image class="explain-img"
                  src="https://pub.file.k12.vip/zlk_weapp/details/mobile.png"
@@ -69,7 +83,8 @@
     </scroll-view>
     <!-- 底部按钮导航  -->
     <view class="details-nav">
-      <view class="details-nav-left">
+      <view class="details-nav-left"
+            @tap="bindClickBackHome">
         <image src="https://pub.file.k12.vip/zlk_weapp/details/tabar-icon-files-sel.png"
                class="details-nav-img"
                mode="widthFix">
@@ -81,13 +96,13 @@
               @tap="bindShowPopup({{'expectShow'}})"
               wx:if="{{true}}">
           <text class="details-nav-pay-title">直接购买</text>
-          <text class="details-nav-pay-subtitle">¥ 5元</text>
+          <text class="details-nav-pay-subtitle">¥ {{detailData.priceYuan}}元</text>
         </view>
         <view class="details-nav-free"
               @tap="bindShowPopup({{'show'}})"
               wx:if="{{true}}">
           <text class="details-nav-free-title">免费兑换</text>
-          <text class="details-nav-free-subtitle">消耗200币</text>
+          <text class="details-nav-free-subtitle">消耗{{detailData.currency}}币</text>
         </view>
         <view class="details-nav-pay"
               wx:if="{{false}}"
@@ -123,7 +138,7 @@
       <view class="details-popup">
         <view class="details-popup-content">
           <text class="details-popup-title">你正在兑换</text>
-          <text class="details-popup-text">小学一年级数学周练</text>
+          <text class="details-popup-text">{{detailData.name}}</text>
         </view>
         <view class="details-popup-action">
           <view class="details-popup-btn cancel"
@@ -195,7 +210,7 @@
         <text class="details-success-popup-text">购买功能正在努力开发中,</text>
         <text class="details-success-popup-text">很快就好~ 你现在可以使用下载币</text>
         <text class="details-success-popup-text">免费兑换资料哦！</text>
-        <view class="details-success-popup-btn">分享到家长群</view>
+        <view class="details-success-popup-btn">我知道了</view>
         <van-icon name="close"
                   @tap="closePopup"
                   class="close-btn"
@@ -339,6 +354,7 @@
 </template>
 <script>
 import wepy from 'wepy';
+import api from '../../request/api'
 import Toast from '../../vant/toast/toast'
 import Share from '../../components/share'
 
@@ -369,9 +385,14 @@ export default class Details extends wepy.page {
     downloadSuccess: false,
     showNav: false,
     unconcernedShow: false,
-    downloadStatus: 0
+    downloadStatus: 0,
+    detailData: {},
+    id: 0
   };
   methods = {
+    navigateToTask() {
+      wx.navigateTo({ url: '/pages/task/task' });
+    },
     closePopup () {
       this.errShow = false
       this.sucShow = false
@@ -382,6 +403,13 @@ export default class Details extends wepy.page {
       this.shareShow = false
       this.openErrShow = false
       this.unconcernedShow = false
+    },
+    binClickActionBtn (type) {
+      if(type == 'ownZan') {
+        this.addZan(type)
+      } else {
+        this.addCollect(type)
+      }
     },
     bindShowPopup (popup) {
       this[popup] = true
@@ -460,13 +488,72 @@ export default class Details extends wepy.page {
         }
       })
     },
-  };
-  events = {};
-  watch = {};
-  computed = {};
-  onLoad () {
+    bindClickBackHome () {
+      wx.navigateTo({ url: '/pages/index/index' });
+    }
   }
-  onShow () { };
+
+  getDetailData (id) {
+    api.material.ownView({
+      id
+    }).then(({ data }) => {
+      this.detailData = data.resultData
+      this.detailData.previewImgUrl = JSON.parse(this.detailData.previewImgUrl)
+      this.$apply()
+    })
+  }
+
+  addCollect (type) {
+    api.user.addCollect({
+      matId: this.id
+    }).then(({ data }) => {
+      this.detailData[type] = !this.detailData[type]
+      this.$apply()
+    })
+  }
+
+  addZan (type) {
+    api.user.addZan({
+      matId: this.id
+    }).then(({ data }) => {
+      this.detailData[type] = !this.detailData[type]
+      console.log(this.detailData[type])
+      if(this.detailData[type]) {
+        this.detailData.zan += 1
+      } else {
+        this.detailData.zan -= 1
+      }
+      this.$apply()
+    })
+  }
+
+  orderAndPay(type) {
+    let data = {
+      materialId: this.id
+    }
+
+    if(type == 1) {
+      data.currency = this.detailData.currency
+      data.payMode = 1
+    }
+
+    if(type == 2) {
+      data.price = this.detailData.priceYuan
+      data.payMode = 2
+    }
+
+
+    api.order.orderAndPay(data).then(({data}) => {
+
+    })
+  }
+
+  onLoad (option) {
+    console.log(option)
+    this.id = option.id
+    this.getDetailData(option.id)
+  }
+
 }
 </script>
 <style lang='scss'>
@@ -485,16 +572,23 @@ export default class Details extends wepy.page {
     height: 92rpx;
     background-color: #fff;
     box-shadow: 0px 6rpx 8rpx 0px rgba(0, 0, 0, 0.08);
+    z-index: 10000;
     &-title {
       @include text-overflow(496rpx);
       font-size: 32rpx;
       color: #2a2828;
     }
     &-share {
+      @include flex-center;
       width: 72rpx;
       height: 72rpx;
       border-radius: 50%;
-      background: rgba(255, 119, 45, 1);
+      background-color: rgba(255, 119, 45, 1);
+      &-icon {
+        @include bg('/ranking/xq-icon-share1.png');
+        width: 42rpx;
+        height: 42rpx;
+      }
     }
   }
   &-scroll {
@@ -519,6 +613,10 @@ export default class Details extends wepy.page {
     color: #03d3c1;
     border-radius: 24rpx 4rpx 24rpx 4rpx;
     border: 1px solid rgba(3, 211, 193, 0.4);
+    &.hot {
+      color: #ff772d;
+      border-color: #ff772d;
+    }
   }
   &-action {
     @include flex-center;
@@ -540,15 +638,15 @@ export default class Details extends wepy.page {
       height: 36rpx;
       margin-bottom: 4rpx;
       &.dz {
-        @include bg('/zlk_weapp/details/xq-icon-collect1.png');
-        &.sel {
-          @include bg('/zlk_weapp/details/xq-icon-collect.png');
-        }
-      }
-      &.sc {
         @include bg('/zlk_weapp/details/xq-icon-like1.png');
         &.sel {
           @include bg('/zlk_weapp/details/xq-icon-like.png');
+        }
+      }
+      &.sc {
+        @include bg('/zlk_weapp/details/xq-icon-collect1.png');
+        &.sel {
+          @include bg('/zlk_weapp/details/xq-icon-collect.png');
         }
       }
       &.fx {
@@ -720,6 +818,7 @@ export default class Details extends wepy.page {
     }
     &-text {
       color: #ff772d;
+      @include text-overflow('400rpx');
     }
   }
   &-success-popup {
@@ -765,28 +864,28 @@ export default class Details extends wepy.page {
       border-radius: 32rpx;
     }
   }
-  &-unconcerned-popup{
+  &-unconcerned-popup {
     &-title {
       text-align: center;
       width: rpx(392);
-      font-weight:500;
+      font-weight: 500;
       font-size: rpx(34);
-      color: #2A2828FF;
+      color: #2a2828ff;
       margin-bottom: rpx(20);
     }
 
     &-text {
       width: rpx(392);
-      color: #FF772DFF;
+      color: #ff772dff;
       font-size: rpx(26);
       /*line-height: rpx(48);*/
     }
 
-    &-img{
+    &-img {
       margin-top: rpx(32);
       width: rpx(404);
       height: rpx(528);
-      background:rgba(250,250,250,1);
+      background: rgba(250, 250, 250, 1);
       border-radius: rpx(8);
     }
   }

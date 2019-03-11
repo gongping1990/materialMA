@@ -64,7 +64,7 @@ export default {
           if(res.data.code == 200) {
             resolve(res)
           } else {
-            reject(res.data.msg)
+            reject(res)
           }
           errorHandle(res.data.code, res.data.msg)
         },

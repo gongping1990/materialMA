@@ -82,13 +82,18 @@
                        scroll-top="{{scrollTop}}"
                        scroll-y="{{isScrollY}}"
                        scroll-with-animation>
-            <view class="bus">
+            <view class="bus {{isAnimate ? 'common-animate' : ''}}">
+              <noDataTemplate wx:if="{{!materialList.length}}"
+                              :info="emptyInfo"></noDataTemplate>
               <repeat for="{{materialList}}"
                       key="index"
                       index="index">
-                <item class="home-item"
-                      :item.sync="item"
-                      @tap="bindClickItem" />
+                <view class="home-item"
+                      style="{{'transition-delay:' + index * 0.3 + 's'}}">
+                  <item :item.sync="item"
+                        @tap="bindClickItem" />
+                </view>
+
                 <view class="home-block"></view>
               </repeat>
             </view>
@@ -138,8 +143,7 @@
     </van-tabbar>
     <CollectGoldPopup :show.sync="showPopup"></CollectGoldPopup>
     <view class="home-mask"
-          wx:if="{{showMask}}"
-          @tap="closeMask">
+          wx:if="{{showMask}}">
       <view class="home-select-class"
             @tap.stop="bindClick">
         <text>{{gradeName}}</text>
@@ -160,6 +164,7 @@ import tabbarMixin from '../../mixins/tabbar.js'
 import Item from '../../components/item'
 import CollectGoldPopup from '../../components/collectGoldPopup'
 import Share from '../../components/share'
+import noDataTemplate from '../../components/noDataTemplate'
 import { NumberAnimate, toThousands } from '../../utils'
 
 
@@ -180,12 +185,14 @@ export default class Index extends wepy.page {
   components = {
     item: Item,
     CollectGoldPopup,
-    Share
+    Share,
+    noDataTemplate
   }
 
   mixins = [tabbarMixin]
 
   data = {
+    isAnimate: false,
     showMask: false,
     showPopup: false,
     height: 0,
@@ -208,22 +215,35 @@ export default class Index extends wepy.page {
       size: 6,
       hot: false,
       newly: false
+    },
+    emptyInfo: {
+      tip: '暂时没有相关的资料！',
+      url: 'https://pub.file.k12.vip/empty/empty-search.png'
     }
   }
 
   computed = {
     gradeName () {
-      let { userInfo } = wepy.$instance.globalData
-      if (userInfo.gradeName) {
-        return userInfo.gradeName
-      } else {
+
+      let { userInfo } = this
+      if (!userInfo) {
         return '选择年级'
+      } else {
+        if (userInfo.gradeName) {
+          return userInfo.gradeName
+        } else {
+          return '选择年级'
+        }
       }
+
     }
   }
 
   watch = {
     userInfo (n, o) {
+      if (!n.grade) {
+        this.showMask = true
+      }
       if (!o.grade && this.subjectId && n.grade) {
         console.log(2)
         this.getCatalogList(this.subjectId)
@@ -283,7 +303,7 @@ export default class Index extends wepy.page {
       }, 500);
     },
     bindClickSearch () {
-      wx.navigateTo({ url: '/pages/search/search' });
+      wx.navigateTo({ url: '/pages/search/search?catalogId=' + this.catalogId });
     },
     bindLoadItem () {
       this.pagination.size = this.pagination.size + 3
@@ -385,6 +405,9 @@ export default class Index extends wepy.page {
       newly,
       size
     }).then(({ data }) => {
+      setTimeout(() => {
+        this.isAnimate = true
+      }, 500);
       this.total = data.resultData.total
       this.materialList = data.resultData.records
       this.$apply()
@@ -538,7 +561,7 @@ export default class Index extends wepy.page {
       top: 32rpx;
       width: 296rpx;
       height: 104rpx;
-      color: #f1f1f1;
+      color: #ff772d;
       background: rgba(255, 255, 255, 1);
       border-radius: 32rpx;
     }
@@ -547,6 +570,17 @@ export default class Index extends wepy.page {
       left: 160rpx;
       top: 142rpx;
       width: 410rpx;
+    }
+  }
+  &-item {
+    opacity: 0;
+    transform: translate(-30rpx, 20rpx);
+    transition: all 0.3s;
+  }
+  .common-animate {
+    .home-item {
+      opacity: 1;
+      transform: translate(0, 0);
     }
   }
 }

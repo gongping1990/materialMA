@@ -11,6 +11,7 @@
     margin-right: 24rpx;
     width: 96rpx;
     height: 96rpx;
+    border-radius: 50%;
   }
   &-name {
     font-size: 32rpx;
@@ -89,12 +90,12 @@
 <template>
   <view class="container user">
     <view class="user-header van-hairline--bottom">
-      <image src="{{}}"
+      <image src="{{userInfo.headimgurl}}"
              class="user-avatar"
              mode="scaleToFill"
              lazy-load="false">
       </image>
-      <text class="user-name">风中的雪花</text>
+      <text class="user-name">{{userInfo.nickname}}</text>
     </view>
     <navigator url="/pages/convertible/convertible" class="user-item van-hairline--bottom">
       <text class="user-item-text">已兑换资料</text>
@@ -138,7 +139,7 @@
         </view>
       </view>
       <view class="user-item van-hairline--bottom" @tap="toPopup(3)">
-        <text class="user-item-text">测试去公众号关注</text>
+        <text class="user-item-text">我的订单</text>
         <view class="user-item-right">
           <text class="user-item-num">10</text>
           <view class="user-item-arrow">
@@ -193,9 +194,15 @@
 
 <script>
 import wepy from 'wepy'
-import tabbarMixin from '../../mixins/tabbar.js'
 import { connect } from 'wepy-redux'
+import tabbarMixin from '../../mixins/tabbar.js'
 
+
+@connect({
+  userInfo(state) {
+    return state.user.userInfo
+  }
+})
 export default class User extends wepy.page {
   config = {
     navigationBarTitleText: '个人中心',
@@ -211,6 +218,7 @@ export default class User extends wepy.page {
   data = {
 
   }
+
 
 
   methods = {

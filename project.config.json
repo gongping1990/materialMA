@@ -34,8 +34,8 @@
 				{
 					"id": 0,
 					"name": "authorize",
-					"pathName": "pages/task/task",
-					"query": ""
+					"pathName": "pages/details/details",
+					"query": "id= 1103584304590462977"
 				},
 				{
 					"id": -1,

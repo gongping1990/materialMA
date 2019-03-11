@@ -18,8 +18,18 @@
 </template>
 <script>
 import wepy from 'wepy';
+import { connect } from 'wepy-redux'
+import { updateUserInfo } from '../../store/actions'
 import api from '../../request/api'
 
+
+@connect({
+  userInfo (state) {
+    return state.user.userInfo
+  },
+}, {
+  updateUserInfo: updateUserInfo
+})
 export default class SelectClass extends wepy.page {
   config = {
     navigationBarTitleText: "选择年级",
@@ -30,29 +40,30 @@ export default class SelectClass extends wepy.page {
     array: ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级',]
   }
 
-  computed = {
-    userInfo() {
-      let {userInfo} = wepy.$instance.globalData
-      if(userInfo.grade) {
-        this.active = userInfo.grade
-      }
-      return userInfo
+
+  onShow () {
+    console.log(this.methods.updateUserInfo)
+    if (this.userInfo.grade) {
+      this.active = this.userInfo.grade
     }
   }
 
   methods = {
-    bindClickBack() {
+    bindClickBack () {
       wx.navigateBack({
         delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
       });
     },
-    bindSelectClass(grade) {
+    bindSelectClass (grade) {
       this.active = grade
       api.user.updateGrade({
         grade
-      }).then(({data}) => {
-        wepy.$instance.globalData.userInfo.grade = grade
-        wepy.$instance.globalData.userInfo.gradeName = this.array[grade - 1]
+      }).then(({ data }) => {
+        this.methods.updateUserInfo({
+          ...this.userInfo,
+          grade,
+          gradeName: this.array[grade - 1]
+        })
         this.$apply()
         wx.showToast({
           title: '年级选择成功', //提示的内容,

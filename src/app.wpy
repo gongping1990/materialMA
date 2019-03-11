@@ -106,6 +106,7 @@
     border: 1px solid rgba(255, 255, 255, 1);
   }
 }
+
 </style>
 
 <script>
@@ -179,7 +180,7 @@ export default class extends wepy.app {
       }).then(({ data }) => {
         let { resultData } = data
         this.globalData.userInfo = resultData
-        store.dispatch({ type: 'UPDATE_USERINFO', playload: resultData })
+        store.dispatch({ type: 'UPDATE_USERINFO', payload: resultData })
         if (resultData.needAuth) {
           wx.redirectTo({ url: '/pages/authorize/authorize' });
         }

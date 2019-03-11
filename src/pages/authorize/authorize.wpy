@@ -96,7 +96,7 @@ export default class Authorize extends wepy.page {
           rawData,
           signature
         }).then(({data}) => {
-
+          wx.redirectTo({ url: '/pages/index/index' });
         })
       }
     }

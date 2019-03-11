@@ -9,6 +9,9 @@ const material = {
   },
   listMaterial(params) {
     return request.get('/material/listMaterial', params)
+  },
+  ownView(params) {
+    return request.post('/material/ownView', params)
   }
 };
 
