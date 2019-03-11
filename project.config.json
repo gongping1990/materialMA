@@ -29,7 +29,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 0,
+			"current": 6,
 			"list": [
 				{
 					"id": 0,
@@ -56,6 +56,26 @@
 					"name": "xiangqing",
 					"pathName": "pages/details/details",
 					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "tasjk",
+					"pathName": "pages/ranking/ranking",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "下载币",
+					"pathName": "pages/task/task",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "下载币",
+					"pathName": "pages/profit/profit",
 					"scene": null
 				}
 			]

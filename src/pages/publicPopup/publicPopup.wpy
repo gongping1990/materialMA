@@ -10,9 +10,9 @@
         </view>
       </view>
       <view class="public-wrap-content">
-        <image @tap="toImg" class="public-wrap-content-img" src="https://pub.file.k12.vip/2019/03/07/1103556901439930370.jpg"/>
+        <image @tap="toImg" class="public-wrap-content-img" src="https://pub.file.k12.vip/huoke/group.52ea104.png"/>
         <view class="public-wrap-content-text">
-          <image class="-text-img" src="https://pub.file.k12.vip/2019/03/07/1103556901439930370.jpg"/>
+          <image class="-text-img" src="https://pub.file.k12.vip/huoke/group.52ea104.png"/>
           <view class="-text-text">长按识别二维码关注小学语文公众号</view>
         </view>
       </view>
@@ -31,18 +31,18 @@
     props = {};
     data = {
       show: true,
-      imgList: ['https://pub.file.k12.vip/2019/03/07/1103556901439930370.jpg']
+      imgList: ['https://pub.file.k12.vip/huoke/group.52ea104.png']
     };
     components = {};
-    // toImg () {
-    //   console.log(wx.previewImage)
-    //   wx.previewImage({
-    //     current: this.imgList[0], // 当前显示图片的http链接
-    //     ulrs: this.imgList, // 当前显示图片的http链接
-    //   })
-    // }
-    methods = {
 
+    methods = {
+      toImg () {
+        console.log(wx.previewImage)
+        wx.previewImage({
+          current: this.imgList[0], // 当前显示图片的http链接
+          ulrs: this.imgList, // 当前显示图片的http链接
+        })
+      },
       onClose() {
         this.show = false;
       }

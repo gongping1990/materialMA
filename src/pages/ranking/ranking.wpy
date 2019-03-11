@@ -136,6 +136,7 @@
 
 <script>
 import wepy from 'wepy'
+import api from '../../request/api'
 import { connect } from 'wepy-redux'
 import tabbarMixin from '../../mixins/tabbar.js'
 import Share from '../../components/share'
@@ -155,47 +156,23 @@ export default class Ranking extends wepy.page {
   mixins = [tabbarMixin]
 
   data = {
+    page: {
+      current: 1,
+      size: 10
+    },
     top: 348,
-    array: [
-      {
-        index: 1,
-        num: 2030,
-        name: '风中的雪花',
-        mc: 22
-      }, {
-        index: 2,
-        num: 2030,
-        name: '风中的雪花',
-        mc: 1
-      }, {
-        index: 3,
-        num: 2030,
-        name: '风中的雪花',
-        mc: 2
-      }, {
-        index: 4,
-        num: 2030,
-        name: '风中的雪花',
-        mc: 3
-      }, {
-        index: 5,
-        num: 2030,
-        name: '风中的雪花',
-        mc: 4
-      }, {
-        index: 6,
-        num: 2030,
-        name: '风中的雪花',
-        mc: 5
-      }, {
-        index: 7,
-        num: 2030,
-        name: '风中的雪花',
-        mc:6
-      }
-    ]
+    array: []
   }
 
+  getRanking() {
+    api.task.rankingList({
+      current: this.page.current,
+      size: this.page.size
+    })
+      .then(({ data }) => {
+        console.log(data);
+      });
+  }
 
   methods = {
 
@@ -203,6 +180,10 @@ export default class Ranking extends wepy.page {
 
   events = {
 
+  }
+
+  onShow () {
+    this.getRanking()
   }
 
   onLoad () {

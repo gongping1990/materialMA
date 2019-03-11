@@ -136,6 +136,7 @@ export default class extends wepy.app {
       'pages/collection/collection',
       'pages/friend/friend',
       'pages/publicPopup/publicPopup',
+      'pages/profit/profit',
     ],
     window: {
       backgroundTextStyle: 'light',
