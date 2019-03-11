@@ -137,16 +137,16 @@
           </view>
         </view>
       </view>
-      <!--<view class="user-item van-hairline&#45;&#45;bottom">-->
-        <!--<text class="user-item-text">我的订单</text>-->
-        <!--<view class="user-item-right">-->
-          <!--<text class="user-item-num">10</text>-->
-          <!--<view class="user-item-arrow">-->
-            <!--<van-icon name="arrow"-->
-                      <!--color="#858697" />-->
-          <!--</view>-->
-        <!--</view>-->
-      <!--</view>-->
+      <view class="user-item van-hairline--bottom" @tap="toPopup(3)">
+        <text class="user-item-text">测试去公众号关注</text>
+        <view class="user-item-right">
+          <text class="user-item-num">10</text>
+          <view class="user-item-arrow">
+            <van-icon name="arrow"
+                      color="#858697" />
+          </view>
+        </view>
+      </view>
     </view>
     <van-tabbar active="{{3}}"
                 active-color="#FF772D"
@@ -217,6 +217,11 @@ export default class User extends wepy.page {
     toJump (data) {
       wx.navigateTo({
         url: data == '1' ? '/pages/collection/collection' : '/pages/friend/friend'
+      })
+    },
+    toPopup () {
+      wx.navigateTo({
+        url: '/pages/publicPopup/publicPopup'
       })
     }
   }

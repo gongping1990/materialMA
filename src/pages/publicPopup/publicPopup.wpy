@@ -1,0 +1,156 @@
+<!--  -->
+<template>
+  <view class="public">
+    <view class="public-wrap">
+      <view class="public-wrap-header">
+        <image class="-header-img" src="https://pub.file.k12.vip/empty/empty-dh.png"/>
+        <view class="-header-text">
+          <view class="-header-text-one">小学语文</view>
+          <view class="-header-text-two">小学语文介绍</view>
+        </view>
+      </view>
+      <view class="public-wrap-content">
+        <image @tap="toImg" class="public-wrap-content-img" src="https://pub.file.k12.vip/2019/03/07/1103556901439930370.jpg"/>
+        <view class="public-wrap-content-text">
+          <image class="-text-img" src="https://pub.file.k12.vip/2019/03/07/1103556901439930370.jpg"/>
+          <view class="-text-text">长按识别二维码关注小学语文公众号</view>
+        </view>
+      </view>
+      <view class="public-wrap-footer">
+        <image class="public-wrap-footer-img" src="https://pub.file.k12.vip/2019/03/07/1103556901439930370.jpg"/>
+        <text class="public-wrap-footer-text">安全认证</text>
+      </view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy';
+
+  export default class publicPopup extends wepy.page {
+    config = {};
+    props = {};
+    data = {
+      show: true,
+      imgList: ['https://pub.file.k12.vip/2019/03/07/1103556901439930370.jpg']
+    };
+    components = {};
+    // toImg () {
+    //   console.log(wx.previewImage)
+    //   wx.previewImage({
+    //     current: this.imgList[0], // 当前显示图片的http链接
+    //     ulrs: this.imgList, // 当前显示图片的http链接
+    //   })
+    // }
+    methods = {
+
+      onClose() {
+        this.show = false;
+      }
+    };
+    events = {};
+    watch = {};
+    computed = {};
+
+    onLoad() {
+    };
+  }
+</script>
+<style lang='scss'>
+  @import '../../assets/style/mixin.scss';
+
+  .public {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+
+    &-wrap {
+      width: rpx(500);
+      background: rgba(255, 255, 255, 1);
+      border-radius: rpx(16);
+
+      &-header {
+        display: flex;
+        align-items: center;
+        margin: rpx(48);
+
+        .-header-img {
+          margin-right: rpx(24);
+          width: rpx(96);
+          height: rpx(96);
+          border-radius: rpx(8);
+        }
+
+        .-header-text {
+          &-one {
+            font-weight: 500;
+            font-size: rpx(34);
+          }
+
+          &-two {
+            color: #858697;
+            font-size: rpx(26);
+          }
+        }
+      }
+
+      &-content {
+        text-align: center;
+        margin-bottom: rpx(36);
+
+        &-img {
+          margin-bottom: rpx(24);
+          width: rpx(324);
+          height: rpx(324);
+        }
+
+        &-text {
+          display: flex;
+          align-items: center;
+          text-align: left;
+          margin-left: rpx(64);
+          .-text-img {
+            margin-right: rpx(16);
+            width: rpx(68);
+            height: rpx(68);
+          }
+          .-text-text {
+            width: rpx(288);
+            height: rpx(68);
+            font-size: rpx(24);
+            font-weight: 500;
+            color: rgba(255, 73, 97, 1);
+            line-height: rpx(34);
+          }
+        }
+      }
+
+      &-footer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: rpx(500);
+        height: rpx(52);
+        background: rgba(3, 211, 133, 1);
+        border-radius: 0 0 rpx(16) rpx(16);
+
+        &-img {
+          margin-right: rpx(8);
+          width: rpx(20);
+          height: rpx(21);
+        }
+
+        &-text {
+          width: rpx(80);
+          height: rpx(28);
+          font-size: rpx(20);
+          font-weight:400;
+          color:rgba(255,255,255,1);
+          line-height: rpx(28);
+        }
+      }
+    }
+  }
+</style>
