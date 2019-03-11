@@ -10,6 +10,9 @@ const user = {
   },
   updateGrade(params) {
     return request.post("/user/updateGrade", params)
+  },
+  changeIdentity(params) {
+    return request.post("/user/updateUserType", params)
   }
 };
 
