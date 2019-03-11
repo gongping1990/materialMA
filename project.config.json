@@ -2,7 +2,7 @@
 	"description": "A WePY project",
 	"setting": {
 		"urlCheck": false,
-		"es6": true,
+		"es6": false,
 		"postcss": false,
 		"minified": false,
 		"newFeature": true,
@@ -29,12 +29,12 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 3,
+			"current": 0,
 			"list": [
 				{
 					"id": 0,
 					"name": "authorize",
-					"pathName": "pages/collection/collection",
+					"pathName": "pages/task/task",
 					"query": ""
 				},
 				{
@@ -55,6 +55,7 @@
 					"id": -1,
 					"name": "xiangqing",
 					"pathName": "pages/details/details",
+					"query": "",
 					"scene": null
 				}
 			]

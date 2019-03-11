@@ -124,6 +124,7 @@
 </template>
 <script>
 import wepy from 'wepy';
+import api from '../../request/api'
 import tabbarMixin from '../../mixins/tabbar.js'
 import collectGoldPopup from '../../components/collectGoldPopup'
 
@@ -138,6 +139,8 @@ export default class Task extends wepy.page {
   data = {
     show: false,
     showSignIn: false,
+    signedIn: false,
+    continuousSignInDays: 0,
     title: '签到成功',
     num: '150',
     subtitle: '恭喜获得下载币',
@@ -160,15 +163,34 @@ export default class Task extends wepy.page {
       },
     ]
   };
+
+
   components = {
     collectGoldPopup
   };
-  methods = {};
-  events = {};
-  watch = {};
-  computed = {};
-  onLoad () { };
-  onShow () { };
+  methods = {}
+  onShow () {
+    this.getTodaySignInRecord()
+  }
+
+  getTodaySignInRecord() {
+    api.task.getTodaySignInRecord().then(({data}) => {
+      let {continuousSignInDays, signedIn} = data.resultData
+      this.signedIn = signedIn
+      this.continuousSignInDays = continuousSignInDays
+      this.$apply()
+    })
+  }
+
+  getUserAccountMsg() {
+    api.task.getUserAccountMsg()
+  }
+
+  todaySignIn() {
+    api.task.todaySignIn()
+  }
+
+
 }
 </script>
 <style lang='scss'>

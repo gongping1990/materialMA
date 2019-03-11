@@ -1,7 +1,7 @@
 <style lang="scss">
 @import './assets/style/mixin.scss';
 @import './assets/style/index.scss';
-@import "./vant/common/index.wxss";
+@import './vant/common/index.wxss';
 .container {
   position: absolute;
   left: 0;
@@ -14,93 +14,98 @@
 }
 
 .home-classify {
-    &-scroll {
-      width: calc(100vw + 32px);
-      display: flex;
-      flex-wrap: nowrap;
-      white-space: nowrap;
-      padding: 32rpx 0;
+  &-scroll {
+    width: calc(100vw + 32px);
+    display: flex;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    padding: 32rpx 0;
+  }
+  &-item {
+    display: flex;
+    align-items: center;
+    height: 56rpx;
+    margin-left: 32rpx;
+    padding: 0 24rpx;
+    font-size: 26rpx;
+    background: #f1f1f1;
+    color: #858697;
+    border-radius: 16rpx;
+
+    &:last-child {
+      margin-right: 32rpx;
     }
-    &-item {
-      display: flex;
-      align-items: center;
-      height: 56rpx;
-      margin-left: 32rpx;
-      padding: 0 24rpx;
-      font-size: 26rpx;
+    &.active {
       color: #fff;
-      border-radius: 16rpx;
       background: linear-gradient(
         225deg,
         rgba(255, 119, 45, 1) 0%,
         rgba(251, 150, 69, 1) 100%
       );
-      &:last-child {
-        margin-right: 32rpx;
-      }
     }
   }
+}
 
-::-webkit-scrollbar{
-    width: 0;
-    height: 0;
-    color: transparent;
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
 }
 
 .new-popup {
-    @include flex-column-center;
-    color: #fff;
-    &-title {
-      font-size: 44rpx;
-      font-weight: bold;
-      line-height: 60rpx;
-    }
-    &-subtitle {
-      font-size: 28rpx;
-    }
-    &-img {
-      position: relative;
-      margin-top: 60rpx;
-      margin-bottom: 14rpx;
-      width: 180rpx;
-      height: 180rpx;
-    }
-    &-icon {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 160rpx;
-      transform: translate(-50%, -50%);
-      z-index: 10;
-    }
-    &-bg {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 240rpx;
-      transform: translate(-50%, -50%);
-      z-index: 9;
-    }
-    &-num {
-      font-size: 44rpx;
-      font-weight: bold;
-    }
-    &-text {
-      margin-top: 64rpx;
-      margin-bottom: 24rpx;
-      font-size: 24rpx;
-      color: rgba($color: #fff, $alpha: 0.6);
-    }
-    &-btn {
-      @include flex-center;
-      width: 404rpx;
-      height: 80rpx;
-      font-weight: 500;
-      font-size: 28rpx;
-      border-radius: 32rpx;
-      border: 1px solid rgba(255, 255, 255, 1);
-    }
+  @include flex-column-center;
+  color: #fff;
+  &-title {
+    font-size: 44rpx;
+    font-weight: bold;
+    line-height: 60rpx;
   }
+  &-subtitle {
+    font-size: 28rpx;
+  }
+  &-img {
+    position: relative;
+    margin-top: 60rpx;
+    margin-bottom: 14rpx;
+    width: 180rpx;
+    height: 180rpx;
+  }
+  &-icon {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 160rpx;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+  }
+  &-bg {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 240rpx;
+    transform: translate(-50%, -50%);
+    z-index: 9;
+  }
+  &-num {
+    font-size: 44rpx;
+    font-weight: bold;
+  }
+  &-text {
+    margin-top: 64rpx;
+    margin-bottom: 24rpx;
+    font-size: 24rpx;
+    color: rgba($color: #fff, $alpha: 0.6);
+  }
+  &-btn {
+    @include flex-center;
+    width: 404rpx;
+    height: 80rpx;
+    font-weight: 500;
+    font-size: 28rpx;
+    border-radius: 32rpx;
+    border: 1px solid rgba(255, 255, 255, 1);
+  }
+}
 </style>
 
 <script>
@@ -147,18 +152,18 @@ export default class extends wepy.app {
   }
 
   globalData = {
-    userInfo: null,
+    userInfo: {},
     share: false,
     height: 0,
   }
 
-  constructor () {
+  constructor() {
     super()
     this.use('requestfix')
     this.use('promisify');
   }
 
-  onLaunch(options) {
+  onLaunch (options) {
     // 判断是否由分享进入小程序
     if (options.scene == 1007 || options.scene == 1008) {
       this.globalData.share = true
@@ -170,17 +175,30 @@ export default class extends wepy.app {
       console.log(res)
       api.user.wxUserLogin({
         code: res.code
-      }).then(({data}) => {
-        let {resultData} = data
+      }).then(({ data }) => {
+        let { resultData } = data
         this.globalData.userInfo = resultData
-        if(resultData.needAuth) {
+        store.dispatch({ type: 'UPDATE_USERINFO', playload: resultData })
+        if (resultData.needAuth) {
           wx.redirectTo({ url: '/pages/authorize/authorize' });
         }
       })
     })
   }
 
-  getUserInfo(cb) {
+  getData (x) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (x % 2 === 0) {
+          resolve(x)
+        } else {
+          reject(`${x}是不正确的输入`);
+        }
+      }, x * 1000)
+    })
+  }
+
+  getUserInfo (cb) {
     const that = this
     if (this.globalData.userInfo) {
       return this.globalData.userInfo

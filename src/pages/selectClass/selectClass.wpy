@@ -11,32 +11,62 @@
     <view class="select-class-list">
       <view wx:for="{{array}}"
             wx:key="{{index}}"
-            class="select-class-item {{index == 2 ? 'active' : ''}}">{{item}}</view>
+            @tap="bindSelectClass({{index + 1}})"
+            class="select-class-item {{(index + 1) == active ? 'active' : ''}}">{{item}}</view>
     </view>
   </view>
 </template>
 <script>
 import wepy from 'wepy';
+import api from '../../request/api'
+
 export default class SelectClass extends wepy.page {
   config = {
     navigationBarTitleText: "选择年级",
-  };
+  }
+
   data = {
+    active: null,
     array: ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级',]
-  };
-  components = {};
+  }
+
+  computed = {
+    userInfo() {
+      let {userInfo} = wepy.$instance.globalData
+      if(userInfo.grade) {
+        this.active = userInfo.grade
+      }
+      return userInfo
+    }
+  }
+
   methods = {
     bindClickBack() {
       wx.navigateBack({
         delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
       });
+    },
+    bindSelectClass(grade) {
+      this.active = grade
+      api.user.updateGrade({
+        grade
+      }).then(({data}) => {
+        wepy.$instance.globalData.userInfo.grade = grade
+        wepy.$instance.globalData.userInfo.gradeName = this.array[grade - 1]
+        this.$apply()
+        wx.showToast({
+          title: '年级选择成功', //提示的内容,
+          icon: 'success', //图标,
+          duration: 2000, //延迟时间,
+          mask: true, //显示透明蒙层，防止触摸穿透,
+          success: res => {
+            wx.navigateTo({ url: '/pages/index/index' });
+          }
+        });
+      })
     }
-  };
-  events = {};
-  watch = {};
-  computed = {};
-  onLoad () { };
-  onShow () { };
+  }
+
 }
 </script>
 <style lang='scss'>

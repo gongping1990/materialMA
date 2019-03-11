@@ -7,6 +7,9 @@ const user = {
   },
   updateUserWxMa(params) {
     return request.post("/user/updateUserWxMa", params);
+  },
+  updateGrade(params) {
+    return request.post("/user/updateGrade", params)
   }
 };
 

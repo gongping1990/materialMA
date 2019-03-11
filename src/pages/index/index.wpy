@@ -9,7 +9,7 @@
       <view class="home-header">
         <view class="home-select-class"
               @tap="bindClick">
-          <text>高二年级</text>
+          <text>{{gradeName}}</text>
           <van-icon name="arrow-down" />
         </view>
         <view class="home-num">
@@ -25,7 +25,7 @@
             <swiper-item>
               <image mode="widthFix"
                      class="home-banner-img"
-                     src="{{item.src}}" />
+                     src="{{item.url}}" />
             </swiper-item>
           </block>
         </swiper>
@@ -35,36 +35,42 @@
         <view class="home-content-wrap ">
           <view class="home-tab">
             <van-tabs active="{{ active }}"
+                      @click="bindClickTab"
                       color="#FB9645"
                       border="{{false}}"
                       line-width="{{14}}">
-              <van-tab wx:for="{{tabList}}"
-                       wx:key="{{index}}"
-                       title="{{item.title}}"></van-tab>
+              <van-tab wx:for="{{subjectList}}"
+                       wx:key="{{item.id}}"
+                       title="{{item.name}}"></van-tab>
             </van-tabs>
           </view>
           <view class="home-classify van-hairline--bottom">
             <scroll-view scroll-x
+                         scroll-left="{{scrollLeft}}"
                          scroll-with-animation>
               <view class="home-classify-scroll ">
-                <view class="home-classify-item"
-                      wx:for="{{classifyList}}"
-                      wx:key="{{index}}">{{item.title}}</view>
+                <view class="home-classify-item {{item.id == catalogId ? 'active' : ''}}"
+                      wx:for="{{catalogList}}"
+                      @tap="bindClickCatalog({{item.id}})"
+                      wx:key="{{item.id}}">{{item.name}}</view>
               </view>
             </scroll-view>
           </view>
           <view class="home-sort">
             <view class="home-sort-left">
-              <view class="home-sort-popular">
+              <view class="home-sort-popular"
+                    @tap="bindClickSort({{1}})">
                 <text>热门排序</text>
                 <image src="https://pub.file.k12.vip/zlk_weapp/zlk/index-icon-sort.png" />
               </view>
-              <view class="home-sort-newest">
+              <view class="home-sort-newest"
+                    @tap="bindClickSort({{0}})">
                 <text>最新排序</text>
                 <image src="https://pub.file.k12.vip/zlk_weapp/zlk/index-icon-sort.png" />
               </view>
             </view>
-            <view class="home-sort-right">
+            <view class="home-sort-right"
+                  @tap="bindClickSearch">
               <image src="https://pub.file.k12.vip/zlk_weapp/zlk/index-icon-search.png" />
               <text>搜索</text>
             </view>
@@ -72,15 +78,16 @@
           <scroll-view class="home-scroll"
                        upper-threshold="5"
                        @scrolltoupper="bindScrolltoupper"
-                       scroll-y="{{isScrollY}}"
+                       @scrolltolower="bindLoadItem"
                        scroll-top="{{scrollTop}}"
+                       scroll-y="{{isScrollY}}"
                        scroll-with-animation>
             <view class="bus">
-              <repeat for="{{itemList}}"
+              <repeat for="{{materialList}}"
                       key="index"
-                      index="index"
-                      item="item">
+                      index="index">
                 <item class="home-item"
+                      :item.sync="item"
                       @tap="bindClickItem" />
                 <view class="home-block"></view>
               </repeat>
@@ -135,7 +142,7 @@
           @tap="closeMask">
       <view class="home-select-class"
             @tap.stop="bindClick">
-        <text>高二年级</text>
+        <text>{{gradeName}}</text>
         <van-icon name="arrow-down" />
       </view>
       <image src="https://pub.file.k12.vip/zlk_weapp/zlk/guide.png"
@@ -148,6 +155,7 @@
 <script>
 import wepy from 'wepy'
 import { connect } from 'wepy-redux'
+import api from '../../request/api'
 import tabbarMixin from '../../mixins/tabbar.js'
 import Item from '../../components/item'
 import CollectGoldPopup from '../../components/collectGoldPopup'
@@ -155,7 +163,11 @@ import Share from '../../components/share'
 import { NumberAnimate, toThousands } from '../../utils'
 
 
-
+@connect({
+  userInfo (state) {
+    return state.user.userInfo
+  }
+})
 export default class Index extends wepy.page {
   config = {
     navigationBarTitleText: '获课资料库',
@@ -176,70 +188,47 @@ export default class Index extends wepy.page {
   data = {
     showMask: false,
     showPopup: false,
-    scrollTop: 0,
     height: 0,
     num: 0,
     active: 0,
-    itemList: [1, 2, 3, 4, 1, 2, 3, 4],
-    classifyList: [
-      {
-        title: '试卷'
-      },
-      {
-        title: '试卷'
-      },
-      {
-        title: '试卷'
-      },
-      {
-        title: '试卷'
-      },
-      {
-        title: '试卷'
-      },
-      {
-        title: '试卷'
-      }
-    ],
-    tabList: [
-      {
-        title: '语文'
-      },
-      {
-        title: '数学'
-      }, {
-        title: '英语'
-      }, {
-        title: '生物'
-      },
-      {
-        title: '初中高考'
-      }, {
-        title: '英语'
-      }, {
-        title: '生物'
-      },
-      {
-        title: '初中高考'
-      }
-    ],
-    bannerList: [{
-      src: 'https://pub.file.k12.vip/2018/11/17/d1615b9fa20ee58a38b87a6ed02b96b.png'
-    }, {
-      src: 'https://pub.file.k12.vip/2019/02/13/1095571672162930689.jpg'
-    }],
+    scrollLeft: 0,
+    scrollTop: 0,
+    materialList: [],
+    catalogList: [],
+    subjectList: [],
+    bannerList: [],
     isTop: false,
     isScrollY: false,
+    subjectId: 0,
+    catalogId: 0,
     time: null,
-    posterConfig: {
-      width: 500,
-      hight: 260,
-      backgroundColor: '#fff'
+    total: 0,
+    pagination: {
+      current: 1,
+      size: 6,
+      hot: false,
+      newly: false
     }
   }
 
   computed = {
+    gradeName () {
+      let { userInfo } = wepy.$instance.globalData
+      if (userInfo.gradeName) {
+        return userInfo.gradeName
+      } else {
+        return '选择年级'
+      }
+    }
+  }
 
+  watch = {
+    userInfo (n, o) {
+      if (!o.grade && this.subjectId && n.grade) {
+        console.log(2)
+        this.getCatalogList(this.subjectId)
+      }
+    }
   }
 
   methods = {
@@ -266,7 +255,9 @@ export default class Index extends wepy.page {
       this.time = setTimeout(() => {
         this.time = null
       }, 500);
-      this.isScrollY = true
+      if (this.materialList.length > 3) {
+        this.isScrollY = true
+      }
     },
     bindScrolltoupper (n) {
       if (this.time) return
@@ -274,10 +265,51 @@ export default class Index extends wepy.page {
         this.time = null
       }, 500);
       this.isScrollY = false
+    },
+    bindClickTab (e) {
+      let { index } = e.detail
+      let subjectId = this.subjectList[index].id
+      this.scrollTop = this.scrollTop ? 0 : 1
+      this.getCatalogList(subjectId)
+    },
+    async bindClickCatalog (id) {
+      this.catalogId = id
+      this.pagination.size = 6
+      this.scrollTop = this.scrollTop ? 0 : 1
+      await this.getListMaterial(id)
+      setTimeout(() => {
+        this.isScrollY = true
+        this.$apply()
+      }, 500);
+    },
+    bindClickSearch () {
+      wx.navigateTo({ url: '/pages/search/search' });
+    },
+    bindLoadItem () {
+      this.pagination.size = this.pagination.size + 3
+      if (this.total != this.materialList.length) {
+        this.getListMaterial()
+      }
+    },
+    async bindClickSort (type) {
+      this.pagination.hot = type ? true : false
+      this.pagination.newly = type ? false : true
+      this.pagination.size = 6
+      this.scrollTop = this.scrollTop ? 0 : 1
+      await this.getListMaterial()
+      setTimeout(() => {
+        this.isScrollY = true
+        this.$apply()
+      }, 500);
+
     }
   }
 
   events = {
+    'click-item' (id, $event) {
+      console.log(id, $event)
+      wx.navigateTo({ url: '/pages/details/details?id=' + id });
+    },
     'confim' () {
       console.log(this.showPopup)
       this.showPopup = false
@@ -286,11 +318,85 @@ export default class Index extends wepy.page {
   }
 
 
-  onLoad () {
-
+  onShow () {
+    this.getBannerList()
+    this.getSubjectList()
+    console.log(this.userInfo)
   }
 
-  onShow () {
+  onReady () {
+
+    this.NumberAnimate()
+    // this.getCatalogList()
+  }
+
+  /**
+   * @author hujinhui
+   * @description 获取首页banner列表
+   */
+  getBannerList () {
+    api.banner.listShow().then(({ data }) => {
+      console.log(data)
+      this.bannerList = data.resultData
+      this.$apply()
+    })
+  }
+
+  /**
+   * @author hujinhui
+   * @description 获取科目
+   */
+  getSubjectList () {
+    api.material.subjectList().then(({ data }) => {
+      this.subjectList = data.resultData
+      this.subjectId = data.resultData[0].id
+      if (this.userInfo.grade) {
+        console.log(1)
+        this.getCatalogList(data.resultData[0].id)
+      }
+      this.$apply()
+    })
+  }
+
+  async getCatalogList (subject) {
+
+    let { grade } = this.userInfo
+    await api.material.catalogList({
+      subject,
+      grade
+    }).then(({ data }) => {
+      this.scrollLeft = 0
+      this.catalogList = data.resultData
+      this.catalogId = data.resultData[0].id
+      this.pagination.size = 6
+      console.log(231312)
+      this.$apply()
+    })
+    console.log(this.pagination.size)
+    this.getListMaterial()
+  }
+
+  getListMaterial () {
+    let { current, hot, newly, size } = this.pagination
+    return api.material.listMaterial({
+      catalogId: this.catalogId,
+      current,
+      hot,
+      newly,
+      size
+    }).then(({ data }) => {
+      this.total = data.resultData.total
+      this.materialList = data.resultData.records
+      this.$apply()
+    })
+  }
+
+
+  /**
+   * @author hujinhui
+   * @description 数字动画
+   */
+  NumberAnimate () {
     let num3 = 372020;
     let n3 = new NumberAnimate({
       from: num3,
@@ -303,6 +409,10 @@ export default class Index extends wepy.page {
       }
     });
   }
+
+
+
+
 }
 </script>
 <style lang="scss">
@@ -428,7 +538,7 @@ export default class Index extends wepy.page {
       top: 32rpx;
       width: 296rpx;
       height: 104rpx;
-      color: #ff772d;
+      color: #f1f1f1;
       background: rgba(255, 255, 255, 1);
       border-radius: 32rpx;
     }

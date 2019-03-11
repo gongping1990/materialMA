@@ -15,7 +15,7 @@
     }
     &-title {
       font-size: 34rpx;
-      color: #2A2828;
+      color: #2a2828;
       text {
         @include text-overflow(476rpx);
         line-height: 48rpx;
@@ -37,16 +37,20 @@
       width: 64rpx;
       height: 32rpx;
       font-size: 18rpx;
-      color: #03D3C1;
+      color: #03d3c1;
       border-radius: 24rpx 4rpx 24rpx 4rpx;
       border: 1px solid rgba(3, 211, 193, 0.4);
+      &.hot {
+        color: #ff772d;
+        border-color: #ff772d;
+      }
     }
   }
   &-download {
     @include flex-center;
     flex-direction: column;
     font-size: 24rpx;
-    color: #2A2828;
+    color: #2a2828;
     line-height: 34rpx;
     &-btn {
       height: 100rpx;
@@ -74,19 +78,26 @@
   <view class="item van-hairline--bottom">
     <view class="item-left">
       <view class="item-left-title">
-        <view class="item-left-tag">最新</view>
-        <text>高中二年级同步学习指导</text>
+        <view class="item-left-tag"
+              wx:if="{{item.newly}}">最新</view>
+        <view class="item-left-tag hot"
+              wx:if="{{item.hot}}">最热</view>
+        <text>{{item.name}}</text>
       </view>
       <view class="item-left-footer">
-        <view class="item-watch"><image mode="widthFix" src="https://pub.file.k12.vip/zlk_weapp/zlk/icon-scan.png" />23023</view>
-        <view class="item-start"><image mode="widthFix" src="https://pub.file.k12.vip/zlk_weapp/zlk/icon-like.png" />2341213</view>
+        <view class="item-watch">
+          <image mode="widthFix"
+                 src="https://pub.file.k12.vip/zlk_weapp/zlk/icon-scan.png" />{{uv}}</view>
+        <view class="item-start">
+          <image mode="widthFix"
+                 src="https://pub.file.k12.vip/zlk_weapp/zlk/icon-like.png" />{{zan}}</view>
       </view>
     </view>
-    <view class="item-download" @tap="bindClick">
+    <view class="item-download"
+          @tap="bindClick">
       <view class="item-download-btn">
-        <image
-          src="https://pub.file.k12.vip/zlk_weapp/zlk/button-download.png"
-          mode="widthFix">
+        <image src="https://pub.file.k12.vip/zlk_weapp/zlk/button-download.png"
+               mode="widthFix">
         </image>
       </view>
       <text class="item-download-text">立即下载</text>
@@ -95,15 +106,32 @@
 </template>
 <script>
 import wepy from 'wepy'
+import { toThousands } from '../utils'
+
 export default class Item extends wepy.component {
-  onLoad() {
-    console.log(22222222)
+  props = {
+    item: {
+      type: Object,
+      default: {}
+    }
+  }
+
+  computed = {
+    uv () {
+      console.log(this.item)
+      if(!this.item) return 0
+      return toThousands(this.item.uv)
+    },
+    zan () {
+      if(!this.item) return 0
+      return toThousands(this.item.zan)
+    }
   }
 
   methods = {
-    bindClick() {
+    bindClick () {
       console.log(111)
-      this.$emit('click-item')
+      this.$emit('click-item', this.item.id)
     }
   }
 }
