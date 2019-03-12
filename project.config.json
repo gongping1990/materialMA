@@ -29,7 +29,11 @@
 			"list": []
 		},
 		"miniprogram": {
+<<<<<<< HEAD
 			"current": 1,
+=======
+			"current": 7,
+>>>>>>> 87b6f42a54c967057fcb50a6e2a385b2b42a5a1e
 			"list": [
 				{
 					"id": 0,
@@ -60,8 +64,8 @@
 					"scene": null
 				},
 				{
-					"id": -1,
-					"name": "tasjk",
+					"id": 4,
+					"name": "排行榜",
 					"pathName": "pages/ranking/ranking",
 					"query": "",
 					"scene": null
@@ -74,10 +78,20 @@
 					"scene": null
 				},
 				{
-					"id": -1,
-					"name": "下载币",
+					"id": 6,
+					"name": "收益",
 					"pathName": "pages/profit/profit",
 					"query": "",
+<<<<<<< HEAD
+=======
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "好友",
+					"pathName": "pages/friend/friend",
+					"query": "",
+>>>>>>> 87b6f42a54c967057fcb50a6e2a385b2b42a5a1e
 					"scene": null
 				}
 			]

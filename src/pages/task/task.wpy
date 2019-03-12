@@ -145,16 +145,10 @@
 </template>
 <script>
 import wepy from 'wepy';
-import { connect } from 'wepy-redux'
 import api from '../../request/api'
 import tabbarMixin from '../../mixins/tabbar.js'
 import collectGoldPopup from '../../components/collectGoldPopup'
-
-@connect({
-  userInfoFn (state) {
-    return state.user.userInfo
-  }
-})
+import share from '../../components/share'
 
 export default class Task extends wepy.page {
   config = {
@@ -168,6 +162,7 @@ export default class Task extends wepy.page {
     currentChoice: {},
     show: false,
     showSignIn: false,
+    openShare: false,
     signedIn: false,
     continuousSignInDays: 0,
     title: '签到成功',
@@ -203,16 +198,17 @@ export default class Task extends wepy.page {
     bus_y: 0
   };
 
-  // computed = {
-  //   userInfoFn() {
-  //     let {userInfo} = wepy.$instance.globalData
-  //     console.log(userInfo,'008')
-  //     return userInfo
-  //   }
-  // };
+  watch = {
+    'userInfoFn' (n,o) {
+      if(n.type == null) {
+        this.show = true
+      }
+    }
+  }
 
   components = {
-    collectGoldPopup
+    collectGoldPopup,
+    share
   };
 
   methods = {
@@ -244,6 +240,8 @@ export default class Task extends wepy.page {
           })
           break
         case 2:
+          this.openShare = true
+          this.$invoke('share', 'bindClickInvite');
           break
         case 3:
           wx.navigateTo({ url: '/pages/index/index' });
@@ -276,7 +274,11 @@ export default class Task extends wepy.page {
 
   events = {
     'confim': () => {
+      this.getTodaySignInRecord()
       this.showSignIn = false
+    },
+    'closeShareModal': () => {
+      this.openShare = false
     }
   }
 
