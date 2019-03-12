@@ -29,23 +29,18 @@
 			"list": []
 		},
 		"miniprogram": {
-<<<<<<< HEAD
-			"current": 1,
-=======
-			"current": 7,
->>>>>>> 87b6f42a54c967057fcb50a6e2a385b2b42a5a1e
+			"current": 9,
 			"list": [
 				{
 					"id": 0,
 					"name": "authorize",
 					"pathName": "pages/details/details",
-					"query": "id=1103584304590462977&shareId=1",
-					"scene": null
+					"query": "id= 1103584304590462977"
 				},
 				{
-					"id": 1,
+					"id": -1,
 					"name": "wushuju",
-					"pathName": "pages/task/task",
+					"pathName": "pages/convertible/convertible",
 					"query": "",
 					"scene": null
 				},
@@ -57,9 +52,9 @@
 					"scene": null
 				},
 				{
-					"id": -1,
-					"name": "xiangqing",
-					"pathName": "pages/details/details",
+					"id": 3,
+					"name": "我的",
+					"pathName": "pages/user/user",
 					"query": "",
 					"scene": null
 				},
@@ -82,8 +77,6 @@
 					"name": "收益",
 					"pathName": "pages/profit/profit",
 					"query": "",
-<<<<<<< HEAD
-=======
 					"scene": null
 				},
 				{
@@ -91,7 +84,20 @@
 					"name": "好友",
 					"pathName": "pages/friend/friend",
 					"query": "",
->>>>>>> 87b6f42a54c967057fcb50a6e2a385b2b42a5a1e
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "兑换资料",
+					"pathName": "pages/convertible/convertible",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "收藏",
+					"pathName": "pages/collection/collection",
+					"query": "",
 					"scene": null
 				}
 			]

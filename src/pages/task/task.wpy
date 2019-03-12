@@ -17,7 +17,7 @@
             </view>
           </view>
           <view class="task-content-header-right">
-            <view class="task-content-header-icon"></view>
+            <view class="task-content-header-icon" wx:if="{{userInfo.hasIncome}}"></view>
             <text class="task-content-header-sy"
                   @tap="toJump(1)">查看收益</text>
             <van-icon name="arrow"
@@ -140,6 +140,9 @@
           style="left: {{bus_x}}px; top: {{bus_y}}px;">
       <image class="good_box_coin"
              src="https://pub.file.k12.vip/zlk_weapp/qfb/coin.png"></image>
+    </view>
+    <view wx:if="{{openShare}}">
+      <share></share>
     </view>
   </view>
 </template>
@@ -283,19 +286,13 @@ export default class Task extends wepy.page {
   }
 
   onLoad () {
-    console.log()
     this.$parent.screenSize()
-    console.log(this.$parent)
     this.busPos = {};
     this.busPos['x'] = 30;
     this.busPos['y'] = 292;
   }
 
   onShow () {
-    console.log(this.userInfoFn, '009')
-    if (this.userInfoFn.type == null) {
-      this.show = false
-    }
     this.getTodaySignInRecord()
     this.getAccountInfo()
   }
@@ -309,9 +306,9 @@ export default class Task extends wepy.page {
     })
   }
 
-  getAccountInfo () {
-    api.userAccount.accountInfo().then(({ data }) => {
-      this.userInfo.currency = data.resultData.currency
+  getAccountInfo() {
+    api.userAccount.accountInfo().then(({data}) => {
+      this.userInfo = data.resultData
       this.$apply()
     })
   }
@@ -322,6 +319,10 @@ export default class Task extends wepy.page {
 
   todaySignIn () {
     api.task.todaySignIn().then(({ data }) => {
+      if (data.resultData.continuousSignInDays == 7) {
+        this.title = '签到7天，额外获得100金币'
+        this.subTitle = '恭喜获得'
+      }
       this.showSignIn = data.resultData.signedIn
       this.num = data.resultData.goldCount
       this.$apply()

@@ -8,6 +8,10 @@ const userAccount = {
   // 收支详情
   getUserAccountIncomeList(params) {
     return request.get("/userAccount/getUserAccountIncomeList", params);
+  },
+  // 我的页面
+  myInfo(params) {
+    return request.get("/userAccount/myInfo", params);
   }
 };
 

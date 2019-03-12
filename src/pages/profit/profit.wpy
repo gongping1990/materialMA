@@ -10,6 +10,7 @@
           <repeat for="{{dataList}}" key="index" index="index" item="item">
             <view class="convertible-item van-hairline--bottom">
               <view class="convertible-left">
+                <view class="convertible-icon" wx:if="{{!item.hasRead}}"></view>
                 <text class="convertible-title">{{item.name}}</text>
                 <text class="convertible-time">{{item.time}}</text>
               </view>
@@ -72,7 +73,8 @@ export default class profit extends wepy.page {
         this.dataList.push({
           name: this.columnType[item.bizModule-1],
           time: dayjs(Number(item.time)).format('YYYY-MM-DD HH:mm:ss'),
-          currency: item.currency
+          currency: item.currency,
+          hasRead: item.hasRead
         })
       })
       this.$apply()
@@ -114,6 +116,15 @@ export default class profit extends wepy.page {
   &-left, &-right {
     @include flex-column-center;
     align-items: flex-start;
+  }
+  &-icon {
+    position: absolute;
+    top: 40rpx;
+    left: 14rpx;
+    width: 12rpx;
+    height: 12rpx;
+    border-radius: 50%;
+    background-color: #FF505F;
   }
   &-title {
     margin-bottom: 8rpx;

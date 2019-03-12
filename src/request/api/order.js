@@ -5,10 +5,10 @@ const order = {
   orderAndPay(params) {
     return request.post("/order/orderAndPay", params);
   },
-  myOrderPage() {
+  myOrderPage(params) {
     return request.get('/order/myOrderPage', params)
   },
-  orderDetails() {
+  orderDetails(params) {
     return request.get('/order/orderDetails', params)
   }
 };
