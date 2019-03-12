@@ -450,6 +450,8 @@ export default class Index extends wepy.page {
       }, 500);
       if(!data.resultData.records.length) {
         this.isEmpty = true
+      } else {
+        this.isEmpty = false
       }
       this.total = data.resultData.total
       this.materialList = data.resultData.records
