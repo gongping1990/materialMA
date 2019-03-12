@@ -2,7 +2,7 @@
 <template>
   <view>
     <van-popup show="{{ show }}">
-      <view class="new-popup">
+      <view class="new-popup {{animate ? 'animate' : ''}}">
         <text class="new-popup-title">{{title}}</text>
         <text class="new-popup-subtitle">{{subtitle}}</text>
         <view class="new-popup-img">
@@ -18,7 +18,7 @@
           <slot name="message">使用下载币可以免费兑换资料</slot>
         </view>
         <view class="new-popup-btn"
-              @tap="onClose">{{buttonText}}</view>
+              @tap="onComfin">{{buttonText}}</view>
       </view>
     </van-popup>
   </view>
@@ -29,7 +29,8 @@ export default class Example extends wepy.component {
   props = {
     show: {
       type: Boolean,
-      default: false
+      default: false,
+      twoWay: true
     },
     title: {
       type: String,
@@ -40,7 +41,7 @@ export default class Example extends wepy.component {
       default: '恭喜获得下载币'
     },
     num: {
-      type: String,
+      type: Number,
       default: 200
     },
     buttonText: {
@@ -48,18 +49,116 @@ export default class Example extends wepy.component {
       default: '立即领取'
     }
   };
-  data = {};
+  data = {
+    animate: false
+  };
+
+  watch = {
+    show (n) {
+      console.log(n)
+      if (n) {
+        setTimeout(() => {
+          this.animate = true
+          this.$apply()
+        }, 500);
+      } else {
+        this.animate = false
+      }
+    }
+  }
   components = {};
   methods = {
-    onClose () {
-      this.$emit('confim')
+    onComfin () {
+      this.show = false
+      this.$emit('comfin')
     }
-  };
-  events = {};
-  watch = {};
-  computed = {};
-  onLoad () { };
+  }
 }
 </script>
 <style lang='scss'>
+@import '../assets/style/mixin.scss';
+.new-popup {
+  @include flex-column-center;
+  color: #fff;
+  &-title {
+    font-size: 44rpx;
+    font-weight: bold;
+    line-height: 60rpx;
+  }
+  &-subtitle {
+    font-size: 28rpx;
+  }
+  &-img {
+    position: relative;
+    margin-top: 60rpx;
+    margin-bottom: 14rpx;
+    width: 180rpx;
+    height: 180rpx;
+    transform: translateY(-800rpx) rotateY(600deg);
+    transition: all 0.5s cubic-bezier(.43,1.28,.69,1.09);
+  }
+  &-icon {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 160rpx;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+  }
+  &-bg {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 240rpx;
+    transform: translate(-50%, -50%);
+    z-index: 9;
+  }
+  &-num {
+    font-size: 44rpx;
+    font-weight: bold;
+    color: #ffd45c;
+    transform: translateY(40rpx);
+    opacity: 0;
+    transition: all 0.5s;
+    transition-delay: 0.4s;
+  }
+  &-text {
+    margin-top: 64rpx;
+    margin-bottom: 24rpx;
+    font-size: 24rpx;
+    color: rgba($color: #fff, $alpha: 0.6);
+    transform: translateY(40rpx);
+    text-align: center;
+    opacity: 0;
+    transition: all 0.5s;
+    transition-delay: 0.9s;
+    & text {
+      color: #ffd45c;
+    }
+  }
+  &-btn {
+    @include flex-center;
+    width: 404rpx;
+    height: 80rpx;
+    font-weight: 500;
+    font-size: 28rpx;
+    border-radius: 32rpx;
+    border: 1px solid rgba(255, 255, 255, 1);
+    transform: translateY(40rpx);
+    opacity: 0;
+    transition: all 0.5s;
+    transition-delay: 1s;
+  }
+  &.animate {
+    .new-popup-img {
+      transform: translateY(0) rotateY(0);
+    }
+    .new-popup-num,
+    .new-popup-text,
+    .new-popup-btn {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+}
 </style>

@@ -1,10 +1,11 @@
 
 <template>
-  <view class="container home">
+  <view class="container home" @touchend="touchend">
     <scroll-view class="home-scroll-wrap"
                  scroll-y="{{!isScrollY}}"
                  scroll-with-animation
                  lower-threshold="5"
+                 @scroll="onScroll"
                  @scrolltolower="bindScrolltolower">
       <view class="home-header">
         <view class="home-select-class"
@@ -60,7 +61,7 @@
             <view class="home-sort-left">
               <view class="home-sort-popular"
                     @tap="bindClickSort({{1}})">
-                <text>热门排序</text>
+                <text>热门排序{{hideGif}}</text>
                 <image src="https://pub.file.k12.vip/zlk_weapp/zlk/index-icon-sort.png" />
               </view>
               <view class="home-sort-newest"
@@ -77,6 +78,7 @@
           </view>
           <scroll-view class="home-scroll"
                        upper-threshold="5"
+                       @scroll="onScroll"
                        @scrolltoupper="bindScrolltoupper"
                        @scrolltolower="bindLoadItem"
                        scroll-top="{{scrollTop}}"
@@ -113,7 +115,7 @@
                mode="aspectFit" />
         资料库
       </van-tabbar-item>
-      <van-tabbar-item>
+      <van-tabbar-item info="今天还未领取金币">
         <image slot="icon"
                src="https://pub.file.k12.vip/zlk_weapp/tabar-icon-coin-def.png"
                mode="aspectFit" />
@@ -141,7 +143,6 @@
         我的
       </van-tabbar-item>
     </van-tabbar>
-    <CollectGoldPopup :show.sync="showPopup"></CollectGoldPopup>
     <view class="home-mask"
           wx:if="{{showMask}}">
       <view class="home-select-class"
@@ -152,7 +153,14 @@
       <image src="https://pub.file.k12.vip/zlk_weapp/zlk/guide.png"
              mode="widthFix" />
     </view>
-    <Share></Share>
+    <Share :hide.sync="hideGif"></Share>
+    <CollectGoldPopup :title.sync="collectTitle"
+                      :subtitle.sync="collectSubtitle"
+                      :num.sync="collectNum"
+                      :show.sync="showPopup">
+      <view slot="message"
+            wx:if="{{collectMessage}}">此后将不再弹窗提示此类奖励信息 请到 <text>赚下载币>查看收益</text> 中查看</view>
+    </CollectGoldPopup>
   </view>
 </template>
 
@@ -167,6 +175,8 @@ import Share from '../../components/share'
 import noDataTemplate from '../../components/noDataTemplate'
 import { NumberAnimate, toThousands } from '../../utils'
 
+
+let hideTime = null
 
 @connect({
   userInfo (state) {
@@ -192,6 +202,7 @@ export default class Index extends wepy.page {
   mixins = [tabbarMixin]
 
   data = {
+    hideGif: false,
     isAnimate: false,
     showMask: false,
     showPopup: false,
@@ -221,7 +232,11 @@ export default class Index extends wepy.page {
       url: 'https://pub.file.k12.vip/empty/empty-search.png'
     },
     page: 0,
-    isBottom: false
+    isBottom: false,
+    collectNum: 0,
+    collectTitle: '',
+    collectSubtitle: '',
+    collectMessage: false
   }
 
   computed = {
@@ -254,6 +269,17 @@ export default class Index extends wepy.page {
   }
 
   methods = {
+    touchend() {
+      hideTime = setTimeout(() => {
+        hideTime = null
+      }, 300);
+      this.hideGif = false
+    },
+    onScroll () {
+      console.log(hideTime)
+      if(hideTime) return
+      this.hideGif = true
+    },
     closeMask () {
       this.showMask = false
     },
@@ -304,7 +330,7 @@ export default class Index extends wepy.page {
       this.page = 0
       await this.getListMaterial(id)
       setTimeout(() => {
-        if(this.isBottom) {
+        if (this.isBottom) {
           this.isScrollY = true
         }
         this.$apply()
@@ -349,13 +375,13 @@ export default class Index extends wepy.page {
   onShow () {
     this.getBannerList()
     this.getSubjectList()
+    this.getUserAccountMsg()
     console.log(this.userInfo)
   }
 
   onReady () {
 
-    this.NumberAnimate()
-    // this.getCatalogList()
+    this.getCountTotal()
   }
 
   /**
@@ -422,15 +448,37 @@ export default class Index extends wepy.page {
     })
   }
 
+  getUserAccountMsg () {
+    api.task.getUserAccountMsg({
+      userAccountMsgType: 2
+    }).then(({ data }) => {
+      if (data.resultData) {
+
+        this.collectNum = data.resultData.currency
+        this.collectTitle = '你成功邀请“' + data.resultData.name + '"加入'
+        this.collectSubtitle = `恭喜获得${data.resultData.currency}下载币`
+        this.collectMessage = true
+        this.showPopup = true
+        this.$apply()
+      }
+
+    })
+  }
+
+  getCountTotal () {
+    api.material.countTotal().then(({ data }) => {
+      this.NumberAnimate(data.resultData)
+    })
+  }
+
 
   /**
    * @author hujinhui
    * @description 数字动画
    */
-  NumberAnimate () {
-    let num3 = 372020;
+  NumberAnimate (num) {
     let n3 = new NumberAnimate({
-      from: num3,
+      from: num,
       speed: 2000,
       refreshTime: 100,
       decimals: 0,
@@ -562,7 +610,7 @@ export default class Index extends wepy.page {
     top: 0;
     bottom: 0;
     background-color: rgba($color: #000000, $alpha: 0.6);
-    z-index: 10000;
+    z-index: 100;
     .home-select-class {
       position: absolute;
       left: 16rpx;

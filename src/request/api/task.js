@@ -22,6 +22,9 @@ const task = {
   },
   getKfInfo(params) {
     return request.get('/task/getKfInfo', params)
+  },
+  getShareInfo(params) {
+    return request.get('/task/getShareInfo', params)
   }
 };
 

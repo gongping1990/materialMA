@@ -1,5 +1,5 @@
 import { handleActions } from 'redux-actions'
-import { UPDATE_USERINFO } from '../types/user'
+import { UPDATE_USERINFO, UPDATE_SHAREINFO } from '../types/user'
 
 export default handleActions({
   [UPDATE_USERINFO] (state, action) {
@@ -12,7 +12,14 @@ export default handleActions({
       ...state,
       userInfo: action.payload
     }
+  },
+  [UPDATE_SHAREINFO] (state, action) {
+    return {
+      ...state,
+      shareInfo: action.payload
+    }
   }
 }, {
-  userInfo: {}
+  userInfo: {},
+  shareInfo: {}
 })

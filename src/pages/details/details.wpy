@@ -358,7 +358,7 @@
         <text class="details-unconcerned-popup-text">1.进入客服，点击右下角小卡片,</text>
         <text class="details-unconcerned-popup-text"> 2.按照客服的提示操作，即可激 活永久免费下载“语文”资料的权限</text>
         <image class="details-unconcerned-popup-img"
-               src="https://pub.file.k12.vip/zlk_weapp/popup/tq-icon-wait.png"
+               src="https://pub.file.k12.vip/gif/gzzn.gif"
                mode="widthFix" />
         <button
           class="details-success-popup-btn"
@@ -366,7 +366,7 @@
           show-message-card="true"
           session-from="{{kfInfo.id}}"
           send-message-title="{{kfInfo.title}}"
-          send-message-path="/pages/publicPopup/publicPopup"
+          send-message-path="{{'/pages/publicPopup/publicPopup?shareId=' + shareInfo.id }}"
           send-message-img="{{kfInfo.img}}"
           >
             去学习
@@ -380,6 +380,10 @@
     </van-popup>
     <van-toast id="van-toast" />
     <Share></Share>
+    <collectGoldPopup :show.sync="showCollect" :title.sync="collectTitile" :subtitle.sync="collectSubtitile" :num.sync="collectNum" >
+            <view solt="message"
+            wx:if="{{collectMessage}}">此后将不再弹窗提示此类奖励信息 请到 <text>赚下载币>查看收益</text> 中查看</view>
+    </collectGoldPopup>
   </view>
 </template>
 <script>
@@ -388,11 +392,15 @@ import { connect } from 'wepy-redux'
 import api from '../../request/api'
 import Toast from '../../vant/toast/toast'
 import Share from '../../components/share'
+import collectGoldPopup from '../../components/collectGoldPopup'
 
 
 @connect({
   userInfo (state) {
     return state.user.userInfo
+  },
+  shareInfoOnw(state) {
+    return state.user.shareInfo
   }
 })
 export default class Details extends wepy.page {
@@ -405,13 +413,30 @@ export default class Details extends wepy.page {
     }
   }
 
+  onShareAppMessage() {
+    return {
+      title: `我免费领取了一份《${this.detailData.name}》，你也来看看吧~`,
+      path: '/pages/details/details?shareId=' + this.shareInfo.id,
+      imageUrl: 'url',
+      success: res => {
+        this.methods.closePopup()
+      }
+    };
+  }
+
 
 
   components = {
-    Share
+    Share,
+    collectGoldPopup
   }
 
   data = {
+    collectTitile: '',
+    collectSubtitile: '',
+    collectNum: '',
+    collectMessage: false,
+    showCollect: false,
     active: 0,
     show: false,
     errShow: false,
@@ -434,12 +459,25 @@ export default class Details extends wepy.page {
     shareInfo: {}
   };
 
+  computed = {
+    globalData() {
+      return this.$parent.globalData
+    }
+  }
+
 
   watch = {
     userInfo(n,o) {
       this.getDetailData()
       this.getKfInfo()
       this.getShareInfoDetails()
+
+    },
+    shareInfoOnw(n,o) {
+      if(n.id) {
+        this.getUserAccountMsg()
+      }
+      console.log(n)
     }
   }
 
@@ -606,7 +644,7 @@ export default class Details extends wepy.page {
       } else {
         this.sucShow = true
       }
-
+      this.getDetailData()
       this.$apply()
     }).catch(({data}) => {
       if(data.code == 1002) {
@@ -633,12 +671,36 @@ export default class Details extends wepy.page {
     })
   }
 
+  getUserAccountMsg () {
+    let { shareInfo } = this.$parent.globalData
+    api.task.getUserAccountMsg({
+      userAccountMsgType: shareInfo.id ? 5 : 4
+    }).then(({ data }) => {
+      if (data.resultData) {
+        this.showCollect = true
+        if (shareInfo.id) {
+          this.collectTitile = '你的好友“' + data.resultData.name + '"'
+          this.collectSubtitile = `送你${data.resultData.currency}下载币`
+          this.collectMessage = true
+        } else {
+          this.collectTitile = '新用户礼包'
+
+          this.collectSubtitile = '恭喜获得下载币'
+          this.collectMessage = false
+        }
+        this.collectNum = data.resultData.currency
+        this.$apply()
+      }
+    })
+  }
+
   onLoad (option) {
     this.id = option.id
     if(this.userInfo.id) {
       this.getDetailData(option.id)
       this.getKfInfo(option.id)
       this.getShareInfoDetails(option.id)
+      this.getUserAccountMsg()
     }
     if(option.isExchange) {
       this.sucShow = true
@@ -916,7 +978,7 @@ export default class Details extends wepy.page {
     @include flex-column-center;
     box-sizing: border-box;
     padding: 48rpx 38rpx;
-    min-width: 500rpx;
+    min-width: 560rpx;
     background: rgba(255, 255, 255, 1);
     border-radius: 16rpx;
     &-img {

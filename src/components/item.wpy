@@ -87,10 +87,10 @@
       <view class="item-left-footer">
         <view class="item-watch">
           <image mode="widthFix"
-                 src="https://pub.file.k12.vip/zlk_weapp/zlk/icon-scan.png" />{{uv}}</view>
+                 src="https://pub.file.k12.vip/zlk_weapp/zlk/icon-scan.png" />{{item.uv}}</view>
         <view class="item-start">
           <image mode="widthFix"
-                 src="https://pub.file.k12.vip/zlk_weapp/zlk/icon-like.png" />{{zan}}</view>
+                 src="https://pub.file.k12.vip/zlk_weapp/zlk/icon-like.png" />{{item.zan}}</view>
       </view>
     </view>
     <view class="item-download">
@@ -115,17 +115,6 @@ export default class Item extends wepy.component {
     }
   }
 
-  computed = {
-    uv () {
-      console.log(this.item)
-      if(!this.item) return 0
-      return toThousands(this.item.uv)
-    },
-    zan () {
-      if(!this.item) return 0
-      return toThousands(this.item.zan)
-    }
-  }
 
   methods = {
     bindClick () {

@@ -145,11 +145,18 @@
 </template>
 <script>
 import wepy from 'wepy';
+import {connect} from 'wepy-redux'
 import api from '../../request/api'
 import tabbarMixin from '../../mixins/tabbar.js'
 import collectGoldPopup from '../../components/collectGoldPopup'
 import share from '../../components/share'
 
+
+@connect({
+  userInfoFn(state) {
+    return state.user.userInfo
+  }
+})
 export default class Task extends wepy.page {
   config = {
     navigationBarTitleText: "赚下载币",

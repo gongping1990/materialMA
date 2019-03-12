@@ -60,46 +60,99 @@
            mode="widthFix"
            lazy-load="false" />
     <view class="authorize-action">
-      <button
-        class="authorize-btn"
-        open-type="getUserInfo"
-        @getuserinfo="getUserInfo"
-        lang="zh_CN"
-        >
+      <button class="authorize-btn"
+              open-type="getUserInfo"
+              @getuserinfo="getUserInfo"
+              lang="zh_CN">
         确认授权
       </button>
       <text class="authorize-text">获课资料库需要你的授权才能给你发放资料哦</text>
       <text class="authorize-text">请点击确认授权</text>
     </view>
+    <collectGoldPopup :title.sync="title"
+                      :subtitle.sync="subtitle"
+                      :num.sync="num"
+                      :show.sync="show">
+      <view solt="message"
+            wx:if="{{message}}">此后将不再弹窗提示此类奖励信息 请到 <text>赚下载币>查看收益</text> 中查看</view>
+    </collectGoldPopup>
   </view>
 </template>
 <script>
 import wepy from 'wepy';
 import api from '../../request/api'
+import collectGoldPopup from '../../components/collectGoldPopup'
 export default class Authorize extends wepy.page {
   config = {
     navigationBarTitleText: '获课资料库'
   }
 
+  components = {
+    collectGoldPopup
+  }
+
   data = {
-    active: 0
+    active: 0,
+    show: false,
+    title: '',
+    subtitle: '',
+    message: false,
+    num: 0
   }
 
   methods = {
-    getUserInfo(res) {
+    getUserInfo (res) {
       console.log(res)
-      let {iv, encryptedData, rawData, signature} = res.detail
-      if(iv) {
+      let { iv, encryptedData, rawData, signature } = res.detail
+      if (iv) {
         api.user.updateUserWxMa({
           iv,
           encryptedData,
           rawData,
           signature
-        }).then(({data}) => {
-          wx.redirectTo({ url: '/pages/index/index' });
+        }).then(({ data }) => {
+          this.getUserAccountMsg()
         })
       }
     }
   }
+
+  events = {
+    'comfin' () {
+      console.log(111)
+      wx.navigateBack({
+        delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+      });
+    }
+  }
+
+  getUserAccountMsg () {
+    console.log(this.$parent)
+    let { shareInfo } = this.$parent.globalData
+    api.task.getUserAccountMsg({
+      userAccountMsgType: shareInfo.id ? 3 : 1
+    }).then(({ data }) => {
+      if (data.resultData) {
+        this.show = true
+        if (shareInfo.id) {
+          this.title = '你的好友“' + data.resultData.name + '"'
+          this.subtitle = `送你${data.resultData.currency}下载币`
+          this.message = true
+        } else {
+          this.title = '新用户礼包'
+
+          this.subtitle = '恭喜获得下载币'
+          this.message = false
+        }
+        this.num = data.resultData.currency
+        this.$apply()
+      } else {
+        wx.navigateBack({
+          delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+        });
+      }
+    })
+  }
+
 }
 </script>

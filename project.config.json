@@ -29,17 +29,13 @@
 			"list": []
 		},
 		"miniprogram": {
-<<<<<<< HEAD
-			"current": 1,
-=======
-			"current": 7,
->>>>>>> 87b6f42a54c967057fcb50a6e2a385b2b42a5a1e
+			"current": 2,
 			"list": [
 				{
 					"id": 0,
 					"name": "authorize",
 					"pathName": "pages/details/details",
-					"query": "id=1103584304590462977&shareId=1",
+					"query": "id=1103584304590462977&shareId=1105056150574272514",
 					"scene": null
 				},
 				{
@@ -50,9 +46,9 @@
 					"scene": null
 				},
 				{
-					"id": -1,
+					"id": 2,
 					"name": "sousuo",
-					"pathName": "pages/search/search",
+					"pathName": "pages/authorize/authorize",
 					"query": "",
 					"scene": null
 				},
@@ -82,16 +78,6 @@
 					"name": "收益",
 					"pathName": "pages/profit/profit",
 					"query": "",
-<<<<<<< HEAD
-=======
-					"scene": null
-				},
-				{
-					"id": -1,
-					"name": "好友",
-					"pathName": "pages/friend/friend",
-					"query": "",
->>>>>>> 87b6f42a54c967057fcb50a6e2a385b2b42a5a1e
 					"scene": null
 				}
 			]

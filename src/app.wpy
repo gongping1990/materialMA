@@ -52,60 +52,7 @@
   color: transparent;
 }
 
-.new-popup {
-  @include flex-column-center;
-  color: #fff;
-  &-title {
-    font-size: 44rpx;
-    font-weight: bold;
-    line-height: 60rpx;
-  }
-  &-subtitle {
-    font-size: 28rpx;
-  }
-  &-img {
-    position: relative;
-    margin-top: 60rpx;
-    margin-bottom: 14rpx;
-    width: 180rpx;
-    height: 180rpx;
-  }
-  &-icon {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 160rpx;
-    transform: translate(-50%, -50%);
-    z-index: 10;
-  }
-  &-bg {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 240rpx;
-    transform: translate(-50%, -50%);
-    z-index: 9;
-  }
-  &-num {
-    font-size: 44rpx;
-    font-weight: bold;
-  }
-  &-text {
-    margin-top: 64rpx;
-    margin-bottom: 24rpx;
-    font-size: 24rpx;
-    color: rgba($color: #fff, $alpha: 0.6);
-  }
-  &-btn {
-    @include flex-center;
-    width: 404rpx;
-    height: 80rpx;
-    font-weight: 500;
-    font-size: 28rpx;
-    border-radius: 32rpx;
-    border: 1px solid rgba(255, 255, 255, 1);
-  }
-}
+
 
 </style>
 
@@ -158,6 +105,7 @@ export default class extends wepy.app {
     userInfo: {},
     share: false,
     height: 0,
+    shareInfo: {}
   }
 
   constructor() {
@@ -176,19 +124,29 @@ export default class extends wepy.app {
     };
 
     wepy.login().then(res => {
-      console.log(res)
       api.user.wxUserLogin({
         code: res.code
       }).then(({ data }) => {
         let { resultData } = data
         this.globalData.userInfo = resultData
         store.dispatch({ type: 'UPDATE_USERINFO', payload: resultData })
+        if(options.query.shareId) {
+          this.getShareInfo(options.query.shareId)
+        }
         if (resultData.needAuth) {
-          let url = `/pages/authorize/authorize${options.query.shareId ? '?shareId=' + options.query.shareId : ''}`
+          let url = `/pages/authorize/authorize`
           console.log(url, '007')
           wx.redirectTo({ url});
         }
       })
+    })
+  }
+
+  getShareInfo(shareId) {
+    api.task.getShareInfo({
+      shareId
+    }).then(({data}) => {
+      store.dispatch({ type: 'UPDATE_SHAREINFO', payload: data.resultData })
     })
   }
 

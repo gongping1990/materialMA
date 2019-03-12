@@ -1,11 +1,9 @@
 <!--  -->
 <template>
   <view class='share'>
-    <view class="invite-friend"
+    <view class="invite-friend {{hide ? 'hide' : ''}}"
           style="{{top ? 'bottom:auto;top:' + top + 'rpx' : ''}}"
           @tap="bindClickInvite">
-      <text>邀请好友</text>
-      <text>{{bottom}}</text>
     </view>
     <van-popup show="{{inviteShow}}">
       <view class="invite-popup">
@@ -50,6 +48,10 @@ export default class Example extends wepy.component {
     top: {
       type: Number,
       default: 0
+    },
+    hide: {
+      type: Boolean,
+      default: false
     }
   };
   data = {
@@ -149,13 +151,16 @@ export default class Example extends wepy.component {
   right: 16rpx;
   bottom: 400rpx;
   width: 112rpx;
-  height: 112rpx;
+  height: 180rpx;
   font-size: 20rpx;
   line-height: 28rpx;
   color: #fff;
-  border-radius: 50%;
-  background: rgba(255, 73, 97, 1);
-  box-shadow: 0px 8rpx 24rpx 0px rgba(0, 0, 0, 0.05);
+  @include bg('/gif/yq.gif');
+  transform: translateX(0);
+  transition: all .5s;
+  &.hide {
+    transform: translateX(300rpx);
+  }
 }
 .invite-popup {
   position: relative;

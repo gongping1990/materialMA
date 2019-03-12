@@ -12,6 +12,9 @@ const material = {
   },
   ownView(params) {
     return request.post('/material/ownView', params)
+  },
+  countTotal() {
+    return request.get('/material/countTotal')
   }
 };
 

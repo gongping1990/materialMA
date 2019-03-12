@@ -4,4 +4,5 @@
   style="{{ customStyle }}"
 >
   {{ info }}
+  <view class="van-info-arrow"></view>
 </view>
