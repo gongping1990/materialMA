@@ -130,11 +130,11 @@
                       :num.sync="num"
                       :subtitle.sync="subtitle"
                       :title.sync="title" />
-    <view class="{{needAni ? 'bus scale': 'bus'}}">
-      <image src="../../images/bus.png"></image>
-      <view class="count"
-            hidden="{{hideCount}}">{{count}}</view>
-    </view>
+    <!--<view class="{{needAni ? 'bus scale': 'bus'}}">-->
+      <!--<image src="../../images/bus.png"></image>-->
+      <!--<view class="count"-->
+            <!--hidden="{{hideCount}}">{{count}}</view>-->
+    <!--</view>-->
     <view class="good_box"
           hidden="{{hide_good_box}}"
           style="left: {{bus_x}}px; top: {{bus_y}}px;">

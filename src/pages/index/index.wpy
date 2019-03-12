@@ -95,9 +95,8 @@
                   <item :item.sync="item"
                         @tap="bindClickItem" />
                 </view>
-
-                <view class="home-block"></view>
               </repeat>
+              <view class="home-block"></view>
             </view>
           </scroll-view>
         </view>

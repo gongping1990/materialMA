@@ -8,7 +8,12 @@
     <van-popup show="{{inviteShow}}">
       <view class="invite-popup">
         <view class="invite-popup-wrap">
-          <view class="invite-popup-btn">分享到家长群</view>
+          <button
+            class="invite-popup-btn"
+            open-type="share">
+            分享到家长群
+          </button>
+         
           <view class="invite-popup-btn-wrap">
             <poster id="poster"
                     config="{{dConfig}}"
