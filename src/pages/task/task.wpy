@@ -279,6 +279,18 @@ export default class Task extends wepy.page {
 
       this.linePos = this.$parent.bezier([this.busPos, topPoint, this.finger], 30);
       this.startAnimation(e);
+    },
+    todaySignIn () {
+      api.task.todaySignIn().then(({ data }) => {
+        if (data.resultData.continuousSignInDays == 7) {
+          this.title = '签到7天，额外获得100金币'
+          this.subTitle = '恭喜获得'
+        }
+        this.showSignIn = data.resultData.signedIn
+        this.num = data.resultData.goldCount
+        this.touchOnGoods()
+        this.$apply()
+      });
     }
   }
 
@@ -324,18 +336,7 @@ export default class Task extends wepy.page {
     api.task.getUserAccountMsg()
   }
 
-  todaySignIn () {
-    api.task.todaySignIn().then(({ data }) => {
-      if (data.resultData.continuousSignInDays == 7) {
-        this.title = '签到7天，额外获得100金币'
-        this.subTitle = '恭喜获得'
-      }
-      this.showSignIn = data.resultData.signedIn
-      this.num = data.resultData.goldCount
-      this.touchOnGoods()
-      this.$apply()
-    });
-  }
+
 
 
   busAnimation () {
