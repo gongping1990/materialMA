@@ -95,9 +95,8 @@
                   <item :item.sync="item"
                         @tap="bindClickItem" />
                 </view>
-
-                <view class="home-block"></view>
               </repeat>
+              <view class="home-block"></view>
             </view>
           </scroll-view>
         </view>
@@ -115,7 +114,7 @@
                mode="aspectFit" />
         资料库
       </van-tabbar-item>
-      <van-tabbar-item info="今天还未领取金币">
+      <van-tabbar-item>
         <image slot="icon"
                src="https://pub.file.k12.vip/zlk_weapp/tabar-icon-coin-def.png"
                mode="aspectFit" />
@@ -210,6 +209,7 @@ export default class Index extends wepy.page {
     isAnimate: false,
     showMask: false,
     showPopup: false,
+    isShowIcon: false,
     height: 0,
     num: 0,
     active: 0,
@@ -384,6 +384,13 @@ export default class Index extends wepy.page {
 
     this.getCountTotal()
   }
+  //
+  // getAccountInfo() {
+  //   api.userAccount.accountInfo().then(({data}) => {
+  //     this.isShowIcon = data.resultData.hasIncome
+  //     this.$apply()
+  //   })
+  // }
 
   /**
    * @author hujinhui
