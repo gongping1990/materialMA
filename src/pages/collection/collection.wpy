@@ -2,61 +2,106 @@
 <template>
   <view class='container collection'>
     <view class="collection-scroll" wx:if="{{dataList.length}}">
-      <view class="collection-item van-hairline--bottom">
-        <view class="collection-item-left">
-          <text class="collection-title">高中二年级同步学习指导</text>
-          <view class="collection-info">
-            <view class="collection-watch">
-              <image
-                class="collection-watch-img"
-                src="https://pub.file.k12.vip/zlk_weapp/zlk/icon-scan.png"
-                mode="widthFix"/>
-              23,023
+      <scroll-view class="item-scroll"
+                   @scrolltolower="bindLoadItem"
+                   scroll-y
+                   scroll-with-animation>
+        <repeat for="{{dataList}}" key="index" index="index" item="item">
+          <view class="collection-item van-hairline--bottom" @tap="toDetail({{item}})">
+            <view class="collection-item-left">
+              <text class="collection-title">{{item.name}}</text>
+              <view class="collection-info">
+                <view class="collection-watch">
+                  <image
+                    class="collection-watch-img"
+                    src="https://pub.file.k12.vip/zlk_weapp/zlk/icon-scan.png"
+                    mode="widthFix"/>
+                  {{item.uv}}
+                </view>
+                <view class="collection-start">
+                  <image
+                    class="collection-start-img"
+                    src="https://pub.file.k12.vip/zlk_weapp/zlk/icon-like.png"
+                    mode="widthFix"/>
+                  {{item.zan}}
+                </view>
+              </view>
             </view>
-            <view class="collection-start">
+            <view class="collection-item-btn">
               <image
-              class="collection-start-img"
-                src="https://pub.file.k12.vip/zlk_weapp/zlk/icon-like.png"
+                src="https://pub.file.k12.vip/zlk_weapp/zlk/button-download.png"
                 mode="widthFix"/>
-              2,434,970
             </view>
           </view>
-        </view>
-        <view class="collection-item-btn">
-          <image
-            src="https://pub.file.k12.vip/zlk_weapp/zlk/button-download.png"
-            mode="widthFix"/>
-        </view>
-      </view>
+        </repeat>
+      </scroll-view>
     </view>
-    <view wx:else>
+    <view wx:if="{{!dataList.length && !isFecthing}}">
       <noDataTemplate :info="noDataInfo"></noDataTemplate>
     </view>
   </view>
 </template>
 <script>
 import wepy from 'wepy';
+import api from '../../request/api'
+import dayjs from 'dayjs'
 import noDataTemplate from '../../components/noDataTemplate';
 export default class Collection extends wepy.page {
   config = {
     navigationBarTitleText: "已收藏的资料",
   };
   data = {
+    page: {
+      current: 1,
+      size: 10
+    },
     noDataInfo: {
       tip: '你还没有收藏过资料哦～',
       url: 'https://pub.file.k12.vip/empty/empty-sc.png'
     },
-    dataList: []
+    dataList: [],
+    isFecthing: false
   };
   components = {
     noDataTemplate
   };
-  methods = {};
+  methods = {
+    toDetail (item) {
+      wx.navigateTo({ url: '/pages/details/details?id=' + item.id});
+    },
+    bindLoadItem () {
+      this.page.current++
+      this.getCountTotalList()
+    }
+  };
   events = {};
   watch = {};
   computed = {};
   onLoad() {};
-  onShow() {};
+  onShow() {
+    this.getCountTotalList()
+  };
+  getCountTotalList() {
+    this.isFecthing = true;
+    api.user.listCollect({
+      current: this.page.current,
+      size: this.page.size
+    })
+      .then(({ data }) => {
+        if(this.page.current > 1) {
+          this.dataList = this.dataList.concat(data.resultData.records)
+        } else {
+          this.dataList = data.resultData.records;
+        }
+        this.dataList.forEach(item => {
+          item.time = dayjs(+item.createTime).format('YYYY-MM-DD HH:mm:ss')
+        })
+        this.isFecthing = false;
+        this.$apply();
+      },()=>{
+        this.isFecthing = false;
+      })
+  }
 }
 </script>
 <style lang='scss'>
@@ -66,6 +111,10 @@ export default class Collection extends wepy.page {
   background-color: #FAFAFA;
   &-scroll {
     background-color: #fff;
+
+    .item-scroll {
+      height: 100vh;
+    }
   }
   &-item {
     display: flex;

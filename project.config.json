@@ -39,9 +39,9 @@
 					"scene": null
 				},
 				{
-					"id": 1,
+					"id": -1,
 					"name": "wushuju",
-					"pathName": "pages/task/task",
+					"pathName": "pages/convertible/convertible",
 					"query": "",
 					"scene": null
 				},
@@ -53,9 +53,9 @@
 					"scene": null
 				},
 				{
-					"id": -1,
-					"name": "xiangqing",
-					"pathName": "pages/details/details",
+					"id": 3,
+					"name": "我的",
+					"pathName": "pages/user/user",
 					"query": "",
 					"scene": null
 				},

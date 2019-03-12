@@ -15,13 +15,13 @@
               lazy-load="false">
             </image>
             <view class="friend-right van-hairline--bottom">
-              <text class="friend-name">{{item.nickname}}</text>
+              <text class="friend-name">{{item.nickName}}</text>
             </view>
           </view>
         </repeat>
       </scroll-view>
     </view>
-    <view wx:else>
+    <view wx:if="{{!dataList.length && !isFecthing}}">
       <noDataTemplate :info="noDataInfo"></noDataTemplate>
     </view>
   </view>
@@ -50,7 +50,7 @@ export default class Friend extends wepy.page {
   methods = {
     bindLoadItem () {
       this.page.current++
-      this.getRanking()
+      this.getFriendList()
     }
   };
   events = {};
@@ -68,7 +68,11 @@ export default class Friend extends wepy.page {
       size: this.page.size
     })
       .then(({ data }) => {
-        this.dataList = data.resultData.records;
+        if(this.page.current > 1) {
+          this.dataList = this.dataList.concat(data.resultData.records)
+        } else {
+          this.dataList = data.resultData.records;
+        }
         this.isFecthing = false;
         this.$apply();
       },()=>{
@@ -85,6 +89,10 @@ export default class Friend extends wepy.page {
   background-color: #FAFAFA;
   &-scroll {
     background-color: #fff;
+
+    .item-scroll{
+      height: 100vh;
+    }
   }
   &-item {
     display: flex;
@@ -94,12 +102,15 @@ export default class Friend extends wepy.page {
   &-avatar {
     margin-right: 24rpx;
     width: 72rpx;
+    border-radius: 50%;
     height: 72rpx;
   }
   &-right {
     display: flex;
     align-items: center;
     height: 126rpx;
+    border-bottom: 1rpx solid #D8D8D8;
+    width: calc(100vw - 128rpx);
   }
   &-name {
     font-size: 26rpx;

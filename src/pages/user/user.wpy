@@ -80,6 +80,15 @@
       font-size: 24rpx;
       color: #ffd45c;
     }
+    &-left {
+      display: flex;
+      align-items: center;
+    }
+    &-coin {
+      margin-right: 8rpx;
+      width: 40rpx;
+      height: 40rpx;
+    }
     &-time {
       font-size: 22rpx;
       color: #858697;
@@ -100,28 +109,33 @@
     <navigator url="/pages/convertible/convertible" class="user-item van-hairline--bottom">
       <text class="user-item-text">已兑换资料</text>
       <view class="user-item-right">
-        <text class="user-item-num">10</text>
+        <text class="user-item-num">{{userDetail.payedCount}}</text>
         <view class="user-item-arrow">
           <van-icon name="arrow"
                     color="#858697" />
         </view>
       </view>
     </navigator>
-    <view class="user-message">
+    <view class="user-message" wx:if="{{userDetail.orderDetailsVO}}" @tap="toDetail">
       <view class="user-message-title">
-        <text>小学二年级湖南期中试题</text>
+        <text>{{userDetail.orderDetailsVO.materialName}}</text>
         <view class="user-message-tag">最近兑换</view>
       </view>
       <view class="user-message-info">
-        <text class="user-message-num">200</text>
-        <text class="user-message-time">2019-01-29 23:23:23</text>
+        <view class="user-message-left">
+          <image
+            class="user-message-coin"
+            src="https://pub.file.k12.vip/zlk_weapp/qfb/coin.png"/>
+          <text class="user-message-num">{{userDetail.orderDetailsVO.currency}}</text>
+        </view>
+        <text class="user-message-time">{{userDetail.creatTime}}</text>
       </view>
     </view>
     <view class="user-list van-hairline--top">
       <view class="user-item van-hairline--bottom" @tap="toJump(1)">
         <text class="user-item-text">已收藏资料</text>
         <view class="user-item-right">
-          <text class="user-item-num">10</text>
+          <text class="user-item-num">{{userDetail.collectCount}}</text>
           <view class="user-item-arrow">
             <van-icon name="arrow"
                       color="#858697" />
@@ -131,17 +145,7 @@
       <view class="user-item van-hairline--bottom" @tap="toJump(2)">
         <text class="user-item-text">我邀请的好友</text>
         <view class="user-item-right">
-          <text class="user-item-num">10</text>
-          <view class="user-item-arrow">
-            <van-icon name="arrow"
-                      color="#858697" />
-          </view>
-        </view>
-      </view>
-      <view class="user-item van-hairline--bottom" @tap="toPopup(3)">
-        <text class="user-item-text">我的订单</text>
-        <view class="user-item-right">
-          <text class="user-item-num">10</text>
+          <text class="user-item-num">{{userDetail.invitedFriendCount}}</text>
           <view class="user-item-arrow">
             <van-icon name="arrow"
                       color="#858697" />
@@ -194,6 +198,8 @@
 
 <script>
 import wepy from 'wepy'
+import api from '../../request/api'
+import dayjs from 'dayjs'
 import { connect } from 'wepy-redux'
 import tabbarMixin from '../../mixins/tabbar.js'
 
@@ -205,7 +211,7 @@ import tabbarMixin from '../../mixins/tabbar.js'
 })
 export default class User extends wepy.page {
   config = {
-    navigationBarTitleText: '个人中心',
+    navigationBarTitleText: '我的',
     usingComponents: {
       "van-popup": "../../vant/popup/index",
       "van-tabs": "../../vant/tabs/index",
@@ -216,10 +222,8 @@ export default class User extends wepy.page {
   mixins = [tabbarMixin]
 
   data = {
-
+    userDetail: ''
   }
-
-
 
   methods = {
     toJump (data) {
@@ -231,6 +235,9 @@ export default class User extends wepy.page {
       wx.navigateTo({
         url: '/pages/publicPopup/publicPopup'
       })
+    },
+    toDetail () {
+      wx.navigateTo({ url: '/pages/details/details?id=' + this.userDetail.orderDetailsVO.id});
     }
   }
 
@@ -240,6 +247,19 @@ export default class User extends wepy.page {
 
   onLoad () {
 
+  }
+
+  onShow () {
+    this.getUserInfo()
+  }
+
+  getUserInfo () {
+    api.userAccount.myInfo()
+      .then(({ data }) => {
+        this.userDetail = data.resultData;
+        this.userDetail.creatTime = this.userDetail.orderDetailsVO && dayjs(this.userDetail.orderDetailsVO.creatTime).format('YYYY-MM-DD HH:mm:ss')
+        this.$apply();
+      });
   }
 }
 </script>

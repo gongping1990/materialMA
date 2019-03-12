@@ -13,8 +13,8 @@ const material = {
   ownView(params) {
     return request.post('/material/ownView', params)
   },
-  countTotal() {
-    return request.get('/material/countTotal')
+  countTotal(params) {
+    return request.get('/material/countTotal', params)
   }
 };
 

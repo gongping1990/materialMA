@@ -183,6 +183,11 @@ export default class Ranking extends wepy.page {
     })
       .then(({ data }) => {
         let array = data.resultData.records
+        if(this.page.current > 1) {
+          array = array.concat(data.resultData.records)
+        } else {
+          array = data.resultData.records;
+        }
         this.firstInfo = array.length && array[1]
         this.dataList = array
         this.$apply()

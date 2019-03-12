@@ -19,6 +19,9 @@ const user = {
   },
   changeIdentity(params) {
     return request.post("/user/updateUserType", params)
+  },
+  listCollect(params) {
+    return request.get("/user/listCollect", params)
   }
 };
 

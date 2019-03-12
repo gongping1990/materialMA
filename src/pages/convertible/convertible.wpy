@@ -1,49 +1,110 @@
 <!--  -->
 <template>
   <view class='container convertible'>
-    <view wx:if="{{dataList.length}}">
+    <view wx:if="{{dataList.length && !isFecthing}}">
       <view class="convertible-scroll">
-        <view class="convertible-item van-hairline--bottom">
-          <view class="convertible-left">
-            <text class="convertible-title">小学二年级湖南期中试题</text>
-            <text class="convertible-time">2019-01-29 23:23:23</text>
-          </view>
-          <view class="convertible-right">
-            <text class="convertible-price">200</text>
-            <text class="convertible-price-text">下载币</text>
-          </view>
-        </view>
+        <scroll-view class="item-scroll"
+                     @scrolltolower="bindLoadItem"
+                     scroll-y
+                     scroll-with-animation>
+          <repeat for="{{dataList}}" key="index" index="index" item="item">
+            <view class="convertible-item van-hairline--bottom">
+              <view class="convertible-left">
+                <text class="convertible-title">{{item.materialName}}</text>
+                <text class="convertible-time">{{item.time}}</text>
+              </view>
+              <view class="convertible-right">
+                <text class="convertible-price">{{item.payCurrency}}</text>
+                <text class="convertible-price-text">下载币</text>
+              </view>
+            </view>
+          </repeat>
+        </scroll-view>
       </view>
       <view class="convertible-footer">
-        <view class="convertible-btn">我要全部下载资料</view>
+        <view class="convertible-btn" @tap="openDown">我要全部下载资料</view>
       </view>
     </view>
-    <view wx:else>
+    <view wx:if="{{!dataList.length && !isFecthing}}">
       <noDataTemplate :info="noDataInfo"></noDataTemplate>
     </view>
+
+    <van-popup show="{{isOpenModal}}">
+      <view class="convertible-down">
+        <view class="convertible-down-title">全部下载资料</view>
+        <view class="convertible-down-text -d-two">如需下载已兑换的所有资料，</view>
+        <view class="convertible-down-text -d-two">在电脑上打开网站： </view>
+        <view class="convertible-down-text -d-three">“ www.baidu.com ” </view>
+        <button class="convertible-down-btn" @tap="closePopup">
+          我知道了
+        </button>
+      </view>
+    </van-popup>
   </view>
 </template>
 <script>
 import wepy from 'wepy';
+import api from '../../request/api'
+import dayjs from 'dayjs'
 import noDataTemplate from '../../components/noDataTemplate';
 export default class Convertible extends wepy.page {
   config = {
     navigationBarTitleText: "已兑换资料",
   };
   data = {
+    page: {
+      current: 1,
+      size: 10
+    },
     noDataInfo: {
       tip: '你还没有兑换过资料哦～',
       url: 'https://pub.file.k12.vip/empty/empty-dh.png'
     },
-    dataList: []
+    dataList: [],
+    isFecthing: false,
+    isOpenModal: false
   };
   components = { noDataTemplate };
-  methods = {};
+  methods = {
+    openDown () {
+      this.isOpenModal = true
+    },
+    closePopup () {
+      this.isOpenModal = false
+    },
+    bindLoadItem () {
+      this.page.current++
+      this.getExchangeList()
+    }
+  };
   events = {};
   watch = {};
   computed = {};
-  onLoad () { };
-  onShow () { };
+  onShow () {
+    this.getExchangeList()
+  };
+  getExchangeList() {
+    this.isFecthing = true;
+    api.order.myOrderPage({
+      current: this.page.current,
+      size: this.page.size,
+      payMode: 1
+    })
+      .then(({ data }) => {
+        if(this.page.current > 1) {
+          this.dataList = this.dataList.concat(data.resultData.records)
+        } else {
+          this.dataList = data.resultData.records;
+        }
+        this.dataList.forEach(item => {
+          item.time = dayjs(+item.createTime).format('YYYY-MM-DD HH:mm:ss')
+        })
+        this.isFecthing = false;
+        this.$apply();
+      },()=>{
+        this.isFecthing = false;
+      })
+  }
 }
 </script>
 <style lang='scss'>
@@ -58,7 +119,10 @@ export default class Convertible extends wepy.page {
     left: 0;
     max-height: calc(100vh - 128rpx);
     background-color: #fff;
-    overflow-y: auto;
+
+    .item-scroll {
+      height: calc(100vh - 128rpx)
+    }
   }
   &-footer {
     position: fixed;
@@ -107,6 +171,42 @@ export default class Convertible extends wepy.page {
       rgba(251, 150, 69, 1) 100%
     );
     border-radius: 32rpx;
+  }
+  &-down {
+    text-align: center;
+    width:500rpx;
+    height:404rpx;
+    background:rgba(255,255,255,1);
+    border-radius:16rpx;
+
+    &-title {
+      padding-top: 48rpx;
+      font-size: 34rpx;
+      line-height: 68rpx;
+      font-weight: bold;
+    }
+
+    .-d-two {
+      font-size: 26rpx;
+    }
+
+    .-d-three {
+      line-height: 58rpx;
+      color: #FF772D;
+      font-size: 34rpx;
+    }
+
+    &-btn {
+      margin-top: 48rpx;
+      width:404rpx;
+      height:80rpx;
+      background:linear-gradient(225deg,rgba(255,119,45,1) 0%,rgba(251,150,69,1) 100%);
+      box-shadow:0 4rpx 20rpx 0 rgba(255,119,45,0.5);
+      border-radius:32rpx;
+      color: #ffffff;
+    }
+
+
   }
 }
 </style>
