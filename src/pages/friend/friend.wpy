@@ -1,18 +1,25 @@
 <!--  -->
 <template>
   <view class='container friend'>
-    <view class="friend-scroll" wx:if="{{dataList.length}}">
-      <view class="friend-item ">
-        <image
-          class="friend-avatar"
-          src="{{}}"
-          mode="scaleToFill"
-          lazy-load="false">
-        </image>
-        <view class="friend-right van-hairline--bottom">
-          <text class="friend-name">最美的期待</text>
-        </view>
-      </view>
+    <view class="friend-scroll" wx:if="{{dataList.length && !isFecthing}}">
+      <scroll-view class="item-scroll"
+                   @scrolltolower="bindLoadItem"
+                   scroll-y
+                   scroll-with-animation>
+        <repeat for="{{dataList}}" key="index" index="index" item="item">
+          <view class="friend-item ">
+            <image
+              class="friend-avatar"
+              src="{{item.headimgurl}}"
+              mode="scaleToFill"
+              lazy-load="false">
+            </image>
+            <view class="friend-right van-hairline--bottom">
+              <text class="friend-name">{{item.nickname}}</text>
+            </view>
+          </view>
+        </repeat>
+      </scroll-view>
     </view>
     <view wx:else>
       <noDataTemplate :info="noDataInfo"></noDataTemplate>
@@ -21,25 +28,54 @@
 </template>
 <script>
 import wepy from 'wepy';
+import api from '../../request/api'
 import noDataTemplate from '../../components/noDataTemplate';
 export default class Friend extends wepy.page {
   config = {
     navigationBarTitleText: "我邀请的好友",
   };
   data = {
+    page: {
+      current: 1,
+      size: 10
+    },
     noDataInfo: {
       tip: '你还没有邀请的好友哦～',
       url: 'https://pub.file.k12.vip/empty/empty-yq.png'
     },
-    dataList: []
+    dataList: [],
+    isFecthing: false
   };
   components = { noDataTemplate };
-  methods = {};
+  methods = {
+    bindLoadItem () {
+      this.page.current++
+      this.getRanking()
+    }
+  };
   events = {};
   watch = {};
   computed = {};
   onLoad() {};
-  onShow() {};
+  onShow() {
+    this.getFriendList()
+  };
+
+  getFriendList() {
+    this.isFecthing = true;
+    api.task.invitedRecord({
+      current: this.page.current,
+      size: this.page.size
+    })
+      .then(({ data }) => {
+        this.dataList = data.resultData.records;
+        this.isFecthing = false;
+        this.$apply();
+      },()=>{
+        this.isFecthing = false;
+      })
+
+  }
 }
 </script>
 <style lang='scss'>

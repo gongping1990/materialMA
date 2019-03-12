@@ -58,74 +58,46 @@ export default class Example extends wepy.component {
     shareUrl: '',
     dConfig: {
       width: 500,
-      height: 692,
+      height: 680,
       backgroundColor: '#fff',
       debug: false,
-      blocks: [
-        {
-          width: 500,
-          height: 260,
-          x: 0,
-          y: 0,
-          backgroundColor: '#FB9645',
-          zIndex: 1
-        },
-      ],
       texts: [
         {
-          x: 148,
-          y: 84,
-          text: '获课资料库',
-          fontSize: 44,
-          color: '#fff',
-          fontWeight: 600,
-          zIndex: 2
-        },
-        {
-          x: 128,
-          y: 130,
-          text: '精品小学学习资料免费领',
-          fontSize: 24,
-          color: '#fff',
-          zIndex: 2
-        },
-        {
-          x: 196,
-          y: 336,
+          x: 96,
+          y: 480,
           text: '最美的期待',
-          fontSize: 26,
+          fontSize: 20,
           color: '#2A2828',
           fontWeight: 600,
           zIndex: 2
-        },
-        {
-          x: 120,
-          y: 370,
-          text: '我已经免费领取到学习资料啦，',
-          fontSize: 20,
-          color: '#2A2828',
-          zIndex: 2
-        },
-        {
-          x: 190,
-          y: 400,
-          text: '你也来看看吧~',
-          fontSize: 20,
-          color: '#2A2828',
-          zIndex: 2
-        },
-        {
-          x: 124,
-          y: 458,
-          text: '扫码免费领取资料',
-          fontSize: 34,
-          color: '#FF772D',
-          fontWeight: 600,
-          zIndex: 2
-        },
+        }
       ],
       images: [
-
+        {
+          x: 0,
+          y: 0,
+          url: 'https://pub.file.k12.vip/2019/03/11/1105034246325202945.png',
+          width: 500,
+          height: 680,
+          zIndex: 1
+        },
+        {
+          x: 40,
+          y: 450,
+          url: 'https://pub.file.k12.vip/2019/03/11/1105034246325202945.png',
+          width: 48,
+          height: 48,
+          borderRadius: 48,
+          zIndex: 2
+        },
+        {
+          x: 358,
+          y: 510,
+          url: 'https://pub.file.k12.vip/2019/03/11/1105036933329440769.jpg',
+          width: 96,
+          height: 96,
+          zIndex: 2
+        },
       ]
 
     },
@@ -133,6 +105,7 @@ export default class Example extends wepy.component {
   components = {};
   methods = {
     closePopup() {
+      this.$emit('closeShareModal')
       this.inviteShow = false
       this.shareShow = false
     },

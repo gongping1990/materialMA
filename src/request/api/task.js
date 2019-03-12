@@ -16,6 +16,9 @@ const task = {
   },
   todaySignIn() {
     return request.get("/task/todaySignIn");
+  },
+  getShareInfoDetails() {
+    return request.get("/task/getShareInfoDetails");
   }
 };
 

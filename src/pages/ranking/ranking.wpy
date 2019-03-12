@@ -10,7 +10,7 @@
     font-size: 24rpx;
     line-height: 60rpx;
     color: #ff4961;
-    background-color: #fef6f7;
+    background-color: #FED6C0;
   }
   &-gold-coin {
     font-size: 34rpx;
@@ -26,6 +26,8 @@
       rgba(255, 171, 147, 1) 0%,
       rgba(255, 166, 94, 1) 100%
     );
+    background-image: url("https://pub.file.k12.vip/zlk_weapp/qfb/backgroud.png");
+    background-size: 100%;
 
     &-avatar {
       position: relative;
@@ -71,24 +73,31 @@
     <view class="ranking-banner">
       <view class="ranking-banner-avatar">
         <view class="ranking-banner-avatar-icon"></view>
-        <image src=""
+        <image src="{{firstInfo.headimgurl}}"
                mode="widthFix" />
       </view>
-      <text class="ranking-banner-username">风中的雪花</text>
+      <text class="ranking-banner-username">{{firstInfo.nickName}}</text>
       <view class="ranking-gold-coin">
         <image
           src="https://pub.file.k12.vip/zlk_weapp/qfb/coin.png"
           mode="widthFix" />
-        220030
+        {{firstInfo.totalCurrency}}
       </view>
     </view>
+
     <view class="ranking-list">
-      <repeat for="{{array}}"
-              key="index"
-              index="index"
-              item="item">
-        <rankingItem :item="item" :index="index"></rankingItem>
-      </repeat>
+      <scroll-view class="item-scroll"
+                   @scrolltolower="bindLoadItem"
+                   scroll-y
+                   scroll-with-animation>
+        <repeat for="{{dataList}}"
+                key="index"
+                index="index"
+                item="item">
+          <rankingItem :item.sync="item" :index="index"></rankingItem>
+        </repeat>
+      </scroll-view>
+
     </view>
     <van-tabbar active="{{2}}"
                 active-color="#FF772D"
@@ -145,7 +154,9 @@ import rankingItem from '../../components/rankingItem'
 
 export default class Ranking extends wepy.page {
   config = {
-    navigationBarTitleText: '排行榜'
+    navigationBarTitleText: '勤奋榜',
+    navigationBarTextStyle: 'white',
+    navigationBarBackgroundColor: '#FF772D'
   }
 
   components = {
@@ -160,8 +171,9 @@ export default class Ranking extends wepy.page {
       current: 1,
       size: 10
     },
+    firstInfo: '',
     top: 348,
-    array: []
+    dataList: []
   }
 
   getRanking() {
@@ -170,12 +182,18 @@ export default class Ranking extends wepy.page {
       size: this.page.size
     })
       .then(({ data }) => {
-        console.log(data);
+        let array = data.resultData.records
+        this.firstInfo = array.length && array[1]
+        this.dataList = array
+        this.$apply()
       });
   }
 
   methods = {
-
+    bindLoadItem () {
+      this.page.current++
+      this.getRanking()
+    }
   }
 
   events = {
