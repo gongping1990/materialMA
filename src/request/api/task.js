@@ -16,6 +16,12 @@ const task = {
   },
   todaySignIn() {
     return request.get("/task/todaySignIn");
+  },
+  getShareInfoDetails(params) {
+    return request.get('/task/getShareInfoDetails', params)
+  },
+  getKfInfo(params) {
+    return request.get('/task/getKfInfo', params)
   }
 };
 

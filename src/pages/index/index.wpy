@@ -82,14 +82,14 @@
                        scroll-top="{{scrollTop}}"
                        scroll-y="{{isScrollY}}"
                        scroll-with-animation>
-            <view class="bus {{isAnimate ? 'common-animate' : ''}}">
+            <view class="bus">
               <noDataTemplate wx:if="{{!materialList.length}}"
                               :info="emptyInfo"></noDataTemplate>
               <repeat for="{{materialList}}"
                       key="index"
                       index="index">
-                <view class="home-item"
-                      style="{{'transition-delay:' + index * 0.3 + 's'}}">
+                <view class="home-item {{ (index < page ) ? 'common-animate' : ''}}"
+                      style="{{'transition-delay:' + index * 0.2 + 's'}}">
                   <item :item.sync="item"
                         @tap="bindClickItem" />
                 </view>
@@ -219,7 +219,9 @@ export default class Index extends wepy.page {
     emptyInfo: {
       tip: '暂时没有相关的资料！',
       url: 'https://pub.file.k12.vip/empty/empty-search.png'
-    }
+    },
+    page: 0,
+    isBottom: false
   }
 
   computed = {
@@ -277,7 +279,9 @@ export default class Index extends wepy.page {
       }, 500);
       if (this.materialList.length > 3) {
         this.isScrollY = true
+
       }
+      this.isBottom = true
     },
     bindScrolltoupper (n) {
       if (this.time) return
@@ -285,6 +289,7 @@ export default class Index extends wepy.page {
         this.time = null
       }, 500);
       this.isScrollY = false
+      this.isBottom = false
     },
     bindClickTab (e) {
       let { index } = e.detail
@@ -296,9 +301,12 @@ export default class Index extends wepy.page {
       this.catalogId = id
       this.pagination.size = 6
       this.scrollTop = this.scrollTop ? 0 : 1
+      this.page = 0
       await this.getListMaterial(id)
       setTimeout(() => {
-        this.isScrollY = true
+        if(this.isBottom) {
+          this.isScrollY = true
+        }
         this.$apply()
       }, 500);
     },
@@ -389,10 +397,9 @@ export default class Index extends wepy.page {
       this.catalogList = data.resultData
       this.catalogId = data.resultData[0].id
       this.pagination.size = 6
-      console.log(231312)
+      this.page = 0
       this.$apply()
     })
-    console.log(this.pagination.size)
     this.getListMaterial()
   }
 
@@ -406,7 +413,8 @@ export default class Index extends wepy.page {
       size
     }).then(({ data }) => {
       setTimeout(() => {
-        this.isAnimate = true
+        this.page += 6
+        this.$apply()
       }, 500);
       this.total = data.resultData.total
       this.materialList = data.resultData.records
@@ -574,14 +582,12 @@ export default class Index extends wepy.page {
   }
   &-item {
     opacity: 0;
-    transform: translate(-30rpx, 20rpx);
-    transition: all 0.3s;
+    transform: translate(-20rpx, 20rpx);
+    transition: all 0.2s;
   }
   .common-animate {
-    .home-item {
-      opacity: 1;
-      transform: translate(0, 0);
-    }
+    opacity: 1 !important;
+    transform: translate(0, 0) !important;
   }
 }
 </style>

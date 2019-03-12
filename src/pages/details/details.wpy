@@ -94,24 +94,24 @@
       <view class="details-nav-right">
         <view class="details-nav-pay"
               @tap="bindShowPopup({{'expectShow'}})"
-              wx:if="{{true}}">
+              wx:if="{{!detailData.ownHaved}}">
           <text class="details-nav-pay-title">直接购买</text>
           <text class="details-nav-pay-subtitle">¥ {{detailData.priceYuan}}元</text>
         </view>
         <view class="details-nav-free"
               @tap="bindShowPopup({{'show'}})"
-              wx:if="{{true}}">
+              wx:if="{{!detailData.ownHaved}}">
           <text class="details-nav-free-title">免费兑换</text>
           <text class="details-nav-free-subtitle">消耗{{detailData.currency}}币</text>
         </view>
         <view class="details-nav-pay"
-              wx:if="{{false}}"
+              wx:if="{{detailData.ownHaved}}"
               @tap="bindShowPopup({{'downShow'}})">
           <text class="details-nav-pay-title">下载打印</text>
         </view>
         <view class="details-nav-free"
               @tap="bindClickOpen"
-              wx:if="{{false}}">
+              wx:if="{{detailData.ownHaved}}">
           <text class="details-nav-free-title">直接打开</text>
         </view>
       </view>
@@ -125,7 +125,12 @@
         <text class="details-success-popup-title">邀请好友浏览资料</text>
         <text class="details-success-popup-title">各得<text>50</text>下载币 </text>
         <text class="details-success-popup-text">好资料当然要和大家一起分享～</text>
-        <view class="details-success-popup-btn">分享到家长群</view>
+        <button
+          class="details-success-popup-btn"
+          open-type="share"
+          >
+          分享到家长群
+        </button>
         <van-icon name="close"
                   @tap="closePopup"
                   class="close-btn"
@@ -157,7 +162,12 @@
                mode="widthFix" />
         <text class="details-success-popup-title">文档格式不支持直接打开 </text>
         <text class="details-success-popup-text">请在电脑上下载后使用</text>
-        <view class="details-success-popup-btn">分享到家长群</view>
+        <button
+          class="details-success-popup-btn"
+          open-type="share"
+          >
+          知道了
+        </button>
         <van-icon name="close"
                   @tap="closePopup"
                   class="close-btn"
@@ -174,7 +184,12 @@
                mode="widthFix" />
         <text class="details-success-popup-title">你已成功兑换资料</text>
         <text class="details-success-popup-text">邀请好友浏览资料，各得50下载币</text>
-        <view class="details-success-popup-btn">分享到家长群</view>
+        <button
+          class="details-success-popup-btn"
+          open-type="share"
+          >
+          分享到家长群
+        </button>
         <van-icon name="close"
                   @tap="closePopup"
                   class="close-btn"
@@ -191,7 +206,12 @@
                mode="widthFix" />
         <text class="details-success-popup-title">下载币不足，无法兑换 </text>
         <text class="details-success-popup-text">每邀请一位好友,可赚200下载币</text>
-        <view class="details-success-popup-btn">分享到家长群</view>
+        <button
+          class="details-success-popup-btn"
+          open-type="share"
+          >
+          分享到家长群
+        </button>
         <van-icon name="close"
                   @tap="closePopup"
                   class="close-btn"
@@ -210,7 +230,7 @@
         <text class="details-success-popup-text">购买功能正在努力开发中,</text>
         <text class="details-success-popup-text">很快就好~ 你现在可以使用下载币</text>
         <text class="details-success-popup-text">免费兑换资料哦！</text>
-        <view class="details-success-popup-btn">我知道了</view>
+        <view class="details-success-popup-btn" @tap="closePopup">我知道了</view>
         <van-icon name="close"
                   @tap="closePopup"
                   class="close-btn"
@@ -340,7 +360,17 @@
         <image class="details-unconcerned-popup-img"
                src="https://pub.file.k12.vip/zlk_weapp/popup/tq-icon-wait.png"
                mode="widthFix" />
-        <view class="details-success-popup-btn">去学习</view>
+        <button
+          class="details-success-popup-btn"
+          open-type="contact"
+          show-message-card="true"
+          session-from="{{kfInfo.id}}"
+          send-message-title="{{kfInfo.title}}"
+          send-message-path="/pages/publicPopup/publicPopup"
+          send-message-img="{{kfInfo.img}}"
+          >
+            去学习
+        </button>
         <van-icon name="close"
                   @tap="closePopup"
                   class="close-btn"
@@ -354,17 +384,28 @@
 </template>
 <script>
 import wepy from 'wepy';
+import { connect } from 'wepy-redux'
 import api from '../../request/api'
 import Toast from '../../vant/toast/toast'
 import Share from '../../components/share'
 
+
+@connect({
+  userInfo (state) {
+    return state.user.userInfo
+  }
+})
 export default class Details extends wepy.page {
   config = {
     navigationBarTitleText: '资料详情',
     usingComponents: {
-      "van-toast": "../../vant/toast/index"
+      "van-toast": "../../vant/toast/index",
+      "van-tab": "../../vant/tab/index",
+      "van-tabs": "../../vant/tabs/index"
     }
   }
+
+
 
   components = {
     Share
@@ -387,8 +428,21 @@ export default class Details extends wepy.page {
     unconcernedShow: false,
     downloadStatus: 0,
     detailData: {},
-    id: 0
+    id: 0,
+    shareId: 1,
+    kfInfo: {},
+    shareInfo: {}
   };
+
+
+  watch = {
+    userInfo(n,o) {
+      this.getDetailData()
+      this.getKfInfo()
+      this.getShareInfoDetails()
+    }
+  }
+
   methods = {
     navigateToTask() {
       wx.navigateTo({ url: '/pages/task/task' });
@@ -422,8 +476,9 @@ export default class Details extends wepy.page {
       this.show = false
     },
     bindConfim () {
+      console.log(11)
       this.show = false
-      this.sucShow = true
+      this.orderAndPay(1)
     },
     bindClickPay () {
       this.expectShow = true
@@ -444,7 +499,7 @@ export default class Details extends wepy.page {
     bindCopyLink (n) {
       console.log(n)
       wx.setClipboardData({
-        data: 'dsadsadsaassa', //需要设置的内容,
+        data: this.detailData.authorFileDownUrl, //需要设置的内容,
         success: res => {
           wx.hideToast()
           if (n) {
@@ -458,6 +513,8 @@ export default class Details extends wepy.page {
       });
     },
     bindClickOpen () {
+      let filename = this.detailData.fileDownUrl
+      let extension = filename.split('.').pop()
       const toast = Toast.loading({
         duration: 0,       // 持续展示 toast
         forbidClick: true, // 禁用背景点击
@@ -465,12 +522,12 @@ export default class Details extends wepy.page {
       });
 
       const downloadTask = wx.downloadFile({
-        url: 'https://pub.file.k12.vip/ccc.pptx', // 仅为示例，并非真实的资源
+        url: this.detailData.authorFileDownUrl, // 仅为示例，并非真实的资源
         success (res) {
           const filePath = res.tempFilePath
           wx.openDocument({
             filePath,
-            type: 'pptx',
+            type: extension,
             success (res) {
               wx.hideLoading()
             }
@@ -495,7 +552,7 @@ export default class Details extends wepy.page {
 
   getDetailData (id) {
     api.material.ownView({
-      id
+      id: id ? id : this.id
     }).then(({ data }) => {
       this.detailData = data.resultData
       this.detailData.previewImgUrl = JSON.parse(this.detailData.previewImgUrl)
@@ -544,14 +601,48 @@ export default class Details extends wepy.page {
 
 
     api.order.orderAndPay(data).then(({data}) => {
+      if(!data.resultData.subcribe) {
+        this.unconcernedShow = true
+      } else {
+        this.sucShow = true
+      }
 
+      this.$apply()
+    }).catch(({data}) => {
+      if(data.code == 1002) {
+        this.errShow = false
+        this.$apply()
+      }
+    })
+  }
+
+  getShareInfoDetails(id) {
+    api.task.getShareInfoDetails({
+      materialId: id ? id : this.id
+    }).then(({data}) => {
+      this.shareInfo = data.resultData
+    })
+  }
+
+  getKfInfo(id) {
+    api.task.getKfInfo({
+      materialId: id ? id : this.id
+    }).then(({data}) => {
+      this.kfInfo = data.resultData
+      this.$apply()
     })
   }
 
   onLoad (option) {
-    console.log(option)
     this.id = option.id
-    this.getDetailData(option.id)
+    if(this.userInfo.id) {
+      this.getDetailData(option.id)
+      this.getKfInfo(option.id)
+      this.getShareInfoDetails(option.id)
+    }
+    if(option.isExchange) {
+      this.sucShow = true
+    }
   }
 
 }
@@ -572,7 +663,7 @@ export default class Details extends wepy.page {
     height: 92rpx;
     background-color: #fff;
     box-shadow: 0px 6rpx 8rpx 0px rgba(0, 0, 0, 0.08);
-    z-index: 10000;
+    z-index: 100;
     &-title {
       @include text-overflow(496rpx);
       font-size: 32rpx;

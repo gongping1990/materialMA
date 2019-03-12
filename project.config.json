@@ -29,18 +29,19 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 6,
+			"current": 1,
 			"list": [
 				{
 					"id": 0,
 					"name": "authorize",
 					"pathName": "pages/details/details",
-					"query": "id= 1103584304590462977"
+					"query": "id=1103584304590462977&shareId=1",
+					"scene": null
 				},
 				{
-					"id": -1,
+					"id": 1,
 					"name": "wushuju",
-					"pathName": "pages/convertible/convertible",
+					"pathName": "pages/task/task",
 					"query": "",
 					"scene": null
 				},
@@ -76,6 +77,7 @@
 					"id": -1,
 					"name": "下载币",
 					"pathName": "pages/profit/profit",
+					"query": "",
 					"scene": null
 				}
 			]

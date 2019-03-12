@@ -8,57 +8,61 @@
     </view>
     <view class="task-wrap">
       <view class="task-content">
-      <view class="task-content-header">
-        <view class="task-content-header-left">
-          <text class="task-content-header-text">我的下载币</text>
-          <view class="task-content-header-coin">
-            <image src="https://pub.file.k12.vip/zlk_weapp/qfb/coin.png" />
-            <text>{{userInfo.currency}}</text>
+        <view class="task-content-header">
+          <view class="task-content-header-left">
+            <text class="task-content-header-text">我的下载币</text>
+            <view class="task-content-header-coin">
+              <image src="https://pub.file.k12.vip/zlk_weapp/qfb/coin.png" />
+              <text>{{userInfo.currency}}</text>
+            </view>
+          </view>
+          <view class="task-content-header-right">
+            <view class="task-content-header-icon"></view>
+            <text class="task-content-header-sy"
+                  @tap="toJump(1)">查看收益</text>
+            <van-icon name="arrow"
+                      color="#fff" />
           </view>
         </view>
-        <view class="task-content-header-right">
-          <view class="task-content-header-icon"></view>
-          <text class="task-content-header-sy" @tap="toJump(1)">查看收益</text>
-          <van-icon name="arrow"
-                    color="#fff" />
+        <view class="task-list">
+          <view class="task-item van-hairline--bottom">
+            <view class="task-item-left">
+              <text class="task-item-title">每日签到</text>
+              <text class="task-item-text">每周连续签到7天可额外获得100奖励</text>
+              <view class="task-item-gold">
+                <image src="https://pub.file.k12.vip/zlk_weapp/qfb/coin.png" />
+                150
+              </view>
+            </view>
+            <view class="task-item-btn {{signedIn ? 'disabled' : ''}}"
+                  @tap="touchOnGoods">{{signedIn ? continuousSignInDays : '签到'}}</view>
+          </view>
+          <view class="task-item van-hairline--bottom">
+            <view class="task-item-left">
+              <text class="task-item-title">邀请好友(各得200下载币）</text>
+              <text class="task-item-text">邀请好友来获课资料库</text>
+              <view class="task-item-gold">
+                <image src="https://pub.file.k12.vip/zlk_weapp/qfb/coin.png" />
+                200
+              </view>
+            </view>
+            <view class="task-item-btn"
+                  @tap="toJump(2)">去邀请</view>
+          </view>
+          <view class="task-item van-hairline--bottom">
+            <view class="task-item-left">
+              <text class="task-item-title">分享资料（各得50下载币）</text>
+              <text class="task-item-text">将自己认为好的资料分享给好友</text>
+              <view class="task-item-gold">
+                <image src="https://pub.file.k12.vip/zlk_weapp/qfb/coin.png" />
+                50
+              </view>
+            </view>
+            <view class="task-item-btn"
+                  @tap="toJump(3)">去分享</view>
+          </view>
         </view>
       </view>
-      <view class="task-list">
-        <view class="task-item van-hairline--bottom">
-          <view class="task-item-left">
-            <text class="task-item-title">每日签到</text>
-            <text class="task-item-text">每周连续签到7天可额外获得100奖励</text>
-            <view class="task-item-gold">
-              <image src="https://pub.file.k12.vip/zlk_weapp/qfb/coin.png" />
-              150
-            </view>
-          </view>
-          <view class="task-item-btn {{signedIn ? 'disabled' : ''}}" @tap="todaySignIn">{{signedIn ? continuousSignInDays : '签到'}}</view>
-        </view>
-        <view class="task-item van-hairline--bottom">
-          <view class="task-item-left">
-            <text class="task-item-title">邀请好友(各得200下载币）</text>
-            <text class="task-item-text">邀请好友来获课资料库</text>
-            <view class="task-item-gold">
-              <image src="https://pub.file.k12.vip/zlk_weapp/qfb/coin.png" />
-              200
-            </view>
-          </view>
-          <view class="task-item-btn" @tap="toJump(2)">去邀请</view>
-        </view>
-        <view class="task-item van-hairline--bottom">
-          <view class="task-item-left">
-            <text class="task-item-title">分享资料（各得50下载币）</text>
-            <text class="task-item-text">将自己认为好的资料分享给好友</text>
-            <view class="task-item-gold">
-              <image src="https://pub.file.k12.vip/zlk_weapp/qfb/coin.png" />
-              50
-            </view>
-          </view>
-          <view class="task-item-btn" @tap="toJump(3)">去分享</view>
-        </view>
-      </view>
-    </view>
     </view>
     <van-tabbar active="{{1}}"
                 active-color="#FF772D"
@@ -118,10 +122,25 @@
                       color="#03D3C1" />
           </view>
         </view>
-        <view class="task-popup-btn" @tap="changeType">确认</view>
+        <view class="task-popup-btn"
+              @tap="changeType">确认</view>
       </view>
     </van-popup>
-    <collectGoldPopup :show.sync="showSignIn" :num.sync="num" :subtitle.sync="subtitle" :title.sync="title"/>
+    <collectGoldPopup :show.sync="showSignIn"
+                      :num.sync="num"
+                      :subtitle.sync="subtitle"
+                      :title.sync="title" />
+    <view class="{{needAni ? 'bus scale': 'bus'}}">
+      <image src="../../images/bus.png"></image>
+      <view class="count"
+            hidden="{{hideCount}}">{{count}}</view>
+    </view>
+    <view class="good_box"
+          hidden="{{hide_good_box}}"
+          style="left: {{bus_x}}px; top: {{bus_y}}px;">
+      <image class="good_box_coin"
+             src="https://pub.file.k12.vip/zlk_weapp/qfb/coin.png"></image>
+    </view>
   </view>
 </template>
 <script>
@@ -154,6 +173,7 @@ export default class Task extends wepy.page {
     title: '签到成功',
     num: '',
     subtitle: '恭喜获得下载币',
+    busPos: {},
     identityList: [
       {
         id: '1',
@@ -175,7 +195,12 @@ export default class Task extends wepy.page {
         text: '其他',
         img: 'other'
       },
-    ]
+    ],
+    finger: {},
+    linePos: {},
+    hide_good_box: true,
+    bus_x: 0,
+    bus_y: 0
   };
 
   // computed = {
@@ -195,7 +220,7 @@ export default class Task extends wepy.page {
       this.currentChoice = item
     },
     changeType () {
-      if(!this.currentChoice.id) {
+      if (!this.currentChoice.id) {
         return wx.showToast({
           title: '请选择身份',
           icon: 'none',
@@ -205,7 +230,7 @@ export default class Task extends wepy.page {
 
       api.user.changeIdentity({
         type: this.currentChoice.id
-      }).then(({data}) => {
+      }).then(({ data }) => {
         this.show = false
         this.$apply()
       })
@@ -225,6 +250,27 @@ export default class Task extends wepy.page {
           break
       }
 
+    },
+    touchOnGoods (e) {
+      this.finger = {}; var topPoint = {};
+      this.finger['x'] = e.touches["0"].clientX;//点击的位置
+      this.finger['y'] = e.touches["0"].clientY;
+
+      if (this.finger['y'] < this.busPos['y']) {
+        topPoint['y'] = this.finger['y'] - 150;
+      } else {
+        topPoint['y'] = this.busPos['y'] - 150;
+      }
+      topPoint['x'] = Math.abs(this.finger['x'] - this.busPos['x']) / 2;
+
+      if (this.finger['x'] > this.busPos['x']) {
+        topPoint['x'] = (this.finger['x'] - this.busPos['x']) / 2 + this.busPos['x'];
+      } else {//
+        topPoint['x'] = (this.busPos['x'] - this.finger['x']) / 2 + this.finger['x'];
+      }
+
+      this.linePos = this.$parent.bezier([this.busPos, topPoint, this.finger], 30);
+      this.startAnimation(e);
     }
   }
 
@@ -234,36 +280,45 @@ export default class Task extends wepy.page {
     }
   }
 
+  onLoad () {
+    console.log()
+    this.$parent.screenSize()
+    console.log(this.$parent)
+    this.busPos = {};
+    this.busPos['x'] = 30;
+    this.busPos['y'] = 292;
+  }
+
   onShow () {
-    console.log(this.userInfoFn,'009')
-    if(this.userInfoFn.type == null) {
-     this.show = true
+    console.log(this.userInfoFn, '009')
+    if (this.userInfoFn.type == null) {
+      this.show = false
     }
     this.getTodaySignInRecord()
     this.getAccountInfo()
   }
 
-  getTodaySignInRecord() {
-    api.task.getTodaySignInRecord().then(({data}) => {
-      let {continuousSignInDays, signedIn} = data.resultData
+  getTodaySignInRecord () {
+    api.task.getTodaySignInRecord().then(({ data }) => {
+      let { continuousSignInDays, signedIn } = data.resultData
       this.signedIn = signedIn
       this.continuousSignInDays = `签到${continuousSignInDays}天`
       this.$apply()
     })
   }
 
-  getAccountInfo() {
-    api.userAccount.accountInfo().then(({data}) => {
+  getAccountInfo () {
+    api.userAccount.accountInfo().then(({ data }) => {
       this.userInfo.currency = data.resultData.currency
       this.$apply()
     })
   }
 
-  getUserAccountMsg() {
+  getUserAccountMsg () {
     api.task.getUserAccountMsg()
   }
 
-  todaySignIn() {
+  todaySignIn () {
     api.task.todaySignIn().then(({ data }) => {
       this.showSignIn = data.resultData.signedIn
       this.num = data.resultData.goldCount
@@ -271,6 +326,46 @@ export default class Task extends wepy.page {
     });
   }
 
+
+  busAnimation () {
+    that.setData({
+      needAni: true
+    });
+    setTimeout(function () {
+      that.setData({
+        needAni: false
+      });
+    }, 500);
+  }
+
+  startAnimation (e) {
+    var index = 0, that = this,
+      bezier_points = that.linePos['bezier_points'];
+
+    this.hide_good_box = false,
+      this.bus_x = that.finger['x'],
+      this.bus_y = that.finger['y']
+    var len = bezier_points.length;
+    index = len
+    console.log(bezier_points)
+    this.timer = setInterval(() => {
+      index--
+      if(!bezier_points[index]['x'] && !bezier_points[index]['y']) {
+        clearInterval(that.timer);
+      }
+      this.bus_x = bezier_points[index]['x'],
+      this.bus_y = bezier_points[index]['y']
+
+
+
+      if (index < 1) {
+        console.log(this.timer)
+        clearInterval(that.timer);
+        this.hide_good_box = true
+      }
+      this.$apply()
+    }, 30);
+  }
 
 }
 </script>
@@ -286,7 +381,7 @@ export default class Task extends wepy.page {
   overflow-y: auto;
   &-wrap {
     @include bg('/ranking/backgroud.png');
-    background-color: #FB9545;
+    background-color: #fb9545;
     padding-top: 524rpx;
     padding-bottom: 80rpx;
   }
@@ -301,7 +396,7 @@ export default class Task extends wepy.page {
     font-size: 24rpx;
     font-weight: 400;
     line-height: 34rpx;
-    color: #FF4961;
+    color: #ff4961;
     background: rgba(255, 255, 255, 1);
     border-radius: 12rpx;
     box-shadow: 0px 8rpx 24rpx 0px rgba(0, 0, 0, 0.05);
@@ -471,6 +566,23 @@ export default class Task extends wepy.page {
         color: #858697;
       }
     }
+  }
+  .good_box {
+    width: 40px;
+    height: 40px;
+    position: fixed;
+    border-radius: 50%;
+    overflow: hidden;
+    left: 50%;
+    top: 50%;
+    z-index: +99;
+    border: 1px solid rgba(0, 116, 255, 0.61);
+    background: rgba(120, 188, 255, 0.2);
+  }
+  .good_box image {
+    display: block;
+    width: 100%;
+    height: 100%;
   }
 }
 </style>
