@@ -257,27 +257,6 @@ export default class Task extends wepy.page {
       }
 
     },
-    touchOnGoods (e) {
-      this.finger = {}; var topPoint = {};
-      this.finger['x'] = e.touches["0"].clientX;//点击的位置
-      this.finger['y'] = e.touches["0"].clientY;
-
-      if (this.finger['y'] < this.busPos['y']) {
-        topPoint['y'] = this.finger['y'] - 150;
-      } else {
-        topPoint['y'] = this.busPos['y'] - 150;
-      }
-      topPoint['x'] = Math.abs(this.finger['x'] - this.busPos['x']) / 2;
-
-      if (this.finger['x'] > this.busPos['x']) {
-        topPoint['x'] = (this.finger['x'] - this.busPos['x']) / 2 + this.busPos['x'];
-      } else {//
-        topPoint['x'] = (this.busPos['x'] - this.finger['x']) / 2 + this.finger['x'];
-      }
-
-      this.linePos = this.$parent.bezier([this.busPos, topPoint, this.finger], 30);
-      this.startAnimation(e);
-    },
     todaySignIn () {
       api.task.todaySignIn().then(({ data }) => {
         if (data.resultData.continuousSignInDays == 7) {
@@ -286,7 +265,6 @@ export default class Task extends wepy.page {
         }
         this.showSignIn = data.resultData.signedIn
         this.num = data.resultData.goldCount
-        this.touchOnGoods()
         this.$apply()
       });
     }
@@ -335,7 +313,27 @@ export default class Task extends wepy.page {
   }
 
 
+  touchOnGoods (e) {
+      this.finger = {}; var topPoint = {};
+      this.finger['x'] = e.touches["0"].clientX;//点击的位置
+      this.finger['y'] = e.touches["0"].clientY;
 
+      if (this.finger['y'] < this.busPos['y']) {
+        topPoint['y'] = this.finger['y'] - 150;
+      } else {
+        topPoint['y'] = this.busPos['y'] - 150;
+      }
+      topPoint['x'] = Math.abs(this.finger['x'] - this.busPos['x']) / 2;
+
+      if (this.finger['x'] > this.busPos['x']) {
+        topPoint['x'] = (this.finger['x'] - this.busPos['x']) / 2 + this.busPos['x'];
+      } else {//
+        topPoint['x'] = (this.busPos['x'] - this.finger['x']) / 2 + this.finger['x'];
+      }
+
+      this.linePos = this.$parent.bezier([this.busPos, topPoint, this.finger], 30);
+      this.startAnimation(e);
+    }
 
   busAnimation () {
     that.setData({
