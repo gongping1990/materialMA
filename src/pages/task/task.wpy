@@ -35,7 +35,7 @@
               </view>
             </view>
             <view class="task-item-btn {{signedIn ? 'disabled' : ''}}"
-                  @tap="touchOnGoods">{{signedIn ? continuousSignInDays : '签到'}}</view>
+                  @tap="todaySignIn">{{signedIn ? continuousSignInDays : '签到'}}</view>
           </view>
           <view class="task-item van-hairline--bottom">
             <view class="task-item-left">
@@ -325,6 +325,7 @@ export default class Task extends wepy.page {
       }
       this.showSignIn = data.resultData.signedIn
       this.num = data.resultData.goldCount
+      this.touchOnGoods()
       this.$apply()
     });
   }
