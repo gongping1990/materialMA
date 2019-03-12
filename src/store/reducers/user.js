@@ -1,13 +1,8 @@
 import { handleActions } from 'redux-actions'
-import { UPDATE_USERINFO, UPDATE_SHAREINFO } from '../types/user'
+import { UPDATE_USERINFO, UPDATE_SHAREINFO,UPDATE_SHARE_FRIEND_INFO } from '../types/user'
 
 export default handleActions({
   [UPDATE_USERINFO] (state, action) {
-    console.log(action)
-    console.log({
-      ...state,
-      userInfo: action.payload
-    })
     return {
       ...state,
       userInfo: action.payload
@@ -18,8 +13,15 @@ export default handleActions({
       ...state,
       shareInfo: action.payload
     }
+  },
+  [UPDATE_SHARE_FRIEND_INFO] (state, action) {
+    return {
+      ...state,
+      shareFirendInfo: action.payload
+    }
   }
 }, {
   userInfo: {},
-  shareInfo: {}
+  shareInfo: {},
+  shareFirendInfo: {}
 })

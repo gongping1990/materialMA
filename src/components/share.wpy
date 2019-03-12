@@ -52,6 +52,10 @@ export default class Example extends wepy.component {
     hide: {
       type: Boolean,
       default: false
+    },
+    img: {
+      type: String,
+      default: ''
     }
   };
   data = {
@@ -116,7 +120,6 @@ export default class Example extends wepy.component {
     },
     onPosterSuccess (e) {
       const { detail } = e;
-      console.log(e)
       this.inviteShow = false
       this.shareUrl = detail
       this.shareShow = true
@@ -139,7 +142,10 @@ export default class Example extends wepy.component {
   events = {};
   watch = {};
   computed = {};
-  onLoad () { };
+  onLoad () {
+    this.dConfig.images[2].url = this.img
+    console.log(this.dConfig)
+  };
 }
 </script>
 <style lang='scss'>

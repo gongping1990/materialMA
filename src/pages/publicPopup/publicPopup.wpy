@@ -37,7 +37,6 @@
 
     methods = {
       toImg () {
-        console.log(wx.previewImage)
         wx.previewImage({
           current: this.imgList[0], // 当前显示图片的http链接
           ulrs: this.imgList, // 当前显示图片的http链接

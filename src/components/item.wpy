@@ -118,7 +118,6 @@ export default class Item extends wepy.component {
 
   methods = {
     bindClick () {
-      console.log(111)
       this.$emit('click-item', this.item.id)
     }
   }

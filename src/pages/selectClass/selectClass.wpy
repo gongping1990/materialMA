@@ -42,7 +42,6 @@ export default class SelectClass extends wepy.page {
 
 
   onShow () {
-    console.log(this.methods.updateUserInfo)
     if (this.userInfo.grade) {
       this.active = this.userInfo.grade
     }

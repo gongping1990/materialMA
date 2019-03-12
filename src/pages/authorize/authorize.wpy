@@ -102,7 +102,6 @@ export default class Authorize extends wepy.page {
 
   methods = {
     getUserInfo (res) {
-      console.log(res)
       let { iv, encryptedData, rawData, signature } = res.detail
       if (iv) {
         api.user.updateUserWxMa({
@@ -119,7 +118,6 @@ export default class Authorize extends wepy.page {
 
   events = {
     'comfin' () {
-      console.log(111)
       wx.navigateBack({
         delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
       });
@@ -127,7 +125,6 @@ export default class Authorize extends wepy.page {
   }
 
   getUserAccountMsg () {
-    console.log(this.$parent)
     let { shareInfo } = this.$parent.globalData
     api.task.getUserAccountMsg({
       userAccountMsgType: shareInfo.id ? 3 : 1

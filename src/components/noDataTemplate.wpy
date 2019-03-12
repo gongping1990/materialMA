@@ -21,9 +21,6 @@
     watch = {};
     computed = {};
 
-    onLoad() {
-      console.log(this.info, 1);
-    };
   }
 </script>
 <style lang='scss'>

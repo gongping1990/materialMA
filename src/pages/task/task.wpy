@@ -130,11 +130,6 @@
                       :num.sync="num"
                       :subtitle.sync="subtitle"
                       :title.sync="title" />
-    <view class="{{needAni ? 'bus scale': 'bus'}}">
-      <image src="../../images/bus.png"></image>
-      <view class="count"
-            hidden="{{hideCount}}">{{count}}</view>
-    </view>
     <view class="good_box"
           hidden="{{hide_good_box}}"
           style="left: {{bus_x}}px; top: {{bus_y}}px;">
@@ -142,7 +137,7 @@
              src="https://pub.file.k12.vip/zlk_weapp/qfb/coin.png"></image>
     </view>
     <view wx:if="{{openShare}}">
-      <share></share>
+      <share :img.sync="shareFirendInfo.qrcode"></share>
     </view>
   </view>
 </template>
@@ -158,6 +153,9 @@ import share from '../../components/share'
 @connect({
   userInfoFn(state) {
     return state.user.userInfo
+  },
+  shareFirendInfo(state) {
+    return state.user.shareFirendInfo
   }
 })
 export default class Task extends wepy.page {
@@ -358,7 +356,6 @@ export default class Task extends wepy.page {
       this.bus_y = that.finger['y']
     var len = bezier_points.length;
     index = len
-    console.log(bezier_points)
     this.timer = setInterval(() => {
       index--
       if(!bezier_points[index]['x'] && !bezier_points[index]['y']) {
@@ -370,7 +367,6 @@ export default class Task extends wepy.page {
 
 
       if (index < 1) {
-        console.log(this.timer)
         clearInterval(that.timer);
         this.hide_good_box = true
       }

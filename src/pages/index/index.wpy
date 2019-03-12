@@ -61,7 +61,7 @@
             <view class="home-sort-left">
               <view class="home-sort-popular"
                     @tap="bindClickSort({{1}})">
-                <text>热门排序{{hideGif}}</text>
+                <text>热门排序</text>
                 <image src="https://pub.file.k12.vip/zlk_weapp/zlk/index-icon-sort.png" />
               </view>
               <view class="home-sort-newest"
@@ -85,13 +85,13 @@
                        scroll-y="{{isScrollY}}"
                        scroll-with-animation>
             <view class="bus">
-              <noDataTemplate wx:if="{{!materialList.length}}"
+              <noDataTemplate wx:if="{{isEmpty}}"
                               :info="emptyInfo"></noDataTemplate>
               <repeat for="{{materialList}}"
                       key="index"
                       index="index">
                 <view class="home-item {{ (index < page ) ? 'common-animate' : ''}}"
-                      style="{{'transition-delay:' + index * 0.2 + 's'}}">
+                      style="{{'transition-delay:' + index * 0.1 + 's'}}">
                   <item :item.sync="item"
                         @tap="bindClickItem" />
                 </view>
@@ -153,7 +153,7 @@
       <image src="https://pub.file.k12.vip/zlk_weapp/zlk/guide.png"
              mode="widthFix" />
     </view>
-    <Share :hide.sync="hideGif"></Share>
+    <Share :hide.sync="hideGif" :img.sync="shareFirendInfo.qrcode"></Share>
     <CollectGoldPopup :title.sync="collectTitle"
                       :subtitle.sync="collectSubtitle"
                       :num.sync="collectNum"
@@ -181,6 +181,9 @@ let hideTime = null
 @connect({
   userInfo (state) {
     return state.user.userInfo
+  },
+  shareFirendInfo(state) {
+    return state.user.shareFirendInfo
   }
 })
 export default class Index extends wepy.page {
@@ -202,6 +205,7 @@ export default class Index extends wepy.page {
   mixins = [tabbarMixin]
 
   data = {
+    isEmpty: false,
     hideGif: false,
     isAnimate: false,
     showMask: false,
@@ -262,7 +266,6 @@ export default class Index extends wepy.page {
         this.showMask = true
       }
       if (!o.grade && this.subjectId && n.grade) {
-        console.log(2)
         this.getCatalogList(this.subjectId)
       }
     }
@@ -276,7 +279,6 @@ export default class Index extends wepy.page {
       this.hideGif = false
     },
     onScroll () {
-      console.log(hideTime)
       if(hideTime) return
       this.hideGif = true
     },
@@ -285,7 +287,6 @@ export default class Index extends wepy.page {
     },
     onPosterSuccess (e) {
       const { detail } = e;
-      console.log(e)
       wx.previewImage({
         current: detail,
         urls: [detail]
@@ -298,7 +299,6 @@ export default class Index extends wepy.page {
       wx.navigateTo({ url: '/pages/selectClass/selectClass' });
     },
     bindScrolltolower (n) {
-      console.log(n, this.time)
       if (this.time) return
       this.time = setTimeout(() => {
         this.time = null
@@ -361,11 +361,9 @@ export default class Index extends wepy.page {
 
   events = {
     'click-item' (id, $event) {
-      console.log(id, $event)
       wx.navigateTo({ url: '/pages/details/details?id=' + id });
     },
     'confim' () {
-      console.log(this.showPopup)
       this.showPopup = false
       this.$apply()
     }
@@ -376,7 +374,10 @@ export default class Index extends wepy.page {
     this.getBannerList()
     this.getSubjectList()
     this.getUserAccountMsg()
-    console.log(this.userInfo)
+  }
+
+  onHide() {
+    this.materialList = []
   }
 
   onReady () {
@@ -390,7 +391,6 @@ export default class Index extends wepy.page {
    */
   getBannerList () {
     api.banner.listShow().then(({ data }) => {
-      console.log(data)
       this.bannerList = data.resultData
       this.$apply()
     })
@@ -405,7 +405,6 @@ export default class Index extends wepy.page {
       this.subjectList = data.resultData
       this.subjectId = data.resultData[0].id
       if (this.userInfo.grade) {
-        console.log(1)
         this.getCatalogList(data.resultData[0].id)
       }
       this.$apply()
@@ -442,6 +441,9 @@ export default class Index extends wepy.page {
         this.page += 6
         this.$apply()
       }, 500);
+      if(!data.resultData.records.length) {
+        this.isEmpty = true
+      }
       this.total = data.resultData.total
       this.materialList = data.resultData.records
       this.$apply()
@@ -631,7 +633,7 @@ export default class Index extends wepy.page {
   &-item {
     opacity: 0;
     transform: translate(-20rpx, 20rpx);
-    transition: all 0.2s;
+    transition: all 0.1s;
   }
   .common-animate {
     opacity: 1 !important;

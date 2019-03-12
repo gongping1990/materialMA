@@ -133,9 +133,9 @@ export default class extends wepy.app {
         if(options.query.shareId) {
           this.getShareInfo(options.query.shareId)
         }
+        this.getShareInfoDetails()
         if (resultData.needAuth) {
           let url = `/pages/authorize/authorize`
-          console.log(url, '007')
           wx.redirectTo({ url});
         }
       })
@@ -147,6 +147,12 @@ export default class extends wepy.app {
       shareId
     }).then(({data}) => {
       store.dispatch({ type: 'UPDATE_SHAREINFO', payload: data.resultData })
+    })
+  }
+
+  getShareInfoDetails(id) {
+    api.task.getShareInfoDetails().then(({data}) => {
+      store.dispatch({ type: 'UPDATE_SHARE_FRIEND_INFO', payload: data.resultData })
     })
   }
 

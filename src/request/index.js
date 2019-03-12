@@ -60,7 +60,6 @@ export default {
           'content-type': contentType
         },
         success(res) {
-          console.log(res)
           if(res.data.code == 200) {
             resolve(res)
           } else {

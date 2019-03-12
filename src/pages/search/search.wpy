@@ -73,7 +73,6 @@ export default class Search extends wepy.page {
       this.value = event.detail
     },
     onSearch (event) {
-      console.log(this.value)
       this.getListMaterial()
     },
     onClear() {

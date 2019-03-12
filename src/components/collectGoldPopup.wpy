@@ -55,7 +55,6 @@ export default class Example extends wepy.component {
 
   watch = {
     show (n) {
-      console.log(n)
       if (n) {
         setTimeout(() => {
           this.animate = true

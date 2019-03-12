@@ -48,9 +48,6 @@ export default class Example extends wepy.component {
   events = {};
   watch = {};
   computed = {};
-  onLoad() {
-    console.log(this.item,111)
-  };
 }
 </script>
 <style lang='scss'>
