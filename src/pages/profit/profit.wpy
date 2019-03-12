@@ -46,7 +46,7 @@ export default class profit extends wepy.page {
       size: 10
     },
     dataList: [],
-    columnType: ['新用户注册','邀请好友注册','被好友邀请注册','邀请好友浏览资料','被邀请浏览资料','每日签到','连续签到7天']
+    columnType: ['新用户注册','邀请好友注册','被好友邀请注册','邀请好友浏览资料','被邀请浏览资料','每日签到','连续签到7天','购买资料','更新用户身份']
   };
   components = { noDataTemplate };
   methods = {
@@ -68,7 +68,19 @@ export default class profit extends wepy.page {
       current: this.page.current,
       size: this.page.size
     }).then(({data}) => {
-      let array = data.resultData.records
+      let array =  []
+      let arrayStorage =  []
+      data.resultData.records.forEach(item=>{
+        if(item.income) {
+          array.push(item)
+        }
+      })
+
+      if(this.page.current > 1) {
+        arrayStorage = arrayStorage.concat(array)
+      } else {
+        arrayStorage = array
+      }
       array.forEach(item => {
         this.dataList.push({
           name: this.columnType[item.bizModule-1],
