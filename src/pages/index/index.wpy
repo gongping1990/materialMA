@@ -462,7 +462,7 @@ export default class Index extends wepy.page {
       if (data.resultData) {
 
         this.collectNum = data.resultData.currency
-        this.collectTitle = '你成功邀请“' + data.resultData.name + '"加入'
+        this.collectTitle = '你成功邀请“' + data.resultData.friendNickName + '"加入'
         this.collectSubtitle = `恭喜获得${data.resultData.currency}下载币`
         this.collectMessage = true
         this.showPopup = true

@@ -40,7 +40,8 @@
       <view class="details-method">
         <text class="details-method-title"
               @tap="bindShowPopup({{'unconcernedShow'}})">兑换方法</text>
-        <view class="details-method-content def" @tap="navigateToTask">
+        <view class="details-method-content def"
+              @tap="navigateToTask">
           <text class="details-method-content-title">使用下载币免费兑换，</text>
           <text class="details-method-content-subtitle">下载币可通过邀请好友等方式获得。</text>
           <view class="details-method-content-btn">获取下载币</view>
@@ -54,12 +55,16 @@
       </view>
       <view class="details-method">
         <text class="details-method-title">资料预览</text>
-        <swiper indicator-dots circular style="height: 906rpx">
-            <block wx:for="{{detailData.previewImgUrl}}" wx:key="{{index}}">
-                <swiper-item>
-                    <image mode="widthFix" src="{{item}}"/>
-                </swiper-item>
-            </block>
+        <swiper indicator-dots
+                circular
+                style="height: 906rpx">
+          <block wx:for="{{detailData.previewImgUrl}}"
+                 wx:key="{{index}}">
+            <swiper-item>
+              <image mode="widthFix"
+                     src="{{item}}" />
+            </swiper-item>
+          </block>
         </swiper>
       </view>
       <view class="details-method">
@@ -125,10 +130,8 @@
         <text class="details-success-popup-title">邀请好友浏览资料</text>
         <text class="details-success-popup-title">各得<text>50</text>下载币 </text>
         <text class="details-success-popup-text">好资料当然要和大家一起分享～</text>
-        <button
-          class="details-success-popup-btn"
-          open-type="share"
-          >
+        <button class="details-success-popup-btn"
+                open-type="share">
           分享到家长群
         </button>
         <van-icon name="close"
@@ -162,10 +165,8 @@
                mode="widthFix" />
         <text class="details-success-popup-title">文档格式不支持直接打开 </text>
         <text class="details-success-popup-text">请在电脑上下载后使用</text>
-        <button
-          class="details-success-popup-btn"
-          open-type="share"
-          >
+        <button class="details-success-popup-btn"
+                open-type="share">
           知道了
         </button>
         <van-icon name="close"
@@ -184,10 +185,8 @@
                mode="widthFix" />
         <text class="details-success-popup-title">你已成功兑换资料</text>
         <text class="details-success-popup-text">邀请好友浏览资料，各得50下载币</text>
-        <button
-          class="details-success-popup-btn"
-          open-type="share"
-          >
+        <button class="details-success-popup-btn"
+                open-type="share">
           分享到家长群
         </button>
         <van-icon name="close"
@@ -206,10 +205,8 @@
                mode="widthFix" />
         <text class="details-success-popup-title">下载币不足，无法兑换 </text>
         <text class="details-success-popup-text">每邀请一位好友,可赚200下载币</text>
-        <button
-          class="details-success-popup-btn"
-          open-type="share"
-          >
+        <button class="details-success-popup-btn"
+                open-type="share">
           分享到家长群
         </button>
         <van-icon name="close"
@@ -230,7 +227,8 @@
         <text class="details-success-popup-text">购买功能正在努力开发中,</text>
         <text class="details-success-popup-text">很快就好~ 你现在可以使用下载币</text>
         <text class="details-success-popup-text">免费兑换资料哦！</text>
-        <view class="details-success-popup-btn" @tap="closePopup">我知道了</view>
+        <view class="details-success-popup-btn"
+              @tap="closePopup">我知道了</view>
         <van-icon name="close"
                   @tap="closePopup"
                   class="close-btn"
@@ -360,16 +358,14 @@
         <image class="details-unconcerned-popup-img"
                src="https://pub.file.k12.vip/gif/gzzn.gif"
                mode="widthFix" />
-        <button
-          class="details-success-popup-btn"
-          open-type="contact"
-          show-message-card="true"
-          session-from="{{kfInfo.id}}"
-          send-message-title="{{kfInfo.title}}"
-          send-message-path="{{'/pages/publicPopup/publicPopup?shareId=' + shareInfo.id }}"
-          send-message-img="{{kfInfo.img}}"
-          >
-            去学习
+        <button class="details-success-popup-btn"
+                open-type="contact"
+                show-message-card="true"
+                session-from="{{kfInfo.id}}"
+                send-message-title="{{kfInfo.title}}"
+                send-message-path="{{'/pages/publicPopup/publicPopup?shareId=' + shareInfo.id }}"
+                send-message-img="{{kfInfo.img}}">
+          去学习
         </button>
         <van-icon name="close"
                   @tap="closePopup"
@@ -380,8 +376,11 @@
     </van-popup>
     <van-toast id="van-toast" />
     <Share :img.sync="shareFirendInfo"></Share>
-    <collectGoldPopup :show.sync="showCollect" :title.sync="collectTitile" :subtitle.sync="collectSubtitile" :num.sync="collectNum" >
-            <view solt="message"
+    <collectGoldPopup :show.sync="showCollect"
+                      :title.sync="collectTitile"
+                      :subtitle.sync="collectSubtitile"
+                      :num.sync="collectNum">
+      <view solt="message"
             wx:if="{{collectMessage}}">此后将不再弹窗提示此类奖励信息 请到 <text>赚下载币>查看收益</text> 中查看</view>
     </collectGoldPopup>
   </view>
@@ -399,10 +398,10 @@ import collectGoldPopup from '../../components/collectGoldPopup'
   userInfo (state) {
     return state.user.userInfo
   },
-  shareInfoOnw(state) {
+  shareInfoOnw (state) {
     return state.user.shareInfo
   },
-  shareFirendInfo(state) {
+  shareFirendInfo (state) {
     return state.user.shareFirendInfo
   }
 })
@@ -416,7 +415,7 @@ export default class Details extends wepy.page {
     }
   }
 
-  onShareAppMessage() {
+  onShareAppMessage () {
     return {
       title: `我免费领取了一份《${this.detailData.name}》，你也来看看吧~`,
       path: `/pages/details/details?shareId=${this.shareInfo.id}&id=${this.id}`,
@@ -465,28 +464,28 @@ export default class Details extends wepy.page {
   };
 
   computed = {
-    globalData() {
+    globalData () {
       return this.$parent.globalData
     }
   }
 
 
   watch = {
-    userInfo(n,o) {
+    userInfo (n, o) {
       this.getDetailData()
       this.getKfInfo()
       this.getShareInfoDetails()
 
     },
-    shareInfoOnw(n,o) {
-      if(n.id) {
+    shareInfoOnw (n, o) {
+      if (n.id) {
         this.getUserAccountMsg()
       }
     }
   }
 
   methods = {
-    navigateToTask() {
+    navigateToTask () {
       wx.navigateTo({ url: '/pages/task/task' });
     },
     closePopup () {
@@ -501,7 +500,7 @@ export default class Details extends wepy.page {
       this.unconcernedShow = false
     },
     binClickActionBtn (type) {
-      if(type == 'ownZan') {
+      if (type == 'ownZan') {
         this.addZan(type)
       } else {
         this.addCollect(type)
@@ -552,8 +551,14 @@ export default class Details extends wepy.page {
       });
     },
     bindClickOpen () {
+      let extensionArr = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf']
       let filename = this.detailData.fileDownUrl
       let extension = filename.split('.').pop()
+      console.log(extensionArr.indexOf(extension))
+      if (extensionArr.indexOf(extension) == -1) {
+        this.openErrShow = true
+        return
+      }
       const toast = Toast.loading({
         duration: 0,       // 持续展示 toast
         forbidClick: true, // 禁用背景点击
@@ -563,14 +568,28 @@ export default class Details extends wepy.page {
       const downloadTask = wx.downloadFile({
         url: this.detailData.authorFileDownUrl, // 仅为示例，并非真实的资源
         success (res) {
+          console.log(res)
           const filePath = res.tempFilePath
           wx.openDocument({
             filePath,
             type: extension,
             success (res) {
+              console.log(111)
               wx.hideLoading()
             }
           })
+        },
+        fail () {
+          wx.hideLoading()
+          wx.showToast({
+            title: '文件下载失败！',
+            icon: 'none',
+            duration: 2000
+          })
+        },
+        complete() {
+          wx.hideLoading()
+          Toast.clear()
         }
       })
 
@@ -607,7 +626,8 @@ export default class Details extends wepy.page {
       this.collectAnimate = true
       setTimeout(() => {
         this.collectAnimate = false
-      }, 500);
+        this.$apply()
+      }, 300);
       this.$apply()
     })
   }
@@ -617,7 +637,7 @@ export default class Details extends wepy.page {
       matId: this.id
     }).then(({ data }) => {
       this.detailData[type] = !this.detailData[type]
-      if(this.detailData[type]) {
+      if (this.detailData[type]) {
         this.detailData.zan += 1
       } else {
         this.detailData.zan -= 1
@@ -625,55 +645,56 @@ export default class Details extends wepy.page {
       this.zanAnimate = true
       setTimeout(() => {
         this.zanAnimate = false
-      }, 500);
+        this.$apply()
+      }, 300);
       this.$apply()
     })
   }
 
-  orderAndPay(type) {
+  orderAndPay (type) {
     let data = {
       materialId: this.id
     }
 
-    if(type == 1) {
+    if (type == 1) {
       data.currency = this.detailData.currency
       data.payMode = 1
     }
 
-    if(type == 2) {
+    if (type == 2) {
       data.price = this.detailData.priceYuan
       data.payMode = 2
     }
 
 
-    api.order.orderAndPay(data).then(({data}) => {
-      if(!data.resultData.subcribe) {
+    api.order.orderAndPay(data).then(({ data }) => {
+      if (!data.resultData.subcribe) {
         this.unconcernedShow = true
       } else {
         this.sucShow = true
       }
       this.getDetailData()
       this.$apply()
-    }).catch(({data}) => {
-      if(data.code == 1002) {
+    }).catch(({ data }) => {
+      if (data.code == 1002) {
         this.errShow = false
         this.$apply()
       }
     })
   }
 
-  getShareInfoDetails(id) {
+  getShareInfoDetails (id) {
     api.task.getShareInfoDetails({
       materialId: id ? id : this.id
-    }).then(({data}) => {
+    }).then(({ data }) => {
       this.shareInfo = data.resultData
     })
   }
 
-  getKfInfo(id) {
+  getKfInfo (id) {
     api.task.getKfInfo({
       materialId: id ? id : this.id
-    }).then(({data}) => {
+    }).then(({ data }) => {
       this.kfInfo = data.resultData
       this.$apply()
     })
@@ -687,7 +708,7 @@ export default class Details extends wepy.page {
       if (data.resultData) {
         this.showCollect = true
         if (shareInfo.id) {
-          this.collectTitile = '你的好友“' + data.resultData.name + '"'
+          this.collectTitile = '你的好友“' + data.resultData.friendNickName + '"'
           this.collectSubtitile = `送你${data.resultData.currency}下载币`
           this.collectMessage = true
         } else {
@@ -704,13 +725,13 @@ export default class Details extends wepy.page {
 
   onLoad (option) {
     this.id = option.id
-    if(this.userInfo.id) {
+    if (this.userInfo.id) {
       this.getDetailData(option.id)
       this.getKfInfo(option.id)
       this.getShareInfoDetails(option.id)
       this.getUserAccountMsg()
     }
-    if(option.isExchange) {
+    if (option.isExchange) {
       this.sucShow = true
     }
 
@@ -799,18 +820,17 @@ export default class Details extends wepy.page {
       width: 36rpx;
       height: 36rpx;
       margin-bottom: 4rpx;
-      transform: rotate(0);
-      transition: all 0.4s;
-      &.zan-animate {
-        transform: rotateX(60deg);
-      }
+      transition: all 0.3s;
+
       &.dz {
+        transform: rotate(0);
         @include bg('/zlk_weapp/details/xq-icon-like1.png');
         &.sel {
           @include bg('/zlk_weapp/details/xq-icon-like.png');
         }
       }
       &.sc {
+        transform: scale(1);
         @include bg('/zlk_weapp/details/xq-icon-collect1.png');
         &.sel {
           @include bg('/zlk_weapp/details/xq-icon-collect.png');
@@ -818,6 +838,12 @@ export default class Details extends wepy.page {
       }
       &.fx {
         @include bg('/zlk_weapp/details/xq-icon-share.png');
+      }
+      &.zan-animate {
+        transform: rotate(16deg);
+      }
+      &.collect-animate {
+        transform: scale(1.2);
       }
     }
   }

@@ -147,14 +147,14 @@ export default class Authorize extends wepy.page {
   }
 
   getUserAccountMsg () {
-    let { shareInfo } = this.$parent.globalData
+    let { shareId } = this.$parent.globalData
     api.task.getUserAccountMsg({
-      userAccountMsgType: shareInfo.id ? 3 : 1
+      userAccountMsgType: shareId ? 3 : 1
     }).then(({ data }) => {
       if (data.resultData) {
         this.show = true
-        if (shareInfo.id) {
-          this.title = '你的好友“' + data.resultData.name + '"'
+        if (shareId) {
+          this.title = '你的好友“' + data.resultData.friendNickName + '"'
           this.subtitle = `送你${data.resultData.currency}下载币`
           this.message = true
         } else {
