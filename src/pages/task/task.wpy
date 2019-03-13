@@ -11,7 +11,7 @@
         <view class="task-content-header">
           <view class="task-content-header-left">
             <text class="task-content-header-text">我的下载币</text>
-            <view class="task-content-header-coin">
+            <view class="task-content-header-coin {{animate ? 'animate' : ''}}">
               <image src="https://pub.file.k12.vip/zlk_weapp/qfb/coin.png" />
               <text>{{userInfo.currency}}</text>
             </view>
@@ -384,7 +384,6 @@ export default class Task extends wepy.page {
   left: 0;
   right: 0;
   top: 0;
-  bottom: 100rpx;
   overflow-y: auto;
   &-wrap {
     @include bg('/ranking/backgroud.png');
@@ -520,6 +519,11 @@ export default class Task extends wepy.page {
           width: 56rpx;
           height: 56rpx;
         }
+        &.animate {
+          image {
+            animation: animate ease-in-out;
+          }
+        }
       }
     }
   }
@@ -590,6 +594,12 @@ export default class Task extends wepy.page {
     display: block;
     width: 100%;
     height: 100%;
+  }
+
+  @keyframes animate {
+    0% {
+      transform: translateY(20rpx) rotateY(0);
+    }
   }
 }
 </style>

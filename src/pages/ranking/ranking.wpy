@@ -2,15 +2,13 @@
 @import '../../assets/style/mixin.scss';
 
 .ranking {
-  bottom: 100rpx;
-  overflow-y: auto;
   &-title {
     height: 60rpx;
     text-align: center;
     font-size: 24rpx;
     line-height: 60rpx;
     color: #ff4961;
-    background-color: #FED6C0;
+    background-color: #fed6c0;
   }
   &-gold-coin {
     font-size: 34rpx;
@@ -26,7 +24,7 @@
       rgba(255, 171, 147, 1) 0%,
       rgba(255, 166, 94, 1) 100%
     );
-    background-image: url("https://pub.file.k12.vip/zlk_weapp/qfb/backgroud.png");
+    background-image: url('https://pub.file.k12.vip/zlk_weapp/qfb/backgroud.png');
     background-size: 100%;
 
     &-avatar {
@@ -65,46 +63,44 @@
       }
     }
   }
-  &-list {
-
-    .item-scroll{
-      height: calc(100vh - 372rpx - 60rpx);
-    }
+  .item-scroll {
+    height: calc(100vh - 100rpx);
   }
 }
 </style>
 <template>
   <view class="container ranking">
-    <view class="ranking-title">榜单根据一周内累计获得下载币数量排名，每10分钟更新1次</view>
-    <view class="ranking-banner">
-      <view class="ranking-banner-avatar">
-        <view class="ranking-banner-avatar-icon"></view>
-        <image src="{{firstInfo.headimgurl}}"
-               mode="widthFix" />
+    <scroll-view class="item-scroll"
+                 @scrolltolower="bindLoadItem"
+                 scroll-y
+                 scroll-with-animation>
+      <view class="ranking-title">榜单根据一周内累计获得下载币数量排名，每10分钟更新1次</view>
+      <view class="ranking-banner">
+        <view class="ranking-banner-avatar">
+          <view class="ranking-banner-avatar-icon"></view>
+          <image src="{{firstInfo.headimgurl}}"
+                 mode="widthFix" />
+        </view>
+        <text class="ranking-banner-username">{{firstInfo.nickName}}</text>
+        <view class="ranking-gold-coin">
+          <image src="https://pub.file.k12.vip/zlk_weapp/qfb/coin.png"
+                 mode="widthFix" />
+          {{firstInfo.totalCurrency}}
+        </view>
       </view>
-      <text class="ranking-banner-username">{{firstInfo.nickName}}</text>
-      <view class="ranking-gold-coin">
-        <image
-          src="https://pub.file.k12.vip/zlk_weapp/qfb/coin.png"
-          mode="widthFix" />
-        {{firstInfo.totalCurrency}}
-      </view>
-    </view>
 
-    <view class="ranking-list">
-      <scroll-view class="item-scroll"
-                   @scrolltolower="bindLoadItem"
-                   scroll-y
-                   scroll-with-animation>
+      <view class="ranking-list">
         <repeat for="{{dataList}}"
                 key="index"
                 index="index"
                 item="item">
-          <rankingItem :item.sync="item" :index="index"></rankingItem>
+          <rankingItem :item.sync="item"
+                       :index="index"></rankingItem>
         </repeat>
-      </scroll-view>
 
-    </view>
+      </view>
+    </scroll-view>
+
     <van-tabbar active="{{2}}"
                 active-color="#FF772D"
                 bind:change="onChangeTabbar">
@@ -183,18 +179,18 @@ export default class Ranking extends wepy.page {
     dataList: []
   }
 
-  getRanking() {
+  getRanking () {
     api.task.rankingList({
       current: this.page.current,
       size: this.page.size
     })
       .then(({ data }) => {
-        if(this.page.current > 1) {
-          this.dataList =  this.dataList.concat(data.resultData.records)
+        if (this.page.current > 1) {
+          this.dataList = this.dataList.concat(data.resultData.records)
         } else {
           this.dataList = data.resultData.records;
         }
-        this.firstInfo =  this.dataList.length &&  this.dataList[1]
+        this.firstInfo = this.dataList.length && this.dataList[1]
         this.page.total = data.resultData.total
         this.$apply()
       });
@@ -202,7 +198,7 @@ export default class Ranking extends wepy.page {
 
   methods = {
     bindLoadItem () {
-      if(this.page.current < Math.ceil(this.page.total/this.page.size)) {
+      if (this.page.current < Math.ceil(this.page.total / this.page.size)) {
         this.page.current++
         this.getRanking()
       }

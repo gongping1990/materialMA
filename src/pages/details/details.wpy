@@ -365,7 +365,7 @@
                 send-message-title="{{kfInfo.title}}"
                 send-message-path="{{'/pages/publicPopup/publicPopup?shareId=' + shareInfo.id }}"
                 send-message-img="{{kfInfo.img}}">
-          去学习
+          去激活
         </button>
         <van-icon name="close"
                   @tap="closePopup"
