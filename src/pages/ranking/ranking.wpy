@@ -202,7 +202,7 @@ export default class Ranking extends wepy.page {
 
   methods = {
     bindLoadItem () {
-      if(this.page.current < Math.ceil(this.page.total/4)) {
+      if(this.page.current < Math.ceil(this.page.total/this.page.size)) {
         this.page.current++
         this.getRanking()
       }

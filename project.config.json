@@ -39,16 +39,16 @@
 					"scene": null
 				},
 				{
-					"id": -1,
-					"name": "wushuju",
-					"pathName": "pages/convertible/convertible",
+					"id": 1,
+					"name": "收藏",
+					"pathName": "pages/collection/collection",
 					"query": "",
 					"scene": null
 				},
 				{
 					"id": 2,
-					"name": "sousuo",
-					"pathName": "pages/authorize/authorize",
+					"name": "收益",
+					"pathName": "pages/profit/profit",
 					"query": "",
 					"scene": null
 				},
@@ -77,6 +77,13 @@
 					"id": 6,
 					"name": "收益",
 					"pathName": "pages/profit/profit",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "兑换资料",
+					"pathName": "pages/convertible/convertible",
 					"query": "",
 					"scene": null
 				}

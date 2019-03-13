@@ -54,7 +54,8 @@ export default class Convertible extends wepy.page {
   data = {
     page: {
       current: 1,
-      size: 10
+      size: 10,
+      total: ''
     },
     noDataInfo: {
       tip: '你还没有兑换过资料哦～',
@@ -73,8 +74,10 @@ export default class Convertible extends wepy.page {
       this.isOpenModal = false
     },
     bindLoadItem () {
-      this.page.current++
-      this.getExchangeList()
+      if(this.page.current < Math.ceil(this.page.total/this.page.size)) {
+        this.page.current++
+        this.getExchangeList()
+      }
     }
   };
   events = {};
@@ -99,6 +102,7 @@ export default class Convertible extends wepy.page {
         this.dataList.forEach(item => {
           item.time = dayjs(+item.createTime).format('YYYY-MM-DD HH:mm:ss')
         })
+        this.page.total = data.resultData.total
         this.isFecthing = false;
         this.$apply();
       },()=>{
