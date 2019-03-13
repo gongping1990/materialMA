@@ -271,7 +271,7 @@ export default class Task extends wepy.page {
   }
 
   events = {
-    'confin': () => {
+    'confim': () => {
       this.getTodaySignInRecord()
       this.getAccountInfo()
       this.showSignIn = false

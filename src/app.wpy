@@ -134,7 +134,7 @@ export default class extends wepy.app {
 
         if (resultData.needAuth) {
           let url = `/pages/authorize/authorize`
-          wx.redirectTo({ url });
+          wx.navigateTo({ url })
         } else {
           if (options.query.shareId) {
             this.getShareInfo(options.query.shareId)
