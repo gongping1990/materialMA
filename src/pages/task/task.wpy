@@ -31,7 +31,7 @@
               <text class="task-item-text">每周连续签到7天可额外获得100奖励</text>
               <view class="task-item-gold">
                 <image src="https://pub.file.k12.vip/zlk_weapp/qfb/coin.png" />
-                150
+                50
               </view>
             </view>
             <view class="task-item-btn {{signedIn ? 'disabled' : ''}}"
@@ -273,6 +273,7 @@ export default class Task extends wepy.page {
   events = {
     'confim': () => {
       this.getTodaySignInRecord()
+      this.getAccountInfo()
       this.showSignIn = false
     },
     'closeShareModal': () => {
