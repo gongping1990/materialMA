@@ -12,6 +12,10 @@ const userAccount = {
   // 我的页面
   myInfo(params) {
     return request.get("/userAccount/myInfo", params);
+  },
+  // 首页提示
+  homeRemind(params) {
+    return request.get("/userAccount/remind", params);
   }
 };
 
