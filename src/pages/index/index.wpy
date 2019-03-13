@@ -152,7 +152,7 @@
       <image src="https://pub.file.k12.vip/zlk_weapp/zlk/guide.png"
              mode="widthFix" />
     </view>
-    <Share :hide.sync="hideGif" :img.sync="shareFirendInfo.qrcode"></Share>
+    <Share :hide.sync="hideGif" :img.sync="shareFirendInfo"></Share>
     <CollectGoldPopup :title.sync="collectTitle"
                       :subtitle.sync="collectSubtitle"
                       :num.sync="collectNum"

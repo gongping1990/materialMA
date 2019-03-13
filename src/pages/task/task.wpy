@@ -137,7 +137,7 @@
              src="https://pub.file.k12.vip/zlk_weapp/qfb/coin.png"></image>
     </view>
     <view wx:if="{{openShare}}">
-      <share :img.sync="shareFirendInfo.qrcode"></share>
+      <share :img.sync="shareFirendInfo"></share>
     </view>
   </view>
 </template>
