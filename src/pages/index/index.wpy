@@ -114,7 +114,7 @@
                mode="aspectFit" />
         资料库
       </van-tabbar-item>
-      <van-tabbar-item>
+      <van-tabbar-item info="{{isShowIcon ? '今天还未 领取金币' :  null}}">
         <image slot="icon"
                src="https://pub.file.k12.vip/zlk_weapp/tabar-icon-coin-def.png"
                mode="aspectFit" />
@@ -370,6 +370,7 @@ export default class Index extends wepy.page {
     this.getBannerList()
     this.getSubjectList()
     this.getUserAccountMsg()
+    this.homeRemind()
   }
 
   onHide() {
@@ -380,13 +381,13 @@ export default class Index extends wepy.page {
 
     this.getCountTotal()
   }
-  //
-  // getAccountInfo() {
-  //   api.userAccount.accountInfo().then(({data}) => {
-  //     this.isShowIcon = data.resultData.hasIncome
-  //     this.$apply()
-  //   })
-  // }
+
+  homeRemind() {
+    api.userAccount.homeRemind().then(({data}) => {
+      this.isShowIcon = data.resultData.todayGetGold
+      this.$apply()
+    })
+  }
 
   /**
    * @author hujinhui
