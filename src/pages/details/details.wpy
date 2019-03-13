@@ -23,12 +23,12 @@
       <view class="details-action">
         <view class="details-action-dz"
               @tap="binClickActionBtn({{'ownZan'}})">
-          <view class="details-action-icon dz {{detailData.ownZan ? 'sel' : ''}}"></view>
+          <view class="details-action-icon dz {{detailData.ownZan ? 'sel' : ''}} {{zanAnimate ? 'zan-animate': ''}}"></view>
           <text>{{detailData.zan}}</text>
         </view>
         <view class="details-action-sc"
               @tap="binClickActionBtn({{'ownCollect'}})">
-          <view class="details-action-icon sc {{detailData.ownCollect ? 'sel' : ''}}"></view>
+          <view class="details-action-icon sc {{detailData.ownCollect ? 'sel' : ''}} {{collectAnimate ? 'collect-animate': ''}}"></view>
           <text>{{detailData.ownCollect ? '已收藏' : '未收藏'}}</text>
         </view>
         <view class="details-action-fx"
@@ -419,8 +419,8 @@ export default class Details extends wepy.page {
   onShareAppMessage() {
     return {
       title: `我免费领取了一份《${this.detailData.name}》，你也来看看吧~`,
-      path: '/pages/details/details?shareId=' + this.shareInfo.id,
-      imageUrl: 'url',
+      path: `/pages/details/details?shareId=${this.shareInfo.id}&id=${this.id}`,
+      imageUrl: 'https://pub.file.k12.vip/mat/haibao.png',
       success: res => {
         this.methods.closePopup()
       }
@@ -459,7 +459,9 @@ export default class Details extends wepy.page {
     id: 0,
     shareId: 1,
     kfInfo: {},
-    shareInfo: {}
+    shareInfo: {},
+    collectAnimate: false,
+    zanAnimate: false
   };
 
   computed = {
@@ -602,6 +604,10 @@ export default class Details extends wepy.page {
       matId: this.id
     }).then(({ data }) => {
       this.detailData[type] = !this.detailData[type]
+      this.collectAnimate = true
+      setTimeout(() => {
+        this.collectAnimate = false
+      }, 500);
       this.$apply()
     })
   }
@@ -616,6 +622,10 @@ export default class Details extends wepy.page {
       } else {
         this.detailData.zan -= 1
       }
+      this.zanAnimate = true
+      setTimeout(() => {
+        this.zanAnimate = false
+      }, 500);
       this.$apply()
     })
   }
@@ -703,6 +713,7 @@ export default class Details extends wepy.page {
     if(option.isExchange) {
       this.sucShow = true
     }
+
   }
 
 }
@@ -788,6 +799,11 @@ export default class Details extends wepy.page {
       width: 36rpx;
       height: 36rpx;
       margin-bottom: 4rpx;
+      transform: rotate(0);
+      transition: all 0.4s;
+      &.zan-animate {
+        transform: rotateX(60deg);
+      }
       &.dz {
         @include bg('/zlk_weapp/details/xq-icon-like1.png');
         &.sel {

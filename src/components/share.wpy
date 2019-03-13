@@ -13,7 +13,7 @@
             open-type="share">
             分享到家长群
           </button>
-         
+
           <view class="invite-popup-btn-wrap">
             <poster id="poster"
                     config="{{dConfig}}"

@@ -18,5 +18,5 @@ export default class tabberMixin extends wepy.mixin {
           break;
       }
     }
-  };
+  }
 }

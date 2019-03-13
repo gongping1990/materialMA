@@ -100,6 +100,10 @@ export default class Authorize extends wepy.page {
     num: 0
   }
 
+  onShow() {
+    console.log(this.$parent.globalData)
+  }
+
   methods = {
     getUserInfo (res) {
       let { iv, encryptedData, rawData, signature } = res.detail
@@ -111,6 +115,10 @@ export default class Authorize extends wepy.page {
           signature
         }).then(({ data }) => {
           this.getUserAccountMsg()
+          if (this.$parent.globalData) {
+            this.getShareInfo(this.$parent.globalData)
+          }
+          this.getShareInfoDetails()
         })
       }
     }
@@ -122,6 +130,20 @@ export default class Authorize extends wepy.page {
         delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
       });
     }
+  }
+
+  getShareInfo (shareId) {
+    api.task.getShareInfo({
+      shareId
+    }).then(({ data }) => {
+      store.dispatch({ type: 'UPDATE_SHAREINFO', payload: data.resultData })
+    })
+  }
+
+  getShareInfoDetails (id) {
+    api.task.getShareInfoDetails().then(({ data }) => {
+      store.dispatch({ type: 'UPDATE_SHARE_FRIEND_INFO', payload: data.resultData })
+    })
   }
 
   getUserAccountMsg () {

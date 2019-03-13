@@ -40,8 +40,18 @@ VantComponent({
     items: [],
     currentActive: -1
   },
+  computed: {
+    activeIndex() {
+      this.setData({
+        currentActive: this.data.active
+      });
+      this.setActiveItem()
+      return this.data.active
+    }
+  },
   watch: {
     active: function active(_active) {
+      console.log(_active)
       this.set({
         currentActive: _active
       });

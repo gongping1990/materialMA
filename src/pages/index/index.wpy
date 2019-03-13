@@ -2,7 +2,7 @@
 <template>
   <view class="container home" @touchend="touchend">
     <scroll-view class="home-scroll-wrap"
-                 scroll-y="{{!isScrollY}}"
+                 scroll-y
                  scroll-with-animation
                  lower-threshold="5"
                  @scroll="onScroll"
@@ -59,12 +59,12 @@
           </view>
           <view class="home-sort">
             <view class="home-sort-left">
-              <view class="home-sort-popular"
+              <view class="home-sort-popular {{pagination.hot ? 'active' : ''}}"
                     @tap="bindClickSort({{1}})">
                 <text>热门排序</text>
                 <image src="https://pub.file.k12.vip/zlk_weapp/zlk/index-icon-sort.png" />
               </view>
-              <view class="home-sort-newest"
+              <view class="home-sort-newest {{pagination.newly ? 'active' : ''}}"
                     @tap="bindClickSort({{0}})">
                 <text>最新排序</text>
                 <image src="https://pub.file.k12.vip/zlk_weapp/zlk/index-icon-sort.png" />
@@ -349,13 +349,9 @@ export default class Index extends wepy.page {
       this.pagination.hot = type ? true : false
       this.pagination.newly = type ? false : true
       this.pagination.size = 6
-      this.scrollTop = this.scrollTop ? 0 : 1
+      this.page = 0
+      this.materialList = []
       await this.getListMaterial()
-      setTimeout(() => {
-        this.isScrollY = true
-        this.$apply()
-      }, 500);
-
     }
   }
 
@@ -508,9 +504,7 @@ export default class Index extends wepy.page {
 <style lang="scss">
 @import '../../assets/style/mixin.scss';
 .home {
-  overflow-y: auto;
-  height: calc(100vh - 100rpx);
-  padding: 8rpx 0;
+
   & > view {
     width: 100%;
   }
@@ -642,7 +636,7 @@ export default class Index extends wepy.page {
   &-item {
     opacity: 0;
     transform: translate(-20rpx, 20rpx);
-    transition: all 0.1s;
+    transition: all 0.2s;
   }
   .common-animate {
     opacity: 1 !important;
