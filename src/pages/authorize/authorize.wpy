@@ -80,8 +80,17 @@
 </template>
 <script>
 import wepy from 'wepy';
+import {connect} from 'wepy-redux'
 import api from '../../request/api'
+import {updateShareInfo, updateShareFirendInfo} from '../../store/actions'
 import collectGoldPopup from '../../components/collectGoldPopup'
+
+@connect({
+
+}, {
+  updateShareInfo,
+  updateShareFirendInfo
+})
 export default class Authorize extends wepy.page {
   config = {
     navigationBarTitleText: '获课资料库'
@@ -100,9 +109,6 @@ export default class Authorize extends wepy.page {
     num: 0
   }
 
-  onShow() {
-    console.log(this.$parent.globalData)
-  }
 
   methods = {
     getUserInfo (res) {
@@ -136,13 +142,13 @@ export default class Authorize extends wepy.page {
     api.task.getShareInfo({
       shareId
     }).then(({ data }) => {
-      store.dispatch({ type: 'UPDATE_SHAREINFO', payload: data.resultData })
+      this.methods.updateShareInfo(data.resultData)
     })
   }
 
   getShareInfoDetails (id) {
     api.task.getShareInfoDetails().then(({ data }) => {
-      store.dispatch({ type: 'UPDATE_SHARE_FRIEND_INFO', payload: data.resultData })
+      this.methods.updateShareFirendInfo(data.resultData)
     })
   }
 
