@@ -379,7 +379,7 @@
       </view>
     </van-popup>
     <van-toast id="van-toast" />
-    <Share :img.sync="shareFirendInfo.qrcode"></Share>
+    <Share :img.sync="shareFirendInfo"></Share>
     <collectGoldPopup :show.sync="showCollect" :title.sync="collectTitile" :subtitle.sync="collectSubtitile" :num.sync="collectNum" >
             <view solt="message"
             wx:if="{{collectMessage}}">此后将不再弹窗提示此类奖励信息 请到 <text>赚下载币>查看收益</text> 中查看</view>

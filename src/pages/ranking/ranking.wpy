@@ -65,6 +65,12 @@
       }
     }
   }
+  &-list {
+
+    .item-scroll{
+      height: calc(100vh - 372rpx - 60rpx);
+    }
+  }
 }
 </style>
 <template>
@@ -169,7 +175,8 @@ export default class Ranking extends wepy.page {
   data = {
     page: {
       current: 1,
-      size: 10
+      size: 4,
+      total: ''
     },
     firstInfo: '',
     top: 348,
@@ -182,22 +189,23 @@ export default class Ranking extends wepy.page {
       size: this.page.size
     })
       .then(({ data }) => {
-        let array = data.resultData.records
         if(this.page.current > 1) {
-          array = array.concat(data.resultData.records)
+          this.dataList =  this.dataList.concat(data.resultData.records)
         } else {
-          array = data.resultData.records;
+          this.dataList = data.resultData.records;
         }
-        this.firstInfo = array.length && array[1]
-        this.dataList = array
+        this.firstInfo =  this.dataList.length &&  this.dataList[1]
+        this.page.total = data.resultData.total
         this.$apply()
       });
   }
 
   methods = {
     bindLoadItem () {
-      this.page.current++
-      this.getRanking()
+      if(this.page.current < Math.ceil(this.page.total/this.page.size)) {
+        this.page.current++
+        this.getRanking()
+      }
     }
   }
 

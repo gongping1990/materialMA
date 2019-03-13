@@ -37,7 +37,8 @@ export default class Friend extends wepy.page {
   data = {
     page: {
       current: 1,
-      size: 10
+      size: 10,
+      total: ''
     },
     noDataInfo: {
       tip: '你还没有邀请的好友哦～',
@@ -49,8 +50,10 @@ export default class Friend extends wepy.page {
   components = { noDataTemplate };
   methods = {
     bindLoadItem () {
-      this.page.current++
-      this.getFriendList()
+      if(this.page.current < Math.ceil(this.page.total/this.page.size)) {
+        this.page.current++
+        this.getFriendList()
+      }
     }
   };
   events = {};
@@ -73,6 +76,7 @@ export default class Friend extends wepy.page {
         } else {
           this.dataList = data.resultData.records;
         }
+        this.page.total = data.resultData.total
         this.isFecthing = false;
         this.$apply();
       },()=>{

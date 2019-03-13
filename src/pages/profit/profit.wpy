@@ -1,7 +1,7 @@
 <!--  -->
 <template>
   <view class='container convertible'>
-    <view wx:if="{{dataList.length}}">
+    <view wx:if="{{dataList.length && !isFecthing}}">
       <view class="convertible-scroll">
         <scroll-view class="item-scroll"
                      @scrolltolower="bindLoadItem"
@@ -22,7 +22,7 @@
         </scroll-view>
       </view>
     </view>
-    <view wx:else>
+    <view wx:if="{{!dataList.length && !isFecthing}}">
       <noDataTemplate :info="noDataInfo"></noDataTemplate>
     </view>
   </view>
@@ -43,16 +43,20 @@ export default class profit extends wepy.page {
     },
     page: {
       current: 1,
-      size: 10
+      size: 10,
+      total: ''
     },
+    isFecthing: false,
     dataList: [],
     columnType: ['新用户注册','邀请好友注册','被好友邀请注册','邀请好友浏览资料','被邀请浏览资料','每日签到','连续签到7天','购买资料','更新用户身份']
   };
   components = { noDataTemplate };
   methods = {
     bindLoadItem (data) {
-      this.page.current++
-      this.getAccountInfo()
+      if(this.page.current < Math.ceil(this.page.total/this.page.size)) {
+        this.page.current++
+        this.getAccountInfo()
+      }
     }
   };
   events = {};
@@ -64,12 +68,14 @@ export default class profit extends wepy.page {
   };
 
   getAccountInfo() {
+    this.isFecthing = true
     api.userAccount.getUserAccountIncomeList({
       current: this.page.current,
       size: this.page.size
     }).then(({data}) => {
       let array =  []
       let arrayStorage =  []
+
       data.resultData.records.forEach(item=>{
         if(item.income) {
           array.push(item)
@@ -81,6 +87,7 @@ export default class profit extends wepy.page {
       } else {
         arrayStorage = array
       }
+
       array.forEach(item => {
         this.dataList.push({
           name: this.columnType[item.bizModule-1],
@@ -89,7 +96,11 @@ export default class profit extends wepy.page {
           hasRead: item.hasRead
         })
       })
+      this.page.total = data.resultData.total
+      this.isFecthing = false
       this.$apply()
+    },()=>{
+      this.isFecthing = false
     })
   }
 }
@@ -105,11 +116,9 @@ export default class profit extends wepy.page {
     right: 0;
     left: 0;
     background-color: #fff;
-    overflow-y: auto;
-    height: 100vh;
 
     .item-scroll {
-      height: 100%;
+      height: 100vh;
     }
   }
   &-footer {
