@@ -82,7 +82,7 @@
           <text class="explain-title">兑换后，点击页面底部下载打印，</text>
           <text class="explain-title">可下载/打印当前资料。</text>
           <text class="explain-subtitle">如需下载已兑换的所有资料，在电脑上打开网站 </text>
-          <text class="explain-subtitle orange">“ www.baidu.com ” </text>
+          <text class="explain-subtitle orange">“ http://mat.test.k12.vip/ ” </text>
         </view>
       </view>
     </scroll-view>
@@ -364,7 +364,7 @@
                 session-from="{{kfInfo.id}}"
                 send-message-title="{{kfInfo.title}}"
                 send-message-path="{{'/pages/publicPopup/publicPopup?shareId=' + shareInfo.id }}"
-                send-message-img="{{kfInfo.img}}">
+                send-message-img="https://pub.file.k12.vip/mat/lq.png">
           去激活
         </button>
         <van-icon name="close"
@@ -579,7 +579,8 @@ export default class Details extends wepy.page {
             }
           })
         },
-        fail () {
+        fail (res) {
+          console.log(res)
           wx.hideLoading()
           wx.showToast({
             title: '文件下载失败！',
@@ -587,13 +588,15 @@ export default class Details extends wepy.page {
             duration: 2000
           })
         },
-        complete() {
+        complete(res) {
+          console.log(res)
           wx.hideLoading()
           Toast.clear()
         }
       })
 
       downloadTask.onProgressUpdate((res) => {
+        console.log(res)
         if (res.progress < 100) {
           toast.setData({
             message: `加载中 ${res.progress}%`
@@ -701,10 +704,12 @@ export default class Details extends wepy.page {
   }
 
   getUserAccountMsg () {
-    let { shareInfo } = this.$parent.globalData
+    let shareInfo  = this.shareInfoOnw
+    console.log(shareInfo.id ? 5 : 4)
     api.task.getUserAccountMsg({
       userAccountMsgType: shareInfo.id ? 5 : 4
     }).then(({ data }) => {
+      console.log(data)
       if (data.resultData) {
         this.showCollect = true
         if (shareInfo.id) {
@@ -1011,7 +1016,7 @@ export default class Details extends wepy.page {
     }
     &-text {
       color: #ff772d;
-      @include text-overflow('400rpx');
+      @include text-overflow(400rpx);
     }
   }
   &-success-popup {

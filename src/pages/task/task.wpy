@@ -13,11 +13,12 @@
             <text class="task-content-header-text">我的下载币</text>
             <view class="task-content-header-coin {{animate ? 'animate' : ''}}">
               <image src="https://pub.file.k12.vip/zlk_weapp/qfb/coin.png" />
-              <text>{{userInfo.currency}}</text>
+              <text>{{currency}}</text>
             </view>
           </view>
           <view class="task-content-header-right">
-            <view class="task-content-header-icon" wx:if="{{userInfo.hasIncome}}"></view>
+            <view class="task-content-header-icon"
+                  wx:if="{{userInfo.hasIncome}}"></view>
             <text class="task-content-header-sy"
                   @tap="toJump(1)">查看收益</text>
             <van-icon name="arrow"
@@ -143,8 +144,9 @@
 </template>
 <script>
 import wepy from 'wepy';
-import {connect} from 'wepy-redux'
+import { connect } from 'wepy-redux'
 import api from '../../request/api'
+import { NumberAnimate, toThousands } from '../../utils'
 import {updateUserInfo} from '../../store/actions'
 import tabbarMixin from '../../mixins/tabbar.js'
 import collectGoldPopup from '../../components/collectGoldPopup'
@@ -152,10 +154,10 @@ import share from '../../components/share'
 
 
 @connect({
-  userInfoFn(state) {
+  userInfoFn (state) {
     return state.user.userInfo
   },
-  shareFirendInfo(state) {
+  shareFirendInfo (state) {
     return state.user.shareFirendInfo
   }
 },{
@@ -169,6 +171,7 @@ export default class Task extends wepy.page {
   };
   mixins = [tabbarMixin]
   data = {
+    animate: false,
     userInfo: {},
     currentChoice: {},
     show: false,
@@ -206,12 +209,13 @@ export default class Task extends wepy.page {
     linePos: {},
     hide_good_box: true,
     bus_x: 0,
-    bus_y: 0
+    bus_y: 0,
+    currency: 0
   };
 
   watch = {
-    'userInfoFn' (n,o) {
-      if(n.type == null) {
+    'userInfoFn' (n, o) {
+      if (n.type == null) {
         this.show = true
       }
     }
@@ -281,7 +285,12 @@ export default class Task extends wepy.page {
     'confim': () => {
       this.getTodaySignInRecord()
       this.getAccountInfo()
+      this.animate = true
       this.showSignIn = false
+      setTimeout(() => {
+        this.animate = false
+        this.$apply()
+      }, 2000);
     },
     'closeShareModal': () => {
       this.openShare = false
@@ -303,6 +312,14 @@ export default class Task extends wepy.page {
     }
   }
 
+  onShareAppMessage () {
+    return {
+      title: '这儿有好多精品学习资料，快来免费领~',
+      path: `/pages/index/index?shareId=${this.shareFirendInfo.id}`,
+      imageUrl: 'https://pub.file.k12.vip/mat/haibao.png'
+    }
+  }
+
   getTodaySignInRecord () {
     api.task.getTodaySignInRecord().then(({ data }) => {
       let { continuousSignInDays, signedIn } = data.resultData
@@ -312,8 +329,11 @@ export default class Task extends wepy.page {
     })
   }
 
-  getAccountInfo() {
-    api.userAccount.accountInfo().then(({data}) => {
+  getAccountInfo () {
+    api.userAccount.accountInfo().then(({ data }) => {
+      setTimeout(() => {
+        this.NumberAnimate(data.resultData.currency)
+      }, 700);
       this.userInfo = data.resultData
       this.$apply()
     })
@@ -325,26 +345,26 @@ export default class Task extends wepy.page {
 
 
   touchOnGoods (e) {
-      this.finger = {}; var topPoint = {};
-      this.finger['x'] = e.touches["0"].clientX;//点击的位置
-      this.finger['y'] = e.touches["0"].clientY;
+    this.finger = {}; var topPoint = {};
+    this.finger['x'] = e.touches["0"].clientX;//点击的位置
+    this.finger['y'] = e.touches["0"].clientY;
 
-      if (this.finger['y'] < this.busPos['y']) {
-        topPoint['y'] = this.finger['y'] - 150;
-      } else {
-        topPoint['y'] = this.busPos['y'] - 150;
-      }
-      topPoint['x'] = Math.abs(this.finger['x'] - this.busPos['x']) / 2;
-
-      if (this.finger['x'] > this.busPos['x']) {
-        topPoint['x'] = (this.finger['x'] - this.busPos['x']) / 2 + this.busPos['x'];
-      } else {//
-        topPoint['x'] = (this.busPos['x'] - this.finger['x']) / 2 + this.finger['x'];
-      }
-
-      this.linePos = this.$parent.bezier([this.busPos, topPoint, this.finger], 30);
-      this.startAnimation(e);
+    if (this.finger['y'] < this.busPos['y']) {
+      topPoint['y'] = this.finger['y'] - 150;
+    } else {
+      topPoint['y'] = this.busPos['y'] - 150;
     }
+    topPoint['x'] = Math.abs(this.finger['x'] - this.busPos['x']) / 2;
+
+    if (this.finger['x'] > this.busPos['x']) {
+      topPoint['x'] = (this.finger['x'] - this.busPos['x']) / 2 + this.busPos['x'];
+    } else {//
+      topPoint['x'] = (this.busPos['x'] - this.finger['x']) / 2 + this.finger['x'];
+    }
+
+    this.linePos = this.$parent.bezier([this.busPos, topPoint, this.finger], 30);
+    this.startAnimation(e);
+  }
 
   busAnimation () {
     that.setData({
@@ -368,11 +388,11 @@ export default class Task extends wepy.page {
     index = len
     this.timer = setInterval(() => {
       index--
-      if(!bezier_points[index]['x'] && !bezier_points[index]['y']) {
+      if (!bezier_points[index]['x'] && !bezier_points[index]['y']) {
         clearInterval(that.timer);
       }
       this.bus_x = bezier_points[index]['x'],
-      this.bus_y = bezier_points[index]['y']
+        this.bus_y = bezier_points[index]['y']
 
 
 
@@ -382,6 +402,24 @@ export default class Task extends wepy.page {
       }
       this.$apply()
     }, 30);
+  }
+
+  /**
+   * @author hujinhui
+   * @description 数字动画
+   */
+  NumberAnimate (num) {
+    let n3 = new NumberAnimate({
+      to: num,
+      from: this.currency,
+      speed: 1500,
+      refreshTime: 100,
+      decimals: 0,
+      onUpdate: () => {
+        this.currency = toThousands(n3.tempValue)
+        this.$apply()
+      }
+    });
   }
 
 }
@@ -399,7 +437,7 @@ export default class Task extends wepy.page {
     @include bg('/ranking/backgroud.png');
     background-color: #fb9545;
     padding-top: 524rpx;
-    padding-bottom: 80rpx;
+    padding-bottom: 180rpx;
   }
   &-msg-popup {
     @include flex-column-center;
@@ -525,13 +563,20 @@ export default class Task extends wepy.page {
         font-weight: 500;
         color: #ffd45c;
         image {
-          margin-right: 8rpx;
+          margin-right: 16rpx;
           width: 56rpx;
           height: 56rpx;
         }
+        text {
+          transform: scale(1);
+          transition: all 0.3s 0.8s;
+        }
         &.animate {
           image {
-            animation: animate ease-in-out;
+            animation: animate 1s ease-in-out;
+          }
+          text {
+            animation: scale 0.5s 0.9s ease-in;
           }
         }
       }
@@ -608,7 +653,39 @@ export default class Task extends wepy.page {
 
   @keyframes animate {
     0% {
-      transform: translateY(20rpx) rotateY(0);
+      transform: translateY(0) rotateY(0);
+    }
+    20% {
+      transform: translateY(-30rpx) rotateY(90deg);
+    }
+    40% {
+      transform: translateY(0rpx) rotateY(360deg);
+    }
+    55% {
+      transform: translateY(-20rpx);
+    }
+    70% {
+      transform: translateY(0);
+    }
+    85% {
+      transform: translateY(-10rpx);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scale {
+    0% {
+      opacity: 0.8;
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
     }
   }
 }

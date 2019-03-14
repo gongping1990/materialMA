@@ -121,8 +121,8 @@ export default class Authorize extends wepy.page {
           signature
         }).then(({ data }) => {
           this.getUserAccountMsg()
-          if (this.$parent.globalData) {
-            this.getShareInfo(this.$parent.globalData)
+          if (this.$parent.globalData.shareId) {
+            this.getShareInfo(this.$parent.globalData.shareId)
           }
           this.getShareInfoDetails()
         })
@@ -138,9 +138,6 @@ export default class Authorize extends wepy.page {
     }
   }
 
-  onLoad() {
-    this.show = true
-  }
 
   getShareInfo (shareId) {
     api.task.getShareInfo({

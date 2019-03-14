@@ -113,6 +113,7 @@ export default class extends wepy.app {
   }
 
   onLaunch (options) {
+    console.log(options)
     options.query.shareId && (this.shareId = options.query.shareId)
     // 判断是否由分享进入小程序
     if (options.scene == 1007 || options.scene == 1008) {
@@ -127,6 +128,7 @@ export default class extends wepy.app {
       }
 
       options.query.shareId && (params.shareId = options.query.shareId)
+      console.log(params)
       api.user.wxUserLogin(params).then(({ data }) => {
         let { resultData } = data
         this.globalData.userInfo = resultData

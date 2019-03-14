@@ -3,18 +3,20 @@ class NumberAnimate {
 
     constructor(opt) {
         let def = {
-            from:50,//开始时的数字
+            to: 50,
+            from:0,//开始时的数字
             speed:2000,// 总时间
             refreshTime:100,// 刷新一次的时间
             decimals:2,// 小数点后的位数，小数做四舍五入
             onUpdate:function(){}, // 更新时回调函数
             onComplete:function(){} // 完成时回调函数
         }
-        this.tempValue = 0;//累加变量值
+
         this.opt = Object.assign(def,opt);//assign传入配置参数
+        this.tempValue = this.opt.from;//累加变量值
         this.loopCount = 0;//循环次数计数
         this.loops = Math.ceil(this.opt.speed/this.opt.refreshTime);//数字累加次数
-        this.increment = (this.opt.from/this.loops);//每次累加的值
+        this.increment = ((this.opt.to - this.opt.from)/this.loops);//每次累加的值
         this.interval = null;//计时器对象
         this.init();
     }
@@ -28,7 +30,7 @@ class NumberAnimate {
         this.tempValue = this.formatFloat(this.tempValue,this.increment).toFixed(this.opt.decimals);
         if(this.loopCount >= this.loops){
             clearInterval(this.interval);
-            this.tempValue = this.opt.from;
+            this.tempValue = this.opt.to;
             this.opt.onComplete();
         }
         this.opt.onUpdate();

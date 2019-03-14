@@ -87,7 +87,7 @@
       <view class="item-left-footer">
         <view class="item-watch">
           <image mode="widthFix"
-                 src="https://pub.file.k12.vip/zlk_weapp/zlk/icon-scan.png" />{{item.uv}}</view>
+                 src="https://pub.file.k12.vip/zlk_weapp/zlk/icon-scan.png" />{{item.pv}}</view>
         <view class="item-start">
           <image mode="widthFix"
                  src="https://pub.file.k12.vip/zlk_weapp/zlk/icon-like.png" />{{item.zan}}</view>

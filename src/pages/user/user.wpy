@@ -237,7 +237,7 @@ export default class User extends wepy.page {
       })
     },
     toDetail () {
-      wx.navigateTo({ url: '/pages/details/details?id=' + this.userDetail.orderDetailsVO.id});
+      wx.navigateTo({ url: '/pages/details/details?id=' + this.userDetail.orderDetailsVO.materialId});
     }
   }
 
