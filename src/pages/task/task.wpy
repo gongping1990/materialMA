@@ -147,6 +147,7 @@ import wepy from 'wepy';
 import { connect } from 'wepy-redux'
 import api from '../../request/api'
 import { NumberAnimate, toThousands } from '../../utils'
+import {updateUserInfo} from '../../store/actions'
 import tabbarMixin from '../../mixins/tabbar.js'
 import collectGoldPopup from '../../components/collectGoldPopup'
 import share from '../../components/share'
@@ -159,6 +160,8 @@ import share from '../../components/share'
   shareFirendInfo (state) {
     return state.user.shareFirendInfo
   }
+},{
+  updateUserInfo
 })
 export default class Task extends wepy.page {
   config = {
@@ -240,6 +243,10 @@ export default class Task extends wepy.page {
         type: this.currentChoice.id
       }).then(({ data }) => {
         this.show = false
+        this.methods.updateUserInfo({
+          ...this.userInfoFn,
+          type: this.currentChoice.id
+        })
         this.$apply()
       })
 
