@@ -82,12 +82,13 @@
 import wepy from 'wepy';
 import {connect} from 'wepy-redux'
 import api from '../../request/api'
-import {updateShareInfo, updateShareFirendInfo} from '../../store/actions'
+import {updateShareInfo, updateShareFirendInfo,updateUserInfo} from '../../store/actions'
 import collectGoldPopup from '../../components/collectGoldPopup'
 
 @connect({
 
 }, {
+  updateUserInfo,
   updateShareInfo,
   updateShareFirendInfo
 })
@@ -120,6 +121,7 @@ export default class Authorize extends wepy.page {
           rawData,
           signature
         }).then(({ data }) => {
+          this.methods.updateUserInfo(data.resultData)
           this.getUserAccountMsg()
           if (this.$parent.globalData.shareId) {
             this.getShareInfo(this.$parent.globalData.shareId)
