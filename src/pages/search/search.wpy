@@ -106,6 +106,12 @@ export default class Search extends wepy.page {
     })
   }
 
+  events = {
+    'click-item' (id, $event) {
+      wx.redirectTo({ url: '/pages/details/details?id=' + id });
+    }
+  }
+
   onLoad (option) {
     this.catalogId = option.catalogId
   }
