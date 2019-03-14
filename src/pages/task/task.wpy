@@ -300,6 +300,9 @@ export default class Task extends wepy.page {
   onShow () {
     this.getTodaySignInRecord()
     this.getAccountInfo()
+    if(this.userInfoFn.type == null) {
+      this.show = true
+    }
   }
 
   onShareAppMessage () {
