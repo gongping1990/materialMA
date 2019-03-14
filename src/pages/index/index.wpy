@@ -1,6 +1,7 @@
 
 <template>
-  <view class="container home" @touchend="touchend">
+  <view class="container home"
+        @touchend="touchend">
     <scroll-view class="home-scroll-wrap"
                  scroll-y
                  scroll-with-animation
@@ -152,7 +153,8 @@
       <image src="https://pub.file.k12.vip/zlk_weapp/zlk/guide.png"
              mode="widthFix" />
     </view>
-    <Share :hide.sync="hideGif" :img.sync="shareFirendInfo"></Share>
+    <Share :hide.sync="hideGif"
+           :img.sync="shareFirendInfo"></Share>
     <CollectGoldPopup :title.sync="collectTitle"
                       :subtitle.sync="collectSubtitle"
                       :num.sync="collectNum"
@@ -181,7 +183,7 @@ let hideTime = null
   userInfo (state) {
     return state.user.userInfo
   },
-  shareFirendInfo(state) {
+  shareFirendInfo (state) {
     return state.user.shareFirendInfo
   }
 })
@@ -264,6 +266,8 @@ export default class Index extends wepy.page {
     userInfo (n, o) {
       if (!n.grade) {
         this.showMask = true
+      } else{
+        this.showMask = false
       }
       if (!o.grade && this.subjectId && n.grade) {
         this.getCatalogList(this.subjectId)
@@ -272,14 +276,14 @@ export default class Index extends wepy.page {
   }
 
   methods = {
-    touchend() {
+    touchend () {
       hideTime = setTimeout(() => {
         hideTime = null
       }, 300);
       this.hideGif = false
     },
     onScroll () {
-      if(hideTime) return
+      if (hideTime) return
       this.hideGif = true
     },
     closeMask () {
@@ -373,7 +377,7 @@ export default class Index extends wepy.page {
     this.homeRemind()
   }
 
-  onHide() {
+  onHide () {
     this.materialList = []
   }
 
@@ -382,8 +386,16 @@ export default class Index extends wepy.page {
     this.getCountTotal()
   }
 
-  homeRemind() {
-    api.userAccount.homeRemind().then(({data}) => {
+  onShareAppMessage () {
+    return {
+      title: '这儿有好多精品学习资料，快来免费领~',
+      path: `/pages/index/index?shareId=${this.shareFirendInfo.id}`,
+      imageUrl: 'https://pub.file.k12.vip/mat/haibao.png'
+    }
+  }
+
+  homeRemind () {
+    api.userAccount.homeRemind().then(({ data }) => {
       this.isShowIcon = data.resultData.todayGetGold
       this.$apply()
     })
@@ -422,12 +434,14 @@ export default class Index extends wepy.page {
       subject,
       grade
     }).then(({ data }) => {
-      this.scrollLeft = 0
-      this.catalogList = data.resultData
-      this.catalogId = data.resultData[0].id
-      this.pagination.size = 6
-      this.page = 0
-      this.$apply()
+      if (data.resultData.length) {
+        this.scrollLeft = 0
+        this.catalogList = data.resultData
+        this.catalogId = data.resultData[0].id
+        this.pagination.size = 6
+        this.page = 0
+        this.$apply()
+      }
     })
     this.getListMaterial()
   }
@@ -445,7 +459,7 @@ export default class Index extends wepy.page {
         this.page += 6
         this.$apply()
       }, 500);
-      if(!data.resultData.records.length) {
+      if (!data.resultData.records.length) {
         this.isEmpty = true
       } else {
         this.isEmpty = false
@@ -486,7 +500,7 @@ export default class Index extends wepy.page {
    */
   NumberAnimate (num) {
     let n3 = new NumberAnimate({
-      from: num,
+      to: num,
       speed: 2000,
       refreshTime: 100,
       decimals: 0,
@@ -505,7 +519,6 @@ export default class Index extends wepy.page {
 <style lang="scss">
 @import '../../assets/style/mixin.scss';
 .home {
-
   & > view {
     width: 100%;
   }

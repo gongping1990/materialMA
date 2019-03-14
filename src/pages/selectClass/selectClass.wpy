@@ -58,13 +58,12 @@ export default class SelectClass extends wepy.page {
       api.user.updateGrade({
         grade
       }).then(({ data }) => {
+        this.methods.bindClickBack()
         this.methods.updateUserInfo({
           ...this.userInfo,
           grade,
           gradeName: this.array[grade - 1]
         })
-        wx.navigateTo({ url: '/pages/index/index' });
-        this.$apply()
         wx.showToast({
           title: '年级选择成功', //提示的内容,
           icon: 'success', //图标,

@@ -151,7 +151,6 @@ export default class Example extends wepy.component {
     this.dConfig.images[1].url = this.img.headimgurl
     this.dConfig.images[2].url = this.img.qrcode
     this.dConfig.texts[0].text = this.img.nickName
-    console.log(this.dConfig)
   };
 }
 </script>

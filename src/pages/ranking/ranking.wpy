@@ -153,7 +153,14 @@ import tabbarMixin from '../../mixins/tabbar.js'
 import Share from '../../components/share'
 import rankingItem from '../../components/rankingItem'
 
-
+@connect({
+  userInfoFn (state) {
+    return state.user.userInfo
+  },
+  shareFirendInfo (state) {
+    return state.user.shareFirendInfo
+  }
+})
 export default class Ranking extends wepy.page {
   config = {
     navigationBarTitleText: '勤奋榜',
@@ -215,6 +222,14 @@ export default class Ranking extends wepy.page {
 
   onLoad () {
 
+  }
+
+  onShareAppMessage () {
+    return {
+      title: '这儿有好多精品学习资料，快来免费领~',
+      path: `/pages/index/index?shareId=${this.shareFirendInfo.id}`,
+      imageUrl: 'https://pub.file.k12.vip/mat/haibao.png'
+    }
   }
 }
 </script>
