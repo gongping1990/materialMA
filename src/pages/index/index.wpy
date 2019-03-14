@@ -266,11 +266,15 @@ export default class Index extends wepy.page {
     userInfo (n, o) {
       if (!n.grade) {
         this.showMask = true
-      } else{
+      } else {
         this.showMask = false
       }
       if (!o.grade && this.subjectId && n.grade) {
         this.getCatalogList(this.subjectId)
+      }
+      if (n.id) {
+        this.getUserAccountMsg()
+        this.homeRemind()
       }
     }
   }
@@ -361,7 +365,7 @@ export default class Index extends wepy.page {
 
   events = {
     'click-item' (id, $event) {
-      wx.navigateTo({ url: '/pages/details/details?id=' + id });
+      wx.redirectTo({ url: '/pages/details/details?id=' + id });
     },
     'confim' () {
       this.showPopup = false
@@ -373,8 +377,10 @@ export default class Index extends wepy.page {
   onShow () {
     this.getBannerList()
     this.getSubjectList()
-    this.getUserAccountMsg()
-    this.homeRemind()
+    if (this.userInfo.id) {
+      this.getUserAccountMsg()
+      this.homeRemind()
+    }
   }
 
   onHide () {

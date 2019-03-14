@@ -89,11 +89,12 @@ export default class Search extends wepy.page {
   }
 
   getListMaterial () {
-    let { current, size, catalogId } = this
+    let { current, size, catalogId,value } = this
     return api.material.listMaterial({
       catalogId,
       current,
-      size
+      size,
+      name:value
     }).then(({ data }) => {
       let arr = []
       this.total = data.resultData.total

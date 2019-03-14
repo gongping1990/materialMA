@@ -1,11 +1,7 @@
 <!--  -->
 <template>
   <view class='container details'>
-    <scroll-view class="details-scroll"
-                 scroll-y
-                 @scroll="bindScroll"
-                 scroll-with-animation>
-      <view class="float-nav"
+    <view class="float-nav"
             wx:if="{{showNav}}">
         <view wx:if="{{detailData.newly || detailData.hot}}"
               class="details-tag float-nav-tag {{detailDat.hot ? 'hot' : ''}}">{{detailData.newly ? '最新' : detailData.hot ? '最热' : ''}}</view>
@@ -15,6 +11,11 @@
           <view class="float-nav-share-icon"></view>
         </view>
       </view>
+    <scroll-view class="details-scroll"
+                 scroll-y
+                 @scroll="bindScroll"
+                 scroll-with-animation>
+
       <view class="details-title">
         <view wx:if="{{detailData.newly || detailData.hot}}"
               class="details-tag {{detailDat.hot ? 'hot' : ''}}">{{detailData.newly ? '最新' : detailData.hot ? '最热' : ''}}</view>
@@ -507,6 +508,10 @@ export default class Details extends wepy.page {
       }
     },
     bindShowPopup (popup) {
+      if(!this.detailData.accessSubject && popup == 'downShow') {
+        this.unconcernedShow = true
+        return
+      }
       this[popup] = true
     },
     bindChangeShow () {
@@ -551,6 +556,10 @@ export default class Details extends wepy.page {
       });
     },
     bindClickOpen () {
+      if(!this.detailData.accessSubject) {
+        this.unconcernedShow = true
+        return
+      }
       let extensionArr = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf']
       let filename = this.detailData.fileDownUrl
       let extension = filename.split('.').pop()
@@ -607,7 +616,8 @@ export default class Details extends wepy.page {
       })
     },
     bindClickBackHome () {
-      wx.navigateTo({ url: '/pages/index/index' });
+      console.log(111)
+      wx.redirectTo({ url: '/pages/index/index' });
     }
   }
 
@@ -1016,7 +1026,8 @@ export default class Details extends wepy.page {
     }
     &-text {
       color: #ff772d;
-      @include text-overflow(400rpx);
+      width: 400rpx;
+      text-align: center;
     }
   }
   &-success-popup {
