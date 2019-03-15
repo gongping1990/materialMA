@@ -247,6 +247,8 @@ export default class Task extends wepy.page {
           ...this.userInfoFn,
           type: this.currentChoice.id
         })
+        this.getTodaySignInRecord()
+        this.getAccountInfo()
         this.$apply()
       })
 
