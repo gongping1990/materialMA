@@ -69,7 +69,6 @@ export default class Example extends wepy.component {
     dConfig: {
       width: 500,
       height: 680,
-      backgroundColor: '#fff',
       debug: false,
       texts: [
         {
@@ -79,16 +78,24 @@ export default class Example extends wepy.component {
           fontSize: 20,
           color: '#2A2828',
           fontWeight: 600,
-          zIndex: 2
+          zIndex: 100
         }
       ],
       images: [
         {
           x: 0,
           y: 0,
-          url: 'https://pub.file.k12.vip/2019/03/13/1105676817808420866.png',
+          url: 'https://pub.file.k12.vip/2019/03/15/1106512541393481729.jpg',
           width: 500,
-          height: 680,
+          height: 380,
+          zIndex: 1
+        },
+        {
+          x: 0,
+          y: 380,
+          url: 'https://pub.file.k12.vip/2019/03/15/1106512656766201858.jpg',
+          width: 500,
+          height: 300,
           zIndex: 1
         },
         {
@@ -98,7 +105,7 @@ export default class Example extends wepy.component {
           width: 48,
           height: 48,
           borderRadius: 48,
-          zIndex: 2
+          zIndex: 20
         },
         {
           x: 358,
@@ -106,7 +113,7 @@ export default class Example extends wepy.component {
           url: 'https://pub.file.k12.vip/2019/03/11/1105036933329440769.jpg',
           width: 96,
           height: 96,
-          zIndex: 2
+          zIndex: 20
         },
       ]
 
@@ -126,8 +133,8 @@ export default class Example extends wepy.component {
       this.shareShow = false
     },
     bindClickInvite () {
-      this.dConfig.images[1].url = 'https://huoke.prod.k12.vip/material/user/porxyWXheadimg/' + this.img.userId
-      this.dConfig.images[2].url = this.img.qrcode
+      this.dConfig.images[2].url = 'https://huoke.prod.k12.vip/material/user/porxyWXheadimg/' + this.img.userId
+      this.dConfig.images[3].url = this.img.qrcode
       this.dConfig.texts[0].text = this.img.nickName
       this.inviteShow = true
     },

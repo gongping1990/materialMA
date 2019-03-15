@@ -51,7 +51,6 @@ VantComponent({
   },
   watch: {
     active: function active(_active) {
-      console.log(_active)
       this.set({
         currentActive: _active
       });

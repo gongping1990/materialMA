@@ -58,7 +58,7 @@ Component({
                             resolve();
                         })
                         .catch((e) => reject(e));
-                }  
+                }
             })
         },
         onCreate(reset = false) {

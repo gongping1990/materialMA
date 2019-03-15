@@ -261,7 +261,6 @@ export default class Index extends wepy.page {
 
     },
     isPhoneX () {
-      console.log(this.$parent.globalData.isPhoneX)
       return this.$parent.globalData.isPhoneX
     }
   }

@@ -2,15 +2,15 @@
 <template>
   <view class="container details {{isPhoneX ? 'is-phonex' : ''}}">
     <view class="float-nav"
-            wx:if="{{showNav}}">
-        <view wx:if="{{detailData.newly || detailData.hot}}"
-              class="details-tag float-nav-tag {{detailDat.hot ? 'hot' : ''}}">{{detailData.newly ? '最新' : detailData.hot ? '最热' : ''}}</view>
-        <text class="float-nav-title">{{detailData.name}}</text>
-        <view class="float-nav-share"
-              @tap="bindShowPopup({{'shareShow'}})">
-          <view class="float-nav-share-icon"></view>
-        </view>
+          wx:if="{{showNav}}">
+      <view wx:if="{{detailData.newly || detailData.hot}}"
+            class="details-tag float-nav-tag {{detailDat.hot ? 'hot' : ''}}">{{detailData.newly ? '最新' : detailData.hot ? '最热' : ''}}</view>
+      <text class="float-nav-title">{{detailData.name}}</text>
+      <view class="float-nav-share"
+            @tap="bindShowPopup({{'shareShow'}})">
+        <view class="float-nav-share-icon"></view>
       </view>
+    </view>
     <scroll-view class="details-scroll"
                  scroll-y
                  @scroll="bindScroll"
@@ -40,7 +40,7 @@
       </view>
       <view class="details-method">
         <text class="details-method-title"
-              @tap="bindShowPopup({{'unconcernedShow'}})">兑换方法</text>
+              @tap="bindShowPopup({{'unconcernedShow'}})">兑换方法{{isHide ? '1' : '2'}}</text>
         <view class="details-method-content def"
               @tap="navigateToTask">
           <text class="details-method-content-title">使用下载币免费兑换，</text>
@@ -166,10 +166,8 @@
                mode="widthFix" />
         <text class="details-success-popup-title">文档格式不支持直接打开 </text>
         <text class="details-success-popup-text">请在电脑上下载后使用</text>
-        <button class="details-success-popup-btn"
-                open-type="share">
-          知道了
-        </button>
+        <view class="details-success-popup-btn"
+              @tap="closePopup">我知道了</view>
         <van-icon name="close"
                   @tap="closePopup"
                   class="close-btn"
@@ -317,7 +315,9 @@
                 <view class="details-down-step-text">粘贴文档链接<text>发送给打印店老板</text>即可</view>
               </view>
               <text class="details-down-popup-text">emm^还是没搞懂？点击下面视频教程学习一下吧～</text>
-              <image class="details-down-popup-img" src="https://pub.file.k12.vip/ranking/vedio.png" @tap="toVideo({{1}})"/>
+              <image class="details-down-popup-img"
+                     src="https://pub.file.k12.vip/ranking/vedio.png"
+                     @tap="toVideo({{1}})" />
               <view class="details-down-popup-btn"
                     @tap="bindCopyLink({{1}})">复制文档链接</view>
             </view>
@@ -344,7 +344,9 @@
                 <view class="details-down-step-text"><text>粘贴文档链接</text>即可下载。 </view>
               </view>
               <text class="details-down-popup-text">emm^还是没搞懂？点击下面视频教程学习一下吧～</text>
-              <image class="details-down-popup-img" src="https://pub.file.k12.vip/ranking/vedio.png" @tap="toVideo({{0}})"/>
+              <image class="details-down-popup-img"
+                     src="https://pub.file.k12.vip/ranking/vedio.png"
+                     @tap="toVideo({{0}})" />
               <view class="details-down-popup-btn"
                     @tap="bindCopyLink({{0}})">复制文档链接</view>
             </view>
@@ -355,12 +357,10 @@
     <!--播放-->
     <van-popup show="{{isOpenVideo}}">
       <view class="details-video">
-        <video
-          class="-video"
-          id="myVideo"
-          src="{{videoType ? 'https://pub.file.k12.vip/dyzn.mp4' : 'https://pub.file.k12.vip/xzzn.mp4'}}"
-          controls
-        ></video>
+        <video class="-video"
+               id="myVideo"
+               src="{{videoType ? 'https://pub.file.k12.vip/dyzn.mp4' : 'https://pub.file.k12.vip/xzzn.mp4'}}"
+               controls></video>
         <van-icon name="close"
                   @tap="closePopup"
                   class="close-btn -video-close"
@@ -374,7 +374,7 @@
       <view class="details-success-popup details-unconcerned-popup">
         <text class="details-unconcerned-popup-title">激活永久免费下载权限 </text>
         <text class="details-unconcerned-popup-text">1.进入客服，点击右下角小卡片,</text>
-        <text class="details-unconcerned-popup-text"> 2.按照客服的提示操作，即可激 活永久免费下载“语文”资料的权限</text>
+        <text class="details-unconcerned-popup-text"> 2.按照客服的提示操作，即可激 活永久免费下载“{{detailData.subjectName}}”资料的权限</text>
         <image class="details-unconcerned-popup-img"
                src="https://pub.file.k12.vip/gif/gzzn.gif"
                mode="widthFix" />
@@ -482,7 +482,8 @@ export default class Details extends wepy.page {
     kfInfo: {},
     shareInfo: {},
     collectAnimate: false,
-    zanAnimate: false
+    zanAnimate: false,
+    isHide: false
   };
 
   computed = {
@@ -499,13 +500,10 @@ export default class Details extends wepy.page {
     userInfo (n, o) {
       this.getDetailData()
       this.getKfInfo()
-      this.getShareInfoDetails()
-
-    },
-    shareInfoOnw (n, o) {
-      if (n.id) {
-        this.getUserAccountMsg()
+      if (this.id) {
+        this.getShareInfoDetails(this.id)
       }
+
     }
   }
 
@@ -537,7 +535,7 @@ export default class Details extends wepy.page {
       }
     },
     bindShowPopup (popup) {
-      if(!this.detailData.accessSubject && popup == 'downShow') {
+      if (!this.detailData.accessSubject && popup == 'downShow') {
         this.unconcernedShow = true
         return
       }
@@ -585,14 +583,13 @@ export default class Details extends wepy.page {
       });
     },
     bindClickOpen () {
-      if(!this.detailData.accessSubject) {
+      if (!this.detailData.accessSubject) {
         this.unconcernedShow = true
         return
       }
       let extensionArr = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf']
       let filename = this.detailData.fileDownUrl
       let extension = filename.split('.').pop()
-      console.log(extensionArr.indexOf(extension))
       if (extensionArr.indexOf(extension) == -1) {
         this.openErrShow = true
         return
@@ -606,19 +603,16 @@ export default class Details extends wepy.page {
       const downloadTask = wx.downloadFile({
         url: this.detailData.authorFileDownUrl, // 仅为示例，并非真实的资源
         success (res) {
-          console.log(res)
           const filePath = res.tempFilePath
           wx.openDocument({
             filePath,
             type: extension,
             success (res) {
-              console.log(111)
               wx.hideLoading()
             }
           })
         },
         fail (res) {
-          console.log(res)
           wx.hideLoading()
           wx.showToast({
             title: '文件下载失败！',
@@ -626,15 +620,13 @@ export default class Details extends wepy.page {
             duration: 2000
           })
         },
-        complete(res) {
-          console.log(res)
+        complete (res) {
           wx.hideLoading()
           Toast.clear()
         }
       })
 
       downloadTask.onProgressUpdate((res) => {
-        console.log(res)
         if (res.progress < 100) {
           toast.setData({
             message: `加载中 ${res.progress}%`
@@ -653,11 +645,16 @@ export default class Details extends wepy.page {
     let params = {
       id: id ? id : this.id
     }
-    if(this.$parent.globalData.shareId) {
-      params.shareId = this.$parent.globalData.shareId
+    let { shareId } = this.$parent.globalData
+    if (shareId) {
+      params.shareId = shareId
     }
 
     api.material.ownView(params).then(({ data }) => {
+
+      if (shareId) {
+        this.getUserAccountMsg()
+      }
       this.detailData = data.resultData
       this.detailData.previewImgUrl = JSON.parse(this.detailData.previewImgUrl)
       this.$apply()
@@ -730,11 +727,15 @@ export default class Details extends wepy.page {
   }
 
   getShareInfoDetails (id) {
-    api.task.getShareInfoDetails({
-      materialId: id ? id : this.id
-    }).then(({ data }) => {
-      this.shareInfo = data.resultData
-    })
+
+    if (id) {
+      api.task.getShareInfoDetails({
+        materialId: id ? id : this.id
+      }).then(({ data }) => {
+        this.shareInfo = data.resultData
+      })
+    }
+
   }
 
   getKfInfo (id) {
@@ -749,7 +750,7 @@ export default class Details extends wepy.page {
   getUserAccountMsg () {
     let shareId = this.$parent.globalData.shareId
     api.task.getUserAccountMsg({
-      userAccountMsgType: shareId? 5 : 4
+      userAccountMsgType: shareId ? 5 : 4
     }).then(({ data }) => {
       if (data.resultData) {
         this.showCollect = true
@@ -758,7 +759,7 @@ export default class Details extends wepy.page {
           this.collectSubtitile = `送你${data.resultData.currency}下载币`
           this.collectMessage = false
         } else {
-          this.collectTitile = '你的邀请“' + data.resultData.friendNickName + '成功"'
+          this.collectTitile = '你的邀请“' + data.resultData.friendNickName + '"成功'
 
           this.collectSubtitile = '恭喜获得下载币'
           this.collectMessage = true
@@ -781,6 +782,18 @@ export default class Details extends wepy.page {
       this.sucShow = true
     }
 
+  }
+
+  onShow () {
+    if (this.id && this.isHide) {
+      this.isHide = false
+      this.methods.closePopup()
+      this.getDetailData(this.id)
+    }
+  }
+
+  onHide () {
+    this.isHide = true
   }
 
 }
@@ -1068,8 +1081,8 @@ export default class Details extends wepy.page {
     }
 
     .-video-close {
-      top: -80rpx!important;
-      right: 30rpx!important;
+      top: -80rpx !important;
+      right: 30rpx !important;
     }
   }
   &-success-popup {
@@ -1205,10 +1218,10 @@ export default class Details extends wepy.page {
 
     &-img {
       margin-top: 24rpx;
-      width:172rpx;
-      height:96rpx;
-      background:rgba(0,0,0,0.5);
-      border-radius:16rpx;
+      width: 172rpx;
+      height: 96rpx;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 16rpx;
     }
   }
   &-down {
@@ -1280,7 +1293,7 @@ export default class Details extends wepy.page {
       bottom: 68rpx;
     }
     .details-scroll {
-      height:calc(100vh - 196rpx);
+      height: calc(100vh - 196rpx);
     }
   }
 }
