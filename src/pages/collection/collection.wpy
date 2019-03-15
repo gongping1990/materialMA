@@ -53,7 +53,7 @@ export default class Collection extends wepy.page {
   data = {
     page: {
       current: 1,
-      size: 10,
+      size: 15,
       total: ''
     },
     noDataInfo: {
