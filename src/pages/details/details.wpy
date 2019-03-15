@@ -290,7 +290,7 @@
       </view>
     </van-popup>
     <!-- 点击打印下载按钮时底部Tabs弹窗  -->
-    <van-popup show="{{true}}"
+    <van-popup show="{{downShow}}"
                @close="bindChangeDownloadShow"
                position="bottom">
       <view class="details-down-popup">
