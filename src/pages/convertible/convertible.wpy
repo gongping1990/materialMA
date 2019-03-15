@@ -8,7 +8,7 @@
                      scroll-y
                      scroll-with-animation>
           <repeat for="{{dataList}}" key="index" index="index" item="item">
-            <view class="convertible-item van-hairline--bottom">
+            <view class="convertible-item van-hairline--bottom" @tap="toDetail({{item}})">
               <view class="convertible-left">
                 <text class="convertible-title">{{item.materialName}}</text>
                 <text class="convertible-time">{{item.time}}</text>
@@ -67,6 +67,9 @@ export default class Convertible extends wepy.page {
   };
   components = { noDataTemplate };
   methods = {
+    toDetail (item) {
+      wx.navigateTo({ url: '/pages/details/details?id=' + item.materialId});
+    },
     openDown () {
       this.isOpenModal = true
     },
