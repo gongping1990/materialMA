@@ -290,7 +290,7 @@
       </view>
     </van-popup>
     <!-- 点击打印下载按钮时底部Tabs弹窗  -->
-    <van-popup show="{{downShow}}"
+    <van-popup show="{{true}}"
                @close="bindChangeDownloadShow"
                position="bottom">
       <view class="details-down-popup">
@@ -305,18 +305,19 @@
                   <text>第1步</text>
                   <view class="line right"></view>
                 </view>
-                <view class="details-down-step-text"><text>复制</text>文档链接</view>
+                <view class="details-down-step-text">点击<text>复制文档链接</text></view>
               </view>
               <view class="details-down-step">
                 <view class="details-down-step-num">
                   <view class="line left"></view>
-                  <text>第1步</text>
+                  <text>第2步</text>
                   <view class="line right"></view>
                 </view>
                 <view class="details-down-step-text">在微信聊天页面，</view>
-                <view class="details-down-step-text">粘贴文档<text>链接发送给打印店老板</text>即可</view>
+                <view class="details-down-step-text">粘贴文档链接<text>发送给打印店老板</text>即可</view>
               </view>
               <text class="details-down-popup-text">emm^还是没搞懂？点击下面视频教程学习一下吧～</text>
+              <image class="details-down-popup-img" src="https://pub.file.k12.vip/ranking/vedio.png" @tap="toVideo({{1}})"/>
               <view class="details-down-popup-btn"
                     @tap="bindCopyLink({{1}})">复制文档链接</view>
             </view>
@@ -343,6 +344,7 @@
                 <view class="details-down-step-text"><text>粘贴文档链接</text>即可下载。 </view>
               </view>
               <text class="details-down-popup-text">emm^还是没搞懂？点击下面视频教程学习一下吧～</text>
+              <image class="details-down-popup-img" src="https://pub.file.k12.vip/ranking/vedio.png" @tap="toVideo({{0}})"/>
               <view class="details-down-popup-btn"
                     @tap="bindCopyLink({{0}})">复制文档链接</view>
             </view>
@@ -350,6 +352,23 @@
         </van-tabs>
       </view>
     </van-popup>
+    <!--播放-->
+    <van-popup show="{{isOpenVideo}}">
+      <view class="details-video">
+        <video
+          class="-video"
+          id="myVideo"
+          src="{{videoType ? 'https://pub.file.k12.vip/dyzn.mp4' : 'https://pub.file.k12.vip/xzzn.mp4'}}"
+          controls
+        ></video>
+        <van-icon name="close"
+                  @tap="closePopup"
+                  class="close-btn -video-close"
+                  color="#fff"
+                  size="52rpx" />
+      </view>
+    </van-popup>
+
     <!--未关注公众号弹窗-->
     <van-popup show="{{unconcernedShow}}">
       <view class="details-success-popup details-unconcerned-popup">
@@ -454,7 +473,9 @@ export default class Details extends wepy.page {
     downloadSuccess: false,
     showNav: false,
     unconcernedShow: false,
+    isOpenVideo: false,
     downloadStatus: 0,
+    videoType: '',
     detailData: {},
     id: 0,
     shareId: 1,
@@ -486,6 +507,10 @@ export default class Details extends wepy.page {
   }
 
   methods = {
+    toVideo (num) {
+      this.isOpenVideo = true
+      this.videoType = num
+    },
     navigateToTask () {
       wx.navigateTo({ url: '/pages/task/task' });
     },
@@ -499,6 +524,7 @@ export default class Details extends wepy.page {
       this.shareShow = false
       this.openErrShow = false
       this.unconcernedShow = false
+      this.isOpenVideo = false
     },
     binClickActionBtn (type) {
       if (type == 'ownZan') {
@@ -1030,6 +1056,16 @@ export default class Details extends wepy.page {
       text-align: center;
     }
   }
+  &-video {
+    .-video {
+      width: 100vw;
+    }
+
+    .-video-close {
+      top: -80rpx!important;
+      right: 30rpx!important;
+    }
+  }
   &-success-popup {
     @include flex-column-center;
     box-sizing: border-box;
@@ -1159,6 +1195,14 @@ export default class Details extends wepy.page {
       font-size: 22rpx;
       color: #c5c6d4;
       line-height: 32rpx;
+    }
+
+    &-img {
+      margin-top: 24rpx;
+      width:172rpx;
+      height:96rpx;
+      background:rgba(0,0,0,0.5);
+      border-radius:16rpx;
     }
   }
   &-down {

@@ -29,7 +29,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 0,
+			"current": 9,
 			"list": [
 				{
 					"id": 0,
@@ -92,6 +92,13 @@
 					"name": "authorize",
 					"pathName": "pages/index/index",
 					"query": "shareId=3123123",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "详情",
+					"pathName": "pages/details/details",
+					"query": "",
 					"scene": null
 				}
 			]
