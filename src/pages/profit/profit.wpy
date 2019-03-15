@@ -48,7 +48,7 @@ export default class profit extends wepy.page {
     },
     isFecthing: false,
     dataList: [],
-    columnType: ['新用户注册','邀请好友注册','被好友邀请注册','邀请好友浏览资料','被邀请浏览资料','每日签到','连续签到7天','购买资料','更新用户身份']
+    columnType: ['注册礼包','邀请好友注册','好友赠送','邀请好友浏览资料','浏览资料赠送','每日签到','连续签到7天','购买资料','更新用户身份']
   };
   components = { noDataTemplate };
   methods = {
