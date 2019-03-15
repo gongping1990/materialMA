@@ -91,7 +91,6 @@ export default class Search extends wepy.page {
   getListMaterial () {
     let { current, size, catalogId,value } = this
     return api.material.listMaterial({
-      catalogId,
       current,
       size,
       name:value

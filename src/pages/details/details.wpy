@@ -83,7 +83,7 @@
           <text class="explain-title">兑换后，点击页面底部下载打印，</text>
           <text class="explain-title">可下载/打印当前资料。</text>
           <text class="explain-subtitle">如需下载已兑换的所有资料，在电脑上打开网站 </text>
-          <text class="explain-subtitle orange">“ http://mat.test.k12.vip ” </text>
+          <text class="explain-subtitle orange">“ www.xiazai.k12.vip ” </text>
         </view>
       </view>
     </scroll-view>
@@ -365,7 +365,7 @@
                 session-from="{{kfInfo.id}}"
                 send-message-title="{{kfInfo.title}}"
                 send-message-path="{{'/pages/publicPopup/publicPopup?shareId=' + shareInfo.id }}"
-                send-message-img="https://pub.file.k12.vip/mat/lq.png">
+                send-message-img="https://pub.file.k12.vip/mat/dw.png">
           去激活
         </button>
         <van-icon name="close"

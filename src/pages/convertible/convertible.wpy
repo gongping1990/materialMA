@@ -34,7 +34,7 @@
         <view class="convertible-down-title">全部下载资料</view>
         <view class="convertible-down-text -d-two">如需下载已兑换的所有资料，</view>
         <view class="convertible-down-text -d-two">在电脑上打开网站： </view>
-        <view class="convertible-down-text -d-three">“ www.baidu.com ” </view>
+        <view class="convertible-down-text -d-three">“ http://download.k12.vip ” </view>
         <button class="convertible-down-btn" @tap="closePopup">
           我知道了
         </button>
