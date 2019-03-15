@@ -21,9 +21,9 @@
           </repeat>
         </scroll-view>
       </view>
-      <view class="convertible-footer">
+      <!-- <view class="convertible-footer">
         <view class="convertible-btn" @tap="openDown">我要全部下载资料</view>
-      </view>
+      </view> -->
     </view>
     <view wx:if="{{!dataList.length && !isFecthing}}">
       <noDataTemplate :info="noDataInfo"></noDataTemplate>

@@ -8,9 +8,8 @@
     <van-popup show="{{inviteShow}}">
       <view class="invite-popup">
         <view class="invite-popup-wrap">
-          <button
-            class="invite-popup-btn"
-            open-type="share">
+          <button class="invite-popup-btn"
+                  open-type="share">
             分享到家长群
           </button>
 
@@ -59,8 +58,8 @@ export default class Example extends wepy.component {
       default: false
     },
     img: {
-      type: String,
-      default: ''
+      type: Object,
+      default: {}
     }
   };
   data = {
@@ -113,14 +112,23 @@ export default class Example extends wepy.component {
 
     },
   };
-  components = {};
+
+  watch = {
+    img (n, o) {
+      console.log(n)
+    }
+  }
+
   methods = {
-    closePopup() {
+    closePopup () {
       this.$emit('closeShareModal')
       this.inviteShow = false
       this.shareShow = false
     },
     bindClickInvite () {
+      this.dConfig.images[1].url = 'https://huoke.prod.k12.vip/material/user/porxyWXheadimg/' + this.img.userId
+      this.dConfig.images[2].url = this.img.qrcode
+      this.dConfig.texts[0].text = this.img.nickName
       this.inviteShow = true
     },
     onPosterSuccess (e) {
@@ -130,7 +138,7 @@ export default class Example extends wepy.component {
       this.shareShow = true
 
     },
-    bindSaveImage() {
+    bindSaveImage () {
       wx.saveImageToPhotosAlbum({
         filePath: this.shareUrl,
         success (res) {
@@ -143,15 +151,7 @@ export default class Example extends wepy.component {
         }
       })
     }
-  };
-  events = {};
-  watch = {};
-  computed = {};
-  onLoad () {
-    this.dConfig.images[1].url = this.img.headimgurl
-    this.dConfig.images[2].url = this.img.qrcode
-    this.dConfig.texts[0].text = this.img.nickName
-  };
+  }
 }
 </script>
 <style lang='scss'>
@@ -169,7 +169,7 @@ export default class Example extends wepy.component {
   color: #fff;
   @include bg('/gif/yq.gif');
   transform: translateX(0);
-  transition: all .5s;
+  transition: all 0.5s;
   &.hide {
     transform: translateX(300rpx);
   }
@@ -240,5 +240,4 @@ export default class Example extends wepy.component {
     }
   }
 }
-
 </style>

@@ -67,9 +67,15 @@
     height: calc(100vh - 100rpx);
   }
 }
+.is-phonex {
+  .item-scroll {
+    height:calc(100vh - 168rpx);
+
+  }
+}
 </style>
 <template>
-  <view class="container ranking">
+  <view class="container ranking {{isPhoneX ? 'is-phonex' : ''}}">
     <scroll-view class="item-scroll"
                  @scrolltolower="bindLoadItem"
                  scroll-y
@@ -184,6 +190,12 @@ export default class Ranking extends wepy.page {
     firstInfo: '',
     top: 348,
     dataList: []
+  }
+
+  computed = {
+    isPhoneX () {
+      return this.$parent.globalData.isPhoneX
+    }
   }
 
   getRanking () {

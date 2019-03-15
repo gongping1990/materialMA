@@ -6,7 +6,7 @@
 }
 
 @mixin line-clamp($line: 2) {
-  ext-overflow: -o-ellipsis-lastline;
+  text-overflow: -o-ellipsis-lastline;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;

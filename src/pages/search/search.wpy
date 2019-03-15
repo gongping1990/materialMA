@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <view class='container search'>
+  <view class="container search {{isPhoneX ? 'is-phonex' : ''}}">
     <view class="search-header">
       <van-search value="{{ value }}"
                   background="#fff"
@@ -62,7 +62,14 @@ export default class Search extends wepy.page {
     size: 7,
     total: 0,
     isEnd: false
-  };
+  }
+
+  computed = {
+    isPhoneX () {
+      return this.$parent.globalData.isPhoneX
+    }
+  }
+
   components = {
     item,
     noDataTemplate
@@ -175,5 +182,10 @@ export default class Search extends wepy.page {
 }
 .search-btn {
   color: #ff772d;
+}
+.is-phonex {
+  .search-scroll {
+    height: calc(100vh - 170rpx);
+  }
 }
 </style>

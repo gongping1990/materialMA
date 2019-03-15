@@ -1,9 +1,9 @@
 
 <template>
-  <view class="container home"
+  <view class="container home {{isPhoneX ? 'is-phonex' : ''}}"
         @touchend="touchend">
     <scroll-view class="home-scroll-wrap"
-                 scroll-y
+                 scroll-y="{{!isScrollY}}"
                  scroll-with-animation
                  lower-threshold="5"
                  @scroll="onScroll"
@@ -230,7 +230,7 @@ export default class Index extends wepy.page {
     pagination: {
       current: 1,
       size: 6,
-      hot: false,
+      hot: true,
       newly: false
     },
     emptyInfo: {
@@ -259,6 +259,10 @@ export default class Index extends wepy.page {
         }
       }
 
+    },
+    isPhoneX () {
+      console.log(this.$parent.globalData.isPhoneX)
+      return this.$parent.globalData.isPhoneX
     }
   }
 
@@ -661,6 +665,15 @@ export default class Index extends wepy.page {
   .common-animate {
     opacity: 1 !important;
     transform: translate(0, 0) !important;
+  }
+}
+
+.is-phonex {
+  .home-scroll-wrap,.home-content-wrap {
+    height:calc(100vh - 164rpx);
+  }
+  .home-scroll {
+    height:calc(100vh - 456rpx);
   }
 }
 </style>

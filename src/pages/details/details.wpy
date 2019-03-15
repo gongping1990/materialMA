@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <view class='container details'>
+  <view class="container details {{isPhoneX ? 'is-phonex' : ''}}">
     <view class="float-nav"
             wx:if="{{showNav}}">
         <view wx:if="{{detailData.newly || detailData.hot}}"
@@ -82,13 +82,13 @@
           <text class="explain-text">电脑下载/打印</text>
           <text class="explain-title">兑换后，点击页面底部下载打印，</text>
           <text class="explain-title">可下载/打印当前资料。</text>
-          <text class="explain-subtitle">如需下载已兑换的所有资料，在电脑上打开网站 </text>
-          <text class="explain-subtitle orange">“ www.xiazai.k12.vip ” </text>
+          <!-- <text class="explain-subtitle">如需下载已兑换的所有资料，在电脑上打开网站 </text>
+          <text class="explain-subtitle orange">“ www.xiazai.k12.vip ” </text> -->
         </view>
       </view>
     </scroll-view>
     <!-- 底部按钮导航  -->
-    <view class="details-nav">
+    <view class="details-nav van-hairline--top">
       <view class="details-nav-left"
             @tap="bindClickBackHome">
         <image src="https://pub.file.k12.vip/zlk_weapp/details/tabar-icon-files-sel.png"
@@ -467,6 +467,9 @@ export default class Details extends wepy.page {
   computed = {
     globalData () {
       return this.$parent.globalData
+    },
+    isPhoneX () {
+      return this.$parent.globalData.isPhoneX
     }
   }
 
@@ -616,15 +619,19 @@ export default class Details extends wepy.page {
       })
     },
     bindClickBackHome () {
-      console.log(111)
       wx.redirectTo({ url: '/pages/index/index' });
     }
   }
 
   getDetailData (id) {
-    api.material.ownView({
+    let params = {
       id: id ? id : this.id
-    }).then(({ data }) => {
+    }
+    if(this.$parent.globalData.shareId) {
+      params.shareId = this.$parent.globalData.shareId
+    }
+
+    api.material.ownView(params).then(({ data }) => {
       this.detailData = data.resultData
       this.detailData.previewImgUrl = JSON.parse(this.detailData.previewImgUrl)
       this.$apply()
@@ -714,23 +721,21 @@ export default class Details extends wepy.page {
   }
 
   getUserAccountMsg () {
-    let shareInfo  = this.shareInfoOnw
-    console.log(shareInfo.id ? 5 : 4)
+    let shareId = this.$parent.globalData.shareId
     api.task.getUserAccountMsg({
-      userAccountMsgType: shareInfo.id ? 5 : 4
+      userAccountMsgType: shareId? 5 : 4
     }).then(({ data }) => {
-      console.log(data)
       if (data.resultData) {
         this.showCollect = true
-        if (shareInfo.id) {
+        if (shareId) {
           this.collectTitile = '你的好友“' + data.resultData.friendNickName + '"'
           this.collectSubtitile = `送你${data.resultData.currency}下载币`
-          this.collectMessage = true
+          this.collectMessage = false
         } else {
-          this.collectTitile = '新用户礼包'
+          this.collectTitile = '你的邀请“' + data.resultData.friendNickName + '成功"'
 
           this.collectSubtitile = '恭喜获得下载币'
-          this.collectMessage = false
+          this.collectMessage = true
         }
         this.collectNum = data.resultData.currency
         this.$apply()
@@ -929,6 +934,7 @@ export default class Details extends wepy.page {
     align-items: center;
     justify-content: space-between;
     &-left {
+      padding-right: 80rpx;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -1222,6 +1228,15 @@ export default class Details extends wepy.page {
       &.orange {
         color: #ff772d;
       }
+    }
+  }
+
+  .is-phonex {
+    .details-nav {
+      bottom: 68rpx;
+    }
+    .details-scroll {
+      height:calc(100vh - 196rpx);
     }
   }
 }

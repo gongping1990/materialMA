@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <view class='container task'>
+  <view class="container task {{isPhoneX ? 'is-phone' : ''}}">
     <view class="task-msg-popup">
       <text>添加到我的小程序</text>
       <text>随时随地下资料</text>
@@ -218,6 +218,12 @@ export default class Task extends wepy.page {
       if (n.type == null) {
         this.show = true
       }
+    }
+  }
+
+  computed = {
+    isPhoneX () {
+      return this.$parent.globalData.isPhoneX
     }
   }
 
@@ -689,6 +695,12 @@ export default class Task extends wepy.page {
       opacity: 1;
       transform: scale(1);
     }
+  }
+}
+
+.is-phone {
+  .task-wrap  {
+    padding-bottom: 250rpx;
   }
 }
 </style>
