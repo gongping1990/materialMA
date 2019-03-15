@@ -1,7 +1,7 @@
 <!--  -->
 <template>
   <view class="container task {{isPhoneX ? 'is-phone' : ''}}">
-    <view class="task-msg-popup">
+    <view class="task-msg-popup {{isShowTip ? '' : 'animateTip'}}">
       <text>添加到我的小程序</text>
       <text>随时随地下资料</text>
       <view class="task-msg-popup-icon"></view>
@@ -178,6 +178,7 @@ export default class Task extends wepy.page {
     showSignIn: false,
     openShare: false,
     signedIn: false,
+    isShowTip: true,
     continuousSignInDays: 0,
     title: '签到成功',
     num: '',
@@ -318,6 +319,10 @@ export default class Task extends wepy.page {
     if(this.userInfoFn.type == null) {
       this.show = true
     }
+    setTimeout(()=>{
+      this.isShowTip = false
+      this.$apply()
+    },5000)
   }
 
   onShareAppMessage () {
@@ -351,29 +356,6 @@ export default class Task extends wepy.page {
     api.task.getUserAccountMsg()
   }
 
-
-  touchOnGoods (e) {
-    this.finger = {}; var topPoint = {};
-    this.finger['x'] = e.touches["0"].clientX;//点击的位置
-    this.finger['y'] = e.touches["0"].clientY;
-
-    if (this.finger['y'] < this.busPos['y']) {
-      topPoint['y'] = this.finger['y'] - 150;
-    } else {
-      topPoint['y'] = this.busPos['y'] - 150;
-    }
-    topPoint['x'] = Math.abs(this.finger['x'] - this.busPos['x']) / 2;
-
-    if (this.finger['x'] > this.busPos['x']) {
-      topPoint['x'] = (this.finger['x'] - this.busPos['x']) / 2 + this.busPos['x'];
-    } else {//
-      topPoint['x'] = (this.busPos['x'] - this.finger['x']) / 2 + this.finger['x'];
-    }
-
-    this.linePos = this.$parent.bezier([this.busPos, topPoint, this.finger], 30);
-    this.startAnimation(e);
-  }
-
   busAnimation () {
     that.setData({
       needAni: true
@@ -383,33 +365,6 @@ export default class Task extends wepy.page {
         needAni: false
       });
     }, 500);
-  }
-
-  startAnimation (e) {
-    var index = 0, that = this,
-      bezier_points = that.linePos['bezier_points'];
-
-    this.hide_good_box = false,
-      this.bus_x = that.finger['x'],
-      this.bus_y = that.finger['y']
-    var len = bezier_points.length;
-    index = len
-    this.timer = setInterval(() => {
-      index--
-      if (!bezier_points[index]['x'] && !bezier_points[index]['y']) {
-        clearInterval(that.timer);
-      }
-      this.bus_x = bezier_points[index]['x'],
-        this.bus_y = bezier_points[index]['y']
-
-
-
-      if (index < 1) {
-        clearInterval(that.timer);
-        this.hide_good_box = true
-      }
-      this.$apply()
-    }, 30);
   }
 
   /**
@@ -462,6 +417,7 @@ export default class Task extends wepy.page {
     background: rgba(255, 255, 255, 1);
     border-radius: 12rpx;
     box-shadow: 0px 8rpx 24rpx 0px rgba(0, 0, 0, 0.05);
+    transition: all 2s;
     &-icon {
       position: absolute;
       top: -16rpx;
@@ -470,6 +426,12 @@ export default class Task extends wepy.page {
       border-bottom-color: #fff;
     }
   }
+
+  .animateTip{
+    transition: all 2s;
+    transform: translateY(-100px);
+  }
+
   &-popup {
     @include flex-column-center;
     box-sizing: border-box;
