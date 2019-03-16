@@ -29,13 +29,13 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 9,
+			"current": 0,
 			"list": [
 				{
 					"id": 0,
 					"name": "authorize",
 					"pathName": "pages/details/details",
-					"query": "id=1103584304590462977&shareId=1106377242445848577",
+					"query": "id=1103584304590462977&shareId=1106565661557514241",
 					"scene": null
 				},
 				{

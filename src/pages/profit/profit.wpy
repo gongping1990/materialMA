@@ -43,7 +43,7 @@ export default class profit extends wepy.page {
     },
     page: {
       current: 1,
-      size: 10,
+      size: 20,
       total: ''
     },
     isFecthing: false,
@@ -65,7 +65,15 @@ export default class profit extends wepy.page {
   onLoad () { };
   onShow () {
     this.getAccountInfo()
-  };
+  }
+  onHide() {
+    this.dataList = []
+    this.page = {
+      current: 1,
+      size: 20,
+      total: ''
+    }
+  }
 
   getAccountInfo() {
     this.isFecthing = true

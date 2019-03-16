@@ -267,6 +267,7 @@ export default class Index extends wepy.page {
 
   watch = {
     userInfo (n, o) {
+      console.log(n, 'wathc')
       if (!n.grade) {
         this.showMask = true
       } else {
@@ -429,8 +430,12 @@ export default class Index extends wepy.page {
     api.material.subjectList().then(({ data }) => {
       this.subjectList = data.resultData
       this.subjectId = data.resultData[0].id
+      console.log(this.userInfo, 'getsub')
       if (this.userInfo.grade) {
+
         this.getCatalogList(data.resultData[0].id)
+      } else {
+        this.showMask = true
       }
       this.$apply()
     })

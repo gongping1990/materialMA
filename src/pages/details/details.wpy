@@ -436,6 +436,7 @@ export default class Details extends wepy.page {
   }
 
   onShareAppMessage () {
+    console.log(this.shareInfo.id)
     return {
       title: `我免费领取了一份《${this.detailData.name}》，你也来看看吧~`,
       path: `/pages/details/details?shareId=${this.shareInfo.id}&id=${this.id}`,
@@ -498,10 +499,12 @@ export default class Details extends wepy.page {
 
   watch = {
     userInfo (n, o) {
-      this.getDetailData()
-      this.getKfInfo()
-      if (this.id) {
-        this.getShareInfoDetails(this.id)
+      if (n.id) {
+        this.getDetailData()
+        this.getKfInfo()
+        if (this.id) {
+          this.getShareInfoDetails(this.id)
+        }
       }
 
     }
@@ -642,19 +645,18 @@ export default class Details extends wepy.page {
   }
 
   getDetailData (id) {
+    console.log(this.shareId)
     let params = {
       id: id ? id : this.id
     }
-    let { shareId } = this.$parent.globalData
+    let { shareId } = this
     if (shareId) {
       params.shareId = shareId
     }
-
+    console.log (params)
     api.material.ownView(params).then(({ data }) => {
 
-      if (shareId) {
-        this.getUserAccountMsg()
-      }
+      this.getUserAccountMsg()
       this.detailData = data.resultData
       this.detailData.previewImgUrl = JSON.parse(this.detailData.previewImgUrl)
       this.$apply()
@@ -752,14 +754,16 @@ export default class Details extends wepy.page {
     api.task.getUserAccountMsg({
       userAccountMsgType: shareId ? 5 : 4
     }).then(({ data }) => {
+      console.log(data.resultData)
       if (data.resultData) {
+        console.log(data.resultData)
         this.showCollect = true
         if (shareId) {
           this.collectTitile = '你的好友“' + data.resultData.friendNickName + '"'
           this.collectSubtitile = `送你${data.resultData.currency}下载币`
           this.collectMessage = false
         } else {
-          this.collectTitile = '你的邀请“' + data.resultData.friendNickName + '"成功'
+          this.collectTitile = '好友“' + data.resultData.friendNickName + '"浏览资料'
 
           this.collectSubtitile = '恭喜获得下载币'
           this.collectMessage = true
@@ -772,6 +776,8 @@ export default class Details extends wepy.page {
 
   onLoad (option) {
     this.id = option.id
+    this.shareId = option.shareId
+    console.log(option)
     if (this.userInfo.id) {
       this.getDetailData(option.id)
       this.getKfInfo(option.id)

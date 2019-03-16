@@ -132,7 +132,7 @@ export default class extends wepy.app {
         let { resultData } = data
         this.globalData.userInfo = resultData
         store.dispatch({ type: 'UPDATE_USERINFO', payload: resultData })
-
+        console.log(resultData)
         if (resultData.needAuth) {
           let url = `/pages/authorize/authorize`
           wx.navigateTo({ url })

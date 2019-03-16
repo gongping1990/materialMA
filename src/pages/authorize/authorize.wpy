@@ -157,6 +157,7 @@ export default class Authorize extends wepy.page {
 
   getUserAccountMsg () {
     let { shareId } = this.$parent.globalData
+    console.log(shareId, 'share')
     api.task.getUserAccountMsg({
       userAccountMsgType: shareId ? 3 : 1
     }).then(({ data }) => {

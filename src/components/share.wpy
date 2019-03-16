@@ -109,10 +109,10 @@ export default class Example extends wepy.component {
         },
         {
           x: 358,
-          y: 510,
+          y: 490,
           url: 'https://pub.file.k12.vip/2019/03/11/1105036933329440769.jpg',
-          width: 96,
-          height: 96,
+          width: 116,
+          height: 116,
           zIndex: 20
         },
       ]

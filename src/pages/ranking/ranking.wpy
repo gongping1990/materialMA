@@ -147,7 +147,7 @@
         我的
       </van-tabbar-item>
     </van-tabbar>
-    <Share :top="top" />
+    <Share :top="top" :img="shareFirendInfo" />
   </view>
 </template>
 
