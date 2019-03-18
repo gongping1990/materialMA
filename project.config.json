@@ -34,7 +34,7 @@
 				{
 					"id": 0,
 					"name": "authorize",
-					"pathName": "pages/details/details",
+					"pathName": "pages/authorize/authorize",
 					"query": "id=1103584304590462977&shareId=1106565661557514241",
 					"scene": null
 				},

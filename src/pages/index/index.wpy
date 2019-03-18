@@ -278,6 +278,7 @@ export default class Index extends wepy.page {
       }
       if (n.id) {
         this.getUserAccountMsg()
+        this.getUserAccountMsgTwo()
         this.homeRemind()
       }
     }
@@ -383,6 +384,7 @@ export default class Index extends wepy.page {
     this.getSubjectList()
     if (this.userInfo.id) {
       this.getUserAccountMsg()
+      this.getUserAccountMsgTwo()
       this.homeRemind()
     }
   }
@@ -498,6 +500,34 @@ export default class Index extends wepy.page {
         this.$apply()
       }
 
+    })
+  }
+
+  getUserAccountMsgTwo () {
+    let { shareId } = this.$parent.globalData
+    console.log(shareId, 'share')
+    api.task.getUserAccountMsg({
+      userAccountMsgType: shareId ? 3 : 1
+    }).then(({ data }) => {
+      if (data.resultData) {
+        this.show = true
+        if (shareId) {
+          this.title = '你的好友“' + data.resultData.friendNickName + '"'
+          this.subtitle = `送你${data.resultData.currency}下载币`
+          this.message = true
+        } else {
+          this.title = '新用户礼包'
+
+          this.subtitle = '恭喜获得下载币'
+          this.message = false
+        }
+        this.num = data.resultData.currency
+        this.$apply()
+      } else {
+        wx.navigateBack({
+          delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
+        });
+      }
     })
   }
 
