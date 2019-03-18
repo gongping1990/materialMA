@@ -61,6 +61,8 @@ import api from './request/api'
 import { setStore } from 'wepy-redux'
 import configStore from './store'
 
+const mta = require('./mta_wechat_sdk/mta_analysis.js')
+
 const store = configStore()
 setStore(store)
 
@@ -103,7 +105,7 @@ export default class extends wepy.app {
     share: false,
     height: 0,
     shareInfo: {},
-    shareId:0,
+    shareId: 0,
     isPhoneX: true
   }
 
@@ -114,6 +116,9 @@ export default class extends wepy.app {
   }
 
   onLaunch (options) {
+    mta.App.init({
+      "appID": "500674439",
+    })
     options.query.shareId && (this.globalData.shareId = options.query.shareId)
     // 判断是否由分享进入小程序
     if (options.scene == 1007 || options.scene == 1008) {
@@ -146,7 +151,7 @@ export default class extends wepy.app {
     })
 
     wepy.getSystemInfo().then((res) => {
-      if(res.model.search('iPhone X') != -1) {
+      if (res.model.search('iPhone X') != -1) {
         this.globalData.isPhoneX = true
       }
     })
