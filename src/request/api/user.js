@@ -22,6 +22,9 @@ const user = {
   },
   listCollect(params) {
     return request.get("/user/listCollect", params)
+  },
+  uploadFormId (params) {
+    return request.post("/user/uploadFormId", params)
   }
 };
 

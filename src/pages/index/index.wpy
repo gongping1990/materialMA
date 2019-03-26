@@ -50,12 +50,23 @@
             <scroll-view scroll-x
                          scroll-left="{{scrollLeft}}"
                          scroll-with-animation>
-              <view class="home-classify-scroll ">
-                <view class="home-classify-item {{item.id == catalogId ? 'active' : ''}}"
-                      wx:for="{{catalogList}}"
-                      @tap="bindClickCatalog({{item.id}})"
-                      wx:key="{{item.id}}">{{item.name}}</view>
-              </view>
+
+
+              <form
+                report-submit="true"
+                @submit="bindSubmit"
+                class="home-classify-scroll "
+                >
+                <button
+                  form-type="submit"
+                  class="home-classify-item {{item.id == catalogId ? 'active' : ''}}"
+                  wx:for="{{catalogList}}"
+                  @tap="bindClickCatalog({{item.id}})"
+                  wx:key="{{item.id}}"
+                  >
+                  {{item.name}}
+                </button>
+              </form>
             </scroll-view>
           </view>
           <view class="home-sort">
@@ -153,7 +164,8 @@
       <image src="https://pub.file.k12.vip/zlk_weapp/zlk/guide.png"
              mode="widthFix" />
     </view>
-    <Share :hide.sync="hideGif"
+    <Share  wx:if="{{showprice}}"
+            :hide.sync="hideGif"
            :img.sync="shareFirendInfo"></Share>
     <CollectGoldPopup :title.sync="collectTitle"
                       :subtitle.sync="collectSubtitle"
@@ -262,6 +274,9 @@ export default class Index extends wepy.page {
     },
     isPhoneX () {
       return this.$parent.globalData.isPhoneX
+    },
+    showprice() {
+      return this.$parent.globalData.showprice
     }
   }
 
@@ -285,6 +300,10 @@ export default class Index extends wepy.page {
   }
 
   methods = {
+    bindSubmit(e) {
+      console.log(e.detail.formId)
+      this.uploadFormId(e.detail.formId)
+    },
     touchend () {
       hideTime = setTimeout(() => {
         hideTime = null
@@ -294,9 +313,6 @@ export default class Index extends wepy.page {
     onScroll () {
       if (hideTime) return
       this.hideGif = true
-    },
-    closeMask () {
-      this.showMask = false
     },
     onPosterSuccess (e) {
       const { detail } = e;
@@ -387,6 +403,10 @@ export default class Index extends wepy.page {
       this.getUserAccountMsgTwo()
       this.homeRemind()
     }
+
+    if(this.userInfo.grade) {
+      this.showMask =false
+    }
   }
 
   onHide () {
@@ -413,6 +433,12 @@ export default class Index extends wepy.page {
     })
   }
 
+  uploadFormId (formId) {
+    api.user.uploadFormId({
+      formId
+    })
+  }
+
   /**
    * @author hujinhui
    * @description 获取首页banner列表
@@ -432,12 +458,8 @@ export default class Index extends wepy.page {
     api.material.subjectList().then(({ data }) => {
       this.subjectList = data.resultData
       this.subjectId = data.resultData[0].id
-      console.log(this.userInfo, 'getsub')
       if (this.userInfo.grade) {
-
         this.getCatalogList(data.resultData[0].id)
-      } else {
-        this.showMask = true
       }
       this.$apply()
     })
@@ -502,6 +524,8 @@ export default class Index extends wepy.page {
 
     })
   }
+
+
 
   getUserAccountMsgTwo () {
     let { shareId } = this.$parent.globalData
@@ -661,7 +685,7 @@ export default class Index extends wepy.page {
     }
   }
   &-scroll {
-    height: calc(100vh - 392rpx);
+    height: calc(100vh - 384rpx);
   }
   &-block {
     height: 60rpx;

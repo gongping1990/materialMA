@@ -147,7 +147,7 @@
         我的
       </van-tabbar-item>
     </van-tabbar>
-    <Share :top="top" :img="shareFirendInfo" />
+    <Share wx:if="{{showprice}}" :top="top" :img="shareFirendInfo" />
   </view>
 </template>
 
@@ -195,6 +195,9 @@ export default class Ranking extends wepy.page {
   computed = {
     isPhoneX () {
       return this.$parent.globalData.isPhoneX
+    },
+    showprice() {
+      return this.$parent.globalData.showprice
     }
   }
 

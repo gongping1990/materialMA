@@ -33,6 +33,7 @@
           <text>{{detailData.ownCollect ? '已收藏' : '未收藏'}}</text>
         </view>
         <view class="details-action-fx"
+                  wx:if="{{showprice}}"
               @tap="bindShowPopup({{'shareShow'}})">
           <view class="details-action-icon fx"></view>
           <text>分享得50币</text>
@@ -97,7 +98,7 @@
         </image>
         <text>资料库</text>
       </view>
-      <view class="details-nav-right">
+      <view class="details-nav-right" wx:if="{{showprice}}">
         <view class="details-nav-pay"
               @tap="bindShowPopup({{'expectShow'}})"
               wx:if="{{!detailData.ownHaved}}">
@@ -395,7 +396,7 @@
       </view>
     </van-popup>
     <van-toast id="van-toast" />
-    <Share :img.sync="shareFirendInfo"></Share>
+    <Share wx:if="{{showprice}}" :img.sync="shareFirendInfo"></Share>
     <collectGoldPopup :show.sync="showCollect"
                       :title.sync="collectTitile"
                       :subtitle.sync="collectSubtitile"
@@ -493,6 +494,9 @@ export default class Details extends wepy.page {
     },
     isPhoneX () {
       return this.$parent.globalData.isPhoneX
+    },
+    showprice() {
+      return this.$parent.globalData.showprice
     }
   }
 
@@ -1039,7 +1043,6 @@ export default class Details extends wepy.page {
     box-sizing: border-box;
     padding: 48rpx;
     width: 500rpx;
-    height: 352rpx;
     font-weight: 400;
     background: rgba(255, 255, 255, 1);
     border-radius: 16rpx;
@@ -1054,6 +1057,7 @@ export default class Details extends wepy.page {
     }
     &-action {
       @include flex-center;
+      margin-top: 40rpx;
       justify-content: space-between;
       width: 100%;
       font-size: 28rpx;

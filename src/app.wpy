@@ -22,7 +22,7 @@
     padding: 32rpx 0;
   }
   &-item {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     height: 56rpx;
     margin-left: 32rpx;
@@ -106,7 +106,8 @@ export default class extends wepy.app {
     height: 0,
     shareInfo: {},
     shareId: 0,
-    isPhoneX: true
+    isPhoneX: false,
+    showprice: true
   }
 
   constructor() {
@@ -151,10 +152,20 @@ export default class extends wepy.app {
     })
 
     wepy.getSystemInfo().then((res) => {
+      console.log(res.model.search('iPhone X') )
       if (res.model.search('iPhone X') != -1) {
         this.globalData.isPhoneX = true
       }
     })
+
+
+    wx.request({
+      url: 'https://huoke.test.k12.vip/common/showprice', //开发者服务器接口地址",
+      method: 'GET',
+      success: res => {
+        this.globalData.showprice = res.data.resultData
+      },
+    });
   }
 
   getShareInfo (shareId) {
