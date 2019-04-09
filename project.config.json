@@ -9,9 +9,11 @@
 		"autoAudits": false
 	},
 	"compileType": "miniprogram",
-	"appid": "wxb64c6b07e167686a",
+	"appid": "wxf55391977aa1e37e",
 	"projectname": "zlk_huoke",
 	"miniprogramRoot": "dist/",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
 	"condition": {
 		"search": {
 			"current": -1,
@@ -34,8 +36,8 @@
 				{
 					"id": 0,
 					"name": "authorize",
-					"pathName": "pages/authorize/authorize",
-					"query": "id=1103584304590462977&shareId=1106565661557514241",
+					"pathName": "pages/details/details",
+					"query": "id=1106122909128962049",
 					"scene": null
 				},
 				{

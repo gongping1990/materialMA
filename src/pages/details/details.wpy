@@ -33,15 +33,14 @@
           <text>{{detailData.ownCollect ? '已收藏' : '未收藏'}}</text>
         </view>
         <view class="details-action-fx"
-                  wx:if="{{showprice}}"
+              wx:if="{{showprice}}"
               @tap="bindShowPopup({{'shareShow'}})">
           <view class="details-action-icon fx"></view>
           <text>分享得50币</text>
         </view>
       </view>
       <view class="details-method">
-        <text class="details-method-title"
-              @tap="bindShowPopup({{'unconcernedShow'}})">兑换方法{{isHide ? '1' : '2'}}</text>
+        <text class="details-method-title">兑换方法</text>
         <view class="details-method-content def"
               @tap="navigateToTask">
           <text class="details-method-content-title">使用下载币免费兑换，</text>
@@ -98,9 +97,10 @@
         </image>
         <text>资料库</text>
       </view>
-      <view class="details-nav-right" wx:if="{{showprice}}">
+      <view class="details-nav-right"
+            wx:if="{{showprice}}">
         <view class="details-nav-pay"
-              @tap="bindShowPopup({{'expectShow'}})"
+              @tap="bindClickPay"
               wx:if="{{!detailData.ownHaved}}">
           <text class="details-nav-pay-title">直接购买</text>
           <text class="details-nav-pay-subtitle">¥ {{detailData.priceYuan}}元</text>
@@ -167,6 +167,24 @@
                mode="widthFix" />
         <text class="details-success-popup-title">文档格式不支持直接打开 </text>
         <text class="details-success-popup-text">请在电脑上下载后使用</text>
+        <view class="details-success-popup-btn"
+              @tap="closePopup">我知道了</view>
+        <van-icon name="close"
+                  @tap="closePopup"
+                  class="close-btn"
+                  color="#fff"
+                  size="52rpx" />
+      </view>
+    </van-popup>
+    <!-- 支付失败的弹窗 openPayErr  -->
+    <van-popup show="{{openPayErr}}">
+      <view class="details-success-popup">
+        <image class="details-success-popup-img"
+               src="https://pub.file.k12.vip/zlk_weapp/popup/tq-icon-fial.png"
+               style="width:96rpx"
+               mode="widthFix" />
+        <text class="details-success-popup-title">支付失败 </text>
+        <text class="details-success-popup-text">请重新支付</text>
         <view class="details-success-popup-btn"
               @tap="closePopup">我知道了</view>
         <van-icon name="close"
@@ -396,7 +414,8 @@
       </view>
     </van-popup>
     <van-toast id="van-toast" />
-    <Share wx:if="{{showprice}}" :img.sync="shareFirendInfo"></Share>
+    <Share wx:if="{{showprice}}"
+           :img.sync="shareFirendInfo"></Share>
     <collectGoldPopup :show.sync="showCollect"
                       :title.sync="collectTitile"
                       :subtitle.sync="collectSubtitile"
@@ -466,6 +485,7 @@ export default class Details extends wepy.page {
     errShow: false,
     expectShow: false,
     openErrShow: false,
+    openPayErr: false,
     sucShow: false,
     downShow: false,
     copyShow: false,
@@ -495,7 +515,7 @@ export default class Details extends wepy.page {
     isPhoneX () {
       return this.$parent.globalData.isPhoneX
     },
-    showprice() {
+    showprice () {
       return this.$parent.globalData.showprice
     }
   }
@@ -533,6 +553,7 @@ export default class Details extends wepy.page {
       this.openErrShow = false
       this.unconcernedShow = false
       this.isOpenVideo = false
+      this.openPayErr = false
     },
     binClickActionBtn (type) {
       if (type == 'ownZan') {
@@ -542,10 +563,6 @@ export default class Details extends wepy.page {
       }
     },
     bindShowPopup (popup) {
-      if (!this.detailData.accessSubject && popup == 'downShow') {
-        this.unconcernedShow = true
-        return
-      }
       this[popup] = true
     },
     bindChangeShow () {
@@ -559,7 +576,7 @@ export default class Details extends wepy.page {
       this.orderAndPay(1)
     },
     bindClickPay () {
-      this.expectShow = true
+      this.orderAndPay(2)
     },
     bindCloseSuccessShow () {
       this.sucShow = false
@@ -590,10 +607,6 @@ export default class Details extends wepy.page {
       });
     },
     bindClickOpen () {
-      if (!this.detailData.accessSubject) {
-        this.unconcernedShow = true
-        return
-      }
       let extensionArr = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf']
       let filename = this.detailData.fileDownUrl
       let extension = filename.split('.').pop()
@@ -657,7 +670,7 @@ export default class Details extends wepy.page {
     if (shareId) {
       params.shareId = shareId
     }
-    console.log (params)
+    console.log(params)
     api.material.ownView(params).then(({ data }) => {
 
       this.getUserAccountMsg()
@@ -717,13 +730,30 @@ export default class Details extends wepy.page {
 
 
     api.order.orderAndPay(data).then(({ data }) => {
-      if (!data.resultData.subcribe) {
-        this.unconcernedShow = true
+      if (type == 2) {
+        let { timeStamp, nonceStr, packageValue, paySign, signType } = data.resultData
+        wx.requestPayment({
+          timeStamp,
+          nonceStr,
+          package: packageValue,
+          signType,
+          paySign,
+          success: res => {
+            this.sucShow = true
+            this.getDetailData()
+            this.$apply()
+          },
+          fail: () => {
+            this.openPayErr = true
+            this.$apply()
+          }
+        });
       } else {
         this.sucShow = true
+        this.getDetailData()
+        this.$apply()
       }
-      this.getDetailData()
-      this.$apply()
+
     }).catch(({ data }) => {
       if (data.code == 1002) {
         this.errShow = false
