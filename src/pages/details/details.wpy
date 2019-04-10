@@ -563,6 +563,10 @@ export default class Details extends wepy.page {
       }
     },
     bindShowPopup (popup) {
+      if (!this.detailData.accessSubject && popup == 'downShow') {
+        this.unconcernedShow = true
+        return
+      }
       this[popup] = true
     },
     bindChangeShow () {
@@ -607,6 +611,10 @@ export default class Details extends wepy.page {
       });
     },
     bindClickOpen () {
+      if (!this.detailData.accessSubject) {
+        this.unconcernedShow = true
+        return
+      }
       let extensionArr = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf']
       let filename = this.detailData.fileDownUrl
       let extension = filename.split('.').pop()
@@ -749,7 +757,11 @@ export default class Details extends wepy.page {
           }
         });
       } else {
-        this.sucShow = true
+        if (!data.resultData.subcribe) {
+          this.unconcernedShow = true
+        } else {
+          this.sucShow = true
+        }
         this.getDetailData()
         this.$apply()
       }
