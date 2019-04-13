@@ -55,10 +55,10 @@
         </view>
       </view>
       <view class="details-method">
-        <text class="details-method-title">资料预览</text>
+        <text class="details-method-title">资料部分预览</text>
         <swiper indicator-dots
-                circular
-                style="height: 906rpx">
+
+                style="height: 906rpx;margin-top: 40rpx;">
           <block wx:for="{{detailData.previewImgUrl}}"
                  wx:key="{{index}}">
             <swiper-item>
@@ -563,10 +563,6 @@ export default class Details extends wepy.page {
       }
     },
     bindShowPopup (popup) {
-      if (!this.detailData.accessSubject && popup == 'downShow') {
-        this.unconcernedShow = true
-        return
-      }
       this[popup] = true
     },
     bindChangeShow () {
@@ -611,10 +607,6 @@ export default class Details extends wepy.page {
       });
     },
     bindClickOpen () {
-      if (!this.detailData.accessSubject) {
-        this.unconcernedShow = true
-        return
-      }
       let extensionArr = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf']
       let filename = this.detailData.fileDownUrl
       let extension = filename.split('.').pop()
@@ -757,11 +749,7 @@ export default class Details extends wepy.page {
           }
         });
       } else {
-        if (!data.resultData.subcribe) {
-          this.unconcernedShow = true
-        } else {
-          this.sucShow = true
-        }
+        this.sucShow = true
         this.getDetailData()
         this.$apply()
       }
