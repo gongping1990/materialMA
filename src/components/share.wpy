@@ -1,7 +1,7 @@
 <!--  -->
 <template>
   <view class='share'>
-    <view class="invite-friend {{hide ? 'hide' : ''}}"
+    <view class="invite-friend"
           style="{{top ? 'bottom:auto;top:' + top + 'rpx' : ''}}"
           @tap="bindClickInvite">
     </view>

@@ -7,20 +7,25 @@
   padding: 32rpx;
   padding-bottom: 36rpx;
   &-left {
-    width: 500rpx;
+    width: 540rpx;
     display: flex;
     flex-direction: column;
     & > view {
       display: flex;
-      align-items: center;
     }
     &-title {
+      display: flex;
+      align-items: flex-start;
       font-size: 34rpx;
       color: #2a2828;
       text {
-        @include text-overflow(476rpx);
+        @include line-clamp;
+        flex: 1;
         line-height: 48rpx;
         font-weight: 600;
+      }
+      .item-left-tag {
+        margin-top: 4px;
       }
     }
     &-footer {

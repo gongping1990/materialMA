@@ -102,8 +102,7 @@
               <repeat for="{{materialList}}"
                       key="index"
                       index="index">
-                <view class="home-item {{ (index < page ) ? 'common-animate' : ''}}"
-                      style="{{'transition-delay:' + index * 0.1 + 's'}}">
+                <view class="home-item {{ (index < page ) ? 'common-animate' : ''}}">
                   <item :item.sync="item"
                         @tap="bindClickItem" />
                 </view>
@@ -241,7 +240,7 @@ export default class Index extends wepy.page {
     total: 0,
     pagination: {
       current: 1,
-      size: 6,
+      size: 20,
       hot: true,
       newly: false
     },
@@ -354,7 +353,7 @@ export default class Index extends wepy.page {
     },
     async bindClickCatalog (id) {
       this.catalogId = id
-      this.pagination.size = 6
+      this.pagination.size = 20
       this.scrollTop = this.scrollTop ? 0 : 1
       this.page = 0
       await this.getListMaterial(id)
@@ -369,7 +368,7 @@ export default class Index extends wepy.page {
       wx.navigateTo({ url: '/pages/search/search?catalogId=' + this.catalogId });
     },
     bindLoadItem () {
-      this.pagination.size = this.pagination.size + 3
+      this.pagination.size = this.pagination.size + 20
       if (this.total != this.materialList.length) {
         this.getListMaterial()
       }
@@ -377,7 +376,7 @@ export default class Index extends wepy.page {
     async bindClickSort (type) {
       this.pagination.hot = type ? true : false
       this.pagination.newly = type ? false : true
-      this.pagination.size = 6
+      this.pagination.size = 20
       this.page = 0
       this.materialList = []
       await this.getListMaterial()
@@ -476,7 +475,7 @@ export default class Index extends wepy.page {
         this.scrollLeft = 0
         this.catalogList = data.resultData
         this.catalogId = data.resultData[0].id
-        this.pagination.size = 6
+        this.pagination.size = 20
         this.page = 0
         this.$apply()
       }
@@ -494,9 +493,9 @@ export default class Index extends wepy.page {
       size
     }).then(({ data }) => {
       setTimeout(() => {
-        this.page += 6
+        this.page += 20
         this.$apply()
-      }, 500);
+      }, 200);
       if (!data.resultData.records.length) {
         this.isEmpty = true
       } else {
@@ -547,10 +546,6 @@ export default class Index extends wepy.page {
         }
         this.num = data.resultData.currency
         this.$apply()
-      } else {
-        wx.navigateBack({
-          delta: 1 //返回的页面数，如果 delta 大于现有页面数，则返回到首页,
-        });
       }
     })
   }

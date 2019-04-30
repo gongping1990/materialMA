@@ -39,7 +39,7 @@
           <text>分享得50币</text>
         </view>
       </view>
-      <view class="details-method">
+      <!-- <view class="details-method">
         <text class="details-method-title">兑换方法</text>
         <view class="details-method-content def"
               @tap="navigateToTask">
@@ -53,11 +53,10 @@
           <text class="details-method-content-subtitle">将陆续开放。</text>
           <view class="details-method-content-btn disabled">敬请期待…</view>
         </view>
-      </view>
+      </view> -->
       <view class="details-method">
         <text class="details-method-title">资料部分预览</text>
         <swiper indicator-dots
-
                 style="height: 906rpx;margin-top: 40rpx;">
           <block wx:for="{{detailData.previewImgUrl}}"
                  wx:key="{{index}}">
@@ -69,7 +68,10 @@
         </swiper>
       </view>
       <view class="details-method">
-        <text class="details-method-title">资料使用说明</text>
+        <image class="explain-img"
+               src="https://pub.file.k12.vip/read/use-2.png"
+               mode="widthFix" />
+        <!-- <text class="details-method-title">资料使用说明</text>
         <view class="explain">
           <image class="explain-img"
                  src="https://pub.file.k12.vip/zlk_weapp/details/mobile.png"
@@ -81,10 +83,10 @@
                  mode="widthFix" />
           <text class="explain-text">电脑下载/打印</text>
           <text class="explain-title">兑换后，点击页面底部下载打印，</text>
-          <text class="explain-title">可下载/打印当前资料。</text>
-          <!-- <text class="explain-subtitle">如需下载已兑换的所有资料，在电脑上打开网站 </text>
+          <text class="explain-title">可下载/打印当前资料。</text> -->
+        <!-- <text class="explain-subtitle">如需下载已兑换的所有资料，在电脑上打开网站 </text>
           <text class="explain-subtitle orange">“ www.xiazai.k12.vip ” </text> -->
-        </view>
+        <!-- </view> -->
       </view>
     </scroll-view>
     <!-- 底部按钮导航  -->
@@ -97,19 +99,18 @@
         </image>
         <text>资料库</text>
       </view>
-      <view class="details-nav-right"
-            wx:if="{{showprice}}">
-        <view class="details-nav-pay"
+      <view class="details-nav-right">
+        <!-- <view class="details-nav-pay"
               @tap="bindClickPay"
               wx:if="{{!detailData.ownHaved}}">
           <text class="details-nav-pay-title">直接购买</text>
-          <text class="details-nav-pay-subtitle">¥ {{detailData.priceYuan}}元</text>
-        </view>
-        <view class="details-nav-free"
+          <text class="details-nav-pay-subtitle"></text>
+        </view> -->
+        <view class="details-nav-free pay-btn"
               @tap="bindShowPopup({{'show'}})"
               wx:if="{{!detailData.ownHaved}}">
-          <text class="details-nav-free-title">免费兑换</text>
-          <text class="details-nav-free-subtitle">消耗{{detailData.currency}}币</text>
+          <text class="details-nav-free-title">{{detailData.currency}}币兑换</text>
+          <text class="details-nav-free-subtitle delete-text">原价¥ {{detailData.priceYuan}}元</text>
         </view>
         <view class="details-nav-pay"
               wx:if="{{detailData.ownHaved}}"
@@ -843,6 +844,15 @@ export default class Details extends wepy.page {
 
 .details {
   height: 100vh;
+  .explain-img {
+    width: 100% !important;
+  }
+  .pay-btn {
+    flex: 1;
+  }
+  .delete-text {
+    text-decoration: line-through;
+  }
   .float-nav {
     @include flex-center;
     justify-content: space-between;
@@ -1025,6 +1035,7 @@ export default class Details extends wepy.page {
       margin-bottom: 6rpx;
     }
     &-right {
+      flex: 1;
       font-size: 28rpx;
       line-height: 40rpx;
       font-weight: 500;
