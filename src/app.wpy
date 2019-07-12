@@ -160,7 +160,7 @@ export default class extends wepy.app {
 
 
     wx.request({
-      url: 'https://huoke.prod.k12.vip/common/showprice', //开发者服务器接口地址",
+      url: 'https://huoke.prod.k12.vip/sch/common/showprice', //开发者服务器接口地址",
       method: 'GET',
       success: res => {
         this.globalData.showprice = res.data.resultData
